@@ -1,19 +1,21 @@
 
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+
+// Views
 import { StartView } from 'src/app/views/app-start/app-start.view';
+import {PaymentView} from './views/app-payment/app-payment.view';
 
 
 const routes: Routes = [
   {
     path: '',
     component: StartView
-  }
-  // },
-  // {
-  //   path: 'login',
-  //   component: HostLoginComponent
-  // },
+  },
+  {
+    path: 'payment',
+    component: PaymentView
+  },
   // {
   //   path: 'register',
   //   children: [{

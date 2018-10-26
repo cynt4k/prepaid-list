@@ -13,6 +13,8 @@ import { HttpModule } from '@angular/http';
 // Views and Components
 import {ContentComponent} from './components/app-content-component/app-content.component';
 import { StartView } from 'src/app/views/app-start/app-start.view';
+import {PaymentView} from './views/app-payment/app-payment.view';
+import {UserlistComponent} from './components/userlist-component/userlist.component';
 
 
 
@@ -20,7 +22,9 @@ import { StartView } from 'src/app/views/app-start/app-start.view';
   declarations: [
     AppComponent,
     StartView,
-    ContentComponent
+    ContentComponent,
+    PaymentView,
+    UserlistComponent
   ],
   imports: [
     BrowserModule,

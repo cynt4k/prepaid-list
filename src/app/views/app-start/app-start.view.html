@@ -1,8 +1,7 @@
 <app-content>
-  <div title>Anmeldung</div>
+  <div title>Auswahl</div>
   <div content>
-    Username:
-    <input class="form-control" type="text" [(ngModel)]="guestName">
-    <button class="btn btn-primary" (click)="registerGuest()">Anmelden</button>
+    <button class="btn btn-primary" [routerLink]="['../payment']">Guthaben aufladen</button>
+    <button class="btn btn-primary" [routerLink]="['../shareLink']">Produkt abrechnen</button>
   </div>
 </app-content>
