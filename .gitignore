@@ -1,0 +1,5 @@
+.vscode
+node_modules
+/**/.env-dev
+/**/.env-prd
+/**/.env-tst
