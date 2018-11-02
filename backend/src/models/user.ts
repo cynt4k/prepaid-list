@@ -1,16 +1,5 @@
 import mongoose, { Model, model } from 'mongoose';
-
-export interface IUserModel extends mongoose.Document {
-    username: string,
-    token: number,
-    email: string,
-    name: {
-        firstname: string,
-        lastname: string
-    },
-    admin: boolean,
-    balance: number
-}
+import { IUserModel } from '../types/models';
 
 const userSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
