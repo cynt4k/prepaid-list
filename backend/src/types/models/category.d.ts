@@ -3,7 +3,8 @@ import { Document, Types } from 'mongoose';
 export interface ICategoryModel extends Document {
     products: [
         {
-            name: string
+            name: string,
+            barcode: number
         }
     ],
     price: number
