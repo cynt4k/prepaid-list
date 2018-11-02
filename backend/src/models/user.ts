@@ -1,9 +1,10 @@
 import mongoose, { Model, model } from 'mongoose';
 import { IUserModel } from '../types/models';
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
-    token: { type: Number, unique: true },
+    token: { type: String, unique: true },
     email: { type: String, unique: true },
     name: {
         firstname: { type: String },
@@ -19,6 +20,12 @@ userSchema.methods.toJson = function(this: IUserModel) {
     delete obj.__v;
     delete obj._id;
     return obj;
+};
+
+userSchema.methods.compareToken = function(checkingToken: string, cb:(e: any, isMatch: any) => {}) {
+    bcrypt.compare(checkingToken, this.token, (e: mongoose.Error, isMatch: boolean) => {
+        cb(e, isMatch);
+    });
 };
 
 export const User: Model<IUserModel> = mongoose.model<IUserModel>('User', userSchema, 'user');

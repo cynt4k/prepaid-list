@@ -5,6 +5,7 @@ import passport from 'passport';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import { Request, Response, NextFunction } from 'express-serve-static-core';
+import './core/auth';
 
 let logLevel: string = 'dev';
 
@@ -32,5 +33,8 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send('OK');
 })
 
+import { AuthRouter } from './routes';
+
+app.use('/auth', AuthRouter);
 
 export default app;
