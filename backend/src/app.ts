@@ -4,7 +4,9 @@ import lusca from 'lusca';
 import passport from 'passport';
 import bodyParser from 'body-parser';
 import compression from 'compression';
-import { Request, Response, NextFunction } from 'express-serve-static-core';
+import { Request, Response, NextFunction } from 'express';
+import { errorHandler, unkownRouteHandler } from './core/express';
+import methodOverride from 'method-override';
 import './core/auth';
 
 let logLevel: string = 'dev';
@@ -28,13 +30,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.use(passport.initialize());
+app.use(passport.session());
+app.use(methodOverride());
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send('OK');
 })
 
-import { AuthRouter } from './routes';
+import { AuthRouter, UserRouter } from './routes';
 
 app.use('/auth', AuthRouter);
+app.use('/user',UserRouter);
+
+app.all('*', unkownRouteHandler);
+
+app.use(errorHandler);
 
 export default app;

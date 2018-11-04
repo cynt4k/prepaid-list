@@ -27,7 +27,7 @@ passport.use('login-token', new LocalStrategy({
     passwordField: 'token'
 }, async (token: string, password: string, done) => {
     try {
-        const users = await User.find({ token: { $exists: true }});
+        const users = await User.find({ token: { $exists: true }}, '+token');
         const res = users.find((user: IUserModel) => {
             if (bcrypt.compareSync(token, user.token)) {
                 return true
@@ -98,8 +98,8 @@ passport.use('signup-user', new LocalStrategy({
 export namespace Passport {
     export let generateToken = (req: Request) => {
         req.token = jwt.sign({
-            username: req.user.username,
-            id: req.user.id
+            username: (req.user || { username: undefined}).username,
+            id: (req.user || {id: undefined}).id
         }, process.env.JWT_SECRET || '', {
             expiresIn: '1h'
         });
@@ -107,7 +107,7 @@ export namespace Passport {
 
     export let respondToken = (req: Request) => {
         return {
-            user: req.user.username,
+            user: (req.user || {username: undefined}).username,
             token: req.token
         }
     }

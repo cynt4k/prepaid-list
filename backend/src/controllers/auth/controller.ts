@@ -8,7 +8,7 @@ import { IVerifyOptions } from 'passport-local';
 
 export namespace AuthController {
     export let postLoginUsername = (req: Request, res: Response, next: NextFunction) => {
-        passport.authenticate('login-username', (e: Error, user: IUserModel, info: IVerifyOptions ) => {
+        passport.authenticate('login-username', { session: true }, (e: Error, user: IUserModel, info: IVerifyOptions ) => {
             if (e) return next(e);
             if (!user) return response(res, HttpCodes.NotFound, 'User not found');
             req.login(user, (e) => {

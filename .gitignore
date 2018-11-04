@@ -3,4 +3,5 @@ node_modules
 /**/.env-dev
 /**/.env-prd
 /**/.env-tst
-backend/dist/
+backend/dist
+backend/package-lock.json

@@ -10,5 +10,6 @@ export interface IUserModel extends Document {
     },
     admin: boolean,
     balance: number,
-    compareToken: (string, cb: (e: any, isMatch: any) => {}) => void
+    compareToken: (string, cb: (e: any, isMatch: any) => {}) => void,
+    updateToken: (string) => void
 }
