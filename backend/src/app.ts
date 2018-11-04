@@ -37,10 +37,11 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send('OK');
 })
 
-import { AuthRouter, UserRouter } from './routes';
+import { AuthRouter, UserRouter, OrderRouter } from './routes';
 
 app.use('/auth', AuthRouter);
 app.use('/user',UserRouter);
+app.use('/order', OrderRouter);
 
 app.all('*', unkownRouteHandler);
 

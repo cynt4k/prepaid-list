@@ -1,10 +1,10 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { IProductModel } from './product';
+import { IProductHistory } from './nested';
 
 export interface IHistoryModel extends Document {
-    products: [{
-        name: string,
-        price: number
-    }],
+    user: Types.ObjectId,
+    products: IProductHistory[],
     orderDate: Date,
     totalPrice: number
 }

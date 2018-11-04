@@ -1,11 +1,7 @@
 import { Document, Types } from 'mongoose';
+import { IProductModel } from './product';
 
 export interface ICategoryModel extends Document {
-    products: [
-        {
-            name: string,
-            barcode: number
-        }
-    ],
+    products: IProductModel[],
     price: number
 }

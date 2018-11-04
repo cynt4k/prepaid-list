@@ -1,11 +1,10 @@
 import mongoose, { Model } from 'mongoose';
 import { ICategoryModel } from '../types/models';
+import { productModel } from './product';
+
 
 const categoryModel = new mongoose.Schema({
-    products: [{
-        name: { type: String, required: true },
-        barcode: { type: Number, unique: true }
-    }],
+    products: [productModel],
     price: { type: Number, required: true }
 });
 
