@@ -1,6 +1,6 @@
 {
-  "name": "vukebox-frontend",
-  "version": "0.0.0",
+  "name": "fsim-prepaid-list",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
