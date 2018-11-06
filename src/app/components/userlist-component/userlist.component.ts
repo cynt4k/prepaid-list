@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-userlist',
@@ -6,7 +6,10 @@ import {Component} from '@angular/core';
   styleUrls: ['./userlist.component.css'],
 })
 export class UserlistComponent {
-  _users: any;
+  private _users: any;
+  /* Should btn for user be deactivated, when he has not enough cash? */
+  @Input() 
+  private deactivateUser: boolean = true;
 
   constructor() {
     this._users = [];
@@ -21,6 +24,6 @@ export class UserlistComponent {
  }
 
   isDeactivated(user) {
-    return user.credit < -10;
+    return this.deactivateUser && user.credit < -10;
   }
 }
