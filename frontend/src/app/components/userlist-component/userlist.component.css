@@ -1,0 +1,14 @@
+.user-listed {
+  width: 100%;
+  display: flex;
+  margin-top: 5px;
+}
+
+/*TODO: SCSS einbinden (Sass)*/
+.credit {
+  margin-left: auto;
+}
+
+.negative, .negative:focus, .negative:active, .negative[disabled]:hover{
+  background-color: red;
+}
