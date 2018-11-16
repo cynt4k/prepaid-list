@@ -4,7 +4,9 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 // Views
 import { StartView } from 'src/app/views/start/start.view';
-import {PaymentView} from './views/payment/payment.view';
+import { PaymentView } from './views/payment/payment.view';
+import { AccountProductView } from './views/account-product/account-product.view';
+import { AccountProductChooseUserView } from './views/account-product-choose-user/account-product-choose-user.view';
 
 
 const routes: Routes = [
@@ -15,6 +17,18 @@ const routes: Routes = [
   {
     path: 'payment',
     component: PaymentView
+  },
+  {
+    path: 'accountProduct',
+    children: [{
+      path: '',
+      component: AccountProductView,
+    }, {
+      path: 'product',
+      component: AccountProductChooseUserView
+
+    }
+    ]
   },
   // {
   //   path: 'register',

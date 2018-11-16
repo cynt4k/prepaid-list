@@ -15,6 +15,9 @@ import {ContentComponent} from './components/content-component/content.component
 import { StartView } from 'src/app/views/start/start.view';
 import {PaymentView} from './views/payment/payment.view';
 import {UserlistComponent} from './components/userlist-component/userlist.component';
+import { ProductlistComponent } from './components/productlist/productlist.component';
+import { AccountProductView } from './views/account-product/account-product.view';
+import { AccountProductChooseUserView } from './views/account-product-choose-user/account-product-choose-user.view';
 
 
 
@@ -24,7 +27,10 @@ import {UserlistComponent} from './components/userlist-component/userlist.compon
     StartView,
     ContentComponent,
     PaymentView,
-    UserlistComponent
+    UserlistComponent,
+    ProductlistComponent,
+    AccountProductView,
+    AccountProductChooseUserView
   ],
   imports: [
     BrowserModule,
