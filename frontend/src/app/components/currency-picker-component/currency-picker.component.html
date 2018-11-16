@@ -1,0 +1,20 @@
+<app-content>
+  <div title>Betrag auswählen</div>
+  <div content>
+    <input class="text amount" type="text">
+    <div class="row d-flex justify-content-between">
+      <div class="column-3">
+        <app-value-button class="btn touch" [value]="1" (click)="addEntry(1)"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch" [value]="2" (click)="addEntry(2)"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch" [value]="3" (click)="addEntry(3)"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch" [value]="4" (click)="addEntry(4)"></app-value-button>
+      </div>
+    </div>
+  </div>
+</app-content>
