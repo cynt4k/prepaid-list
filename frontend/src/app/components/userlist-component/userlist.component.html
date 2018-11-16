@@ -1,3 +1,3 @@
 <div *ngFor="let user of users; let i = index" class="user">
-  <button class="btn btn-primary user-listed" [class.negative]="isNegative(user)" [disabled]="isDeactivated(user)" [routerLink]="['../payment']">{{user.name}}<span class="credit">{{user.credit}}</span></button>
+  <button class="btn btn-primary user-listed" [class.negative]="isNegative(user)" [disabled]="isDeactivated(user)" [routerLink]="routingLink">{{user.name}}<span class="credit">{{user.credit}}</span></button>
 </div>

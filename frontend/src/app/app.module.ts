@@ -11,12 +11,15 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
 // Views and Components
-import {ContentComponent} from './components/app-content-component/app-content.component';
-import { StartView } from 'src/app/views/app-start/app-start.view';
-import {PaymentView} from './views/app-payment/app-payment.view';
+import {ContentComponent} from './components/content-component/content.component';
+import { StartView } from 'src/app/views/start/start.view';
+import {PaymentView} from './views/payment/payment.view';
 import {UserlistComponent} from './components/userlist-component/userlist.component';
 import { CurrencyPickerComponent } from './components/currency-picker-component/currency-picker.component';
 import { ValueButtonComponent } from './components/value-button/value-button.component';
+import { ProductlistComponent } from './components/productlist/productlist.component';
+import { AccountProductView } from './views/account-product/account-product.view';
+import { AccountProductChooseUserView } from './views/account-product-choose-user/account-product-choose-user.view';
 
 
 
@@ -28,7 +31,10 @@ import { ValueButtonComponent } from './components/value-button/value-button.com
     PaymentView,
     UserlistComponent,
     CurrencyPickerComponent,
-    ValueButtonComponent
+    ValueButtonComponent,
+    ProductlistComponent,
+    AccountProductView,
+    AccountProductChooseUserView
   ],
   imports: [
     BrowserModule,
