@@ -15,6 +15,8 @@ import {ContentComponent} from './components/app-content-component/app-content.c
 import { StartView } from 'src/app/views/app-start/app-start.view';
 import {PaymentView} from './views/app-payment/app-payment.view';
 import {UserlistComponent} from './components/userlist-component/userlist.component';
+import { CurrencyPickerComponent } from './components/currency-picker-component/currency-picker.component';
+import { ValueButtonComponent } from './components/value-button/value-button.component';
 
 
 
@@ -24,7 +26,9 @@ import {UserlistComponent} from './components/userlist-component/userlist.compon
     StartView,
     ContentComponent,
     PaymentView,
-    UserlistComponent
+    UserlistComponent,
+    CurrencyPickerComponent,
+    ValueButtonComponent
   ],
   imports: [
     BrowserModule,
