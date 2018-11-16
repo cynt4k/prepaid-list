@@ -10,7 +10,9 @@ backend/dist
 backend/package-lock.json
 
 # dependencies
-/node_modules
+frontend/node_modules
+backend/node_modules
+
 
 # IDEs and editors
 /.idea
