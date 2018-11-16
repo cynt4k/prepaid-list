@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 // Views
-import { StartView } from 'src/app/views/app-start/app-start.view';
-import {PaymentView} from './views/app-payment/app-payment.view';
+import { StartView } from 'src/app/views/start/start.view';
+import {PaymentView} from './views/payment/payment.view';
 
 
 const routes: Routes = [

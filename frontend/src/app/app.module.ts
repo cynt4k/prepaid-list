@@ -11,9 +11,9 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
 // Views and Components
-import {ContentComponent} from './components/app-content-component/app-content.component';
-import { StartView } from 'src/app/views/app-start/app-start.view';
-import {PaymentView} from './views/app-payment/app-payment.view';
+import {ContentComponent} from './components/content-component/content.component';
+import { StartView } from 'src/app/views/start/start.view';
+import {PaymentView} from './views/payment/payment.view';
 import {UserlistComponent} from './components/userlist-component/userlist.component';
 
 
