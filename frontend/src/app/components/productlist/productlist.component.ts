@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-productlist',
@@ -8,6 +8,10 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ProductlistComponent implements OnInit {
   private _products: any;
   private _routingLink: string;
+
+  @Output()
+  private productClick: EventEmitter<String> = new EventEmitter<String>();
+
   constructor() {
     this._products = [];
     this._products.push({ name: 'RedBull', price: 1.3 });
@@ -18,6 +22,10 @@ export class ProductlistComponent implements OnInit {
   @Input()
   set routingLink(routingLink : string) { this._routingLink = routingLink; }
   get routingLink() { return this._routingLink}
+
+  callProduct(event, product) {
+    this.productClick.emit(product);
+  }
 
   ngOnInit() {
   }
