@@ -8,7 +8,7 @@ import { StateService } from 'src/app/core/services/state.service';
   styleUrls: ['./account-product.view.scss']
 })
 export class AccountProductView implements OnInit {
-  constructor(private router : Router, private route:ActivatedRoute, private stateService:StateService) {this.router = router; this.route = route; }
+  constructor(private router : Router, private route:ActivatedRoute, private stateService:StateService) {}
 
   ngOnInit() {
   }

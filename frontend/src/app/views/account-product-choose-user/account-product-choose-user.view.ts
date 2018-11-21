@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { StateService } from 'src/app/core/services/state.service';
 
 @Component({
   selector: 'app-account-product-choose-user',
@@ -6,10 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./account-product-choose-user.view.scss']
 })
 export class AccountProductChooseUserView implements OnInit {
-
-  constructor() { }
+  
+  constructor(private router : Router, private route:ActivatedRoute, private stateService:StateService) {}
 
   ngOnInit() {
   }
 
+  public saveUser(event) {
+    this.stateService.choosenUser = event;
+    // this.router.navigate(['product'], { relativeTo: this.route });    
+  }
 }

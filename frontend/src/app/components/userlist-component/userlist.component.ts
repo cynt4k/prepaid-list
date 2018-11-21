@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'app-userlist',
@@ -9,22 +9,25 @@ export class UserlistComponent {
   private _users: any;
   /* Should btn for user be deactivated, when he has not enough cash? */
   private _deactivateUser: boolean = true;
-  private _routingLink: string;
   
+  @Output()
+  private userSelect: EventEmitter<String> = new EventEmitter<String>();
+
   constructor() {
     this._users = [];
-    this._users.push({name: 'Nick', credit: 4.5});
-    this._users.push({name: 'Manuel', credit: -4.5});
-    this._users.push({name: 'Sermes', credit: -14.5});
+    this._users.push({id: 1, name: 'Nick', credit: 4.5});
+    this._users.push({id: 2, name: 'Manuel', credit: -4.5});
+    this._users.push({id: 3, name: 'Sermes', credit: -14.5});
   }
   @Input()
   set deactivateUser(deactivateUser: boolean) { this._deactivateUser = deactivateUser;}
-  @Input()
-  set routingLink(routingLink : string) { this._routingLink = routingLink; }
- 
+
   get users() { return this._users; }
-  get routingLink() { return this._routingLink}
  
+  selectUser(event, user) {
+    this.userSelect.emit(user);
+  }
+
   isNegative(user) {
     return user.credit < 0;
   }
