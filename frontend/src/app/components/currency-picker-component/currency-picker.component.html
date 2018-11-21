@@ -1,19 +1,64 @@
 <app-content>
   <div title>Betrag auswählen</div>
   <div content>
-    <input class="text amount" type="text">
+    <div class="input-group">
+      <input type="text" min="0" class="form-control currency" value="{{amount}}" disabled />
+      <span class="input-group-addon">€</span>
+    </div>
     <div class="row d-flex justify-content-between">
       <div class="column-3">
-        <app-value-button class="btn touch" [value]="1" (click)="addEntry(1)"></app-value-button>
+        <app-value-button class="btn touch" [value]="7" (click)="addEntry('7')"></app-value-button>
       </div>
       <div class="column-3">
-        <app-value-button class="btn touch" [value]="2" (click)="addEntry(2)"></app-value-button>
+        <app-value-button class="btn touch" [value]="8" (click)="addEntry('8')"></app-value-button>
       </div>
       <div class="column-3">
-        <app-value-button class="btn touch" [value]="3" (click)="addEntry(3)"></app-value-button>
+        <app-value-button class="btn touch" [value]="9" (click)="addEntry('9')"></app-value-button>
       </div>
       <div class="column-3">
-        <app-value-button class="btn touch" [value]="4" (click)="addEntry(4)"></app-value-button>
+        <app-value-button class="btn touch bill" [text]='"5€"' [value]="5" (click)="addEntry('C5')"></app-value-button>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-between">
+      <div class="column-3">
+        <app-value-button class="btn touch" [value]="4" (click)="addEntry('4')"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch" [value]="5" (click)="addEntry('5')"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch" [value]="6" (click)="addEntry('6')"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch bill" [text]='"10€"' [value]="10" (click)="addEntry('C10')"></app-value-button>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-between">
+      <div class="column-3">
+        <app-value-button class="btn touch" [value]="1" (click)="addEntry('1')"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch" [value]="2" (click)="addEntry('2')"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch" [value]="3" (click)="addEntry('3')"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch bill" [text]='"20€"' [value]="20" (click)="addEntry('C20')"></app-value-button>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-between">
+      <div class="column-3">
+        <app-value-button class="btn touch" [text]='"C"' [value]="0" (click)="addEntry('C')"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch" [value]="0" (click)="addEntry('0')"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch" [text]='","' [value]='","' [isActivated]="!commaInput" (click)="addEntry(',')"></app-value-button>
+      </div>
+      <div class="column-3">
+        <app-value-button class="btn touch ok" [text]='"OK"' (click)="submit()">OK</app-value-button>
       </div>
     </div>
   </div>
