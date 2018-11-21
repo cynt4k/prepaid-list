@@ -6,7 +6,17 @@
         margin: auto;
         box-shadow: unset;
         max-width: 500px;
-        
+        .nav {
+            display: flex;
+        }
+        .nav-btn {
+            width: 100%;
+            margin-right: 5px;
+            &:last-child {
+                margin-right: 0px;
+            }
+        }
+
         .headline {
             font-size: xx-large;
         }

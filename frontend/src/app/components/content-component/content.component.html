@@ -1,5 +1,9 @@
 <div class="content">
     <div class="panel">
+        <div class="nav">
+            <button class="btn nav-btn" (click)="backClicked()">Zurück</button>
+            <button class="btn nav-btn">Home</button>
+        </div>
         <h1 class="headline" >
             <ng-content select="[title]"></ng-content>
         </h1>
