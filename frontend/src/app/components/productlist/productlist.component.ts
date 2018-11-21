@@ -14,9 +14,9 @@ export class ProductlistComponent implements OnInit {
 
   constructor() {
     this._products = [];
-    this._products.push({ name: 'RedBull', price: 1.3 });
-    this._products.push({ name: 'Bier', price: 1.0 });
-    this._products.push({ name: 'Wasser', price: 0.5 });
+    this._products.push({ id: 1, name: 'RedBull', price: 1.3 });
+    this._products.push({ id: 2, name: 'Bier', price: 1.0 });
+    this._products.push({ id: 3, name: 'Wasser', price: 0.5 });
   }
 
   @Input()
