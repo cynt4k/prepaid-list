@@ -16,6 +16,6 @@ export class AccountProductChooseUserView implements OnInit {
 
   public saveUser(event) {
     this.stateService.choosenUser = event;
-    // this.router.navigate(['product'], { relativeTo: this.route });    
+    this.router.navigate(['confirmation'], { relativeTo: this.route });    
   }
 }

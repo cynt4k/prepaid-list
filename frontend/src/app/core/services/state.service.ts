@@ -14,19 +14,21 @@ export class StateService {
     private CHOOSEN_USER : string = 'choosenUser';
 
     set choosenProduct(product : Product) {
-        window.localStorage[this.CHOOSEN_PRODUCT] = product.id;
+        let s = JSON.stringify(product);
+        window.localStorage[this.CHOOSEN_PRODUCT] = s;
     }
-
-    get choosenProduct() {
-        return window.localStorage[this.CHOOSEN_PRODUCT];
+    
+    get choosenProduct(): Product {
+        return JSON.parse(window.localStorage[this.CHOOSEN_PRODUCT]);
     }
-
+    
     set choosenUser(user : User) {
-        window.localStorage[this.CHOOSEN_USER] = user.id;
+        let s = JSON.stringify(user);
+        window.localStorage[this.CHOOSEN_USER] = s;
     }
 
     get choosenUser() {
-        return window.localStorage[this.CHOOSEN_USER];
+        return JSON.parse(window.localStorage[this.CHOOSEN_USER]);
     }
 
 

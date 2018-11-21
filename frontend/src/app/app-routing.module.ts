@@ -7,6 +7,7 @@ import { StartView } from 'src/app/views/start/start.view';
 import { PaymentView } from './views/payment/payment.view';
 import { AccountProductView } from './views/account-product/account-product.view';
 import { AccountProductChooseUserView } from './views/account-product-choose-user/account-product-choose-user.view';
+import { ConfirmationProductView } from './views/confirmation-product/confirmation-product.view';
 
 
 const routes: Routes = [
@@ -25,8 +26,14 @@ const routes: Routes = [
       component: AccountProductView,
     }, {
       path: 'product',
-      component: AccountProductChooseUserView
-
+      children: [{
+        path: '',
+        component: AccountProductChooseUserView,
+      },
+      {
+        path: 'confirmation',
+        component: ConfirmationProductView
+      }]
     }
     ]
   },

@@ -18,6 +18,7 @@ import {UserlistComponent} from './components/userlist-component/userlist.compon
 import { ProductlistComponent } from './components/productlist/productlist.component';
 import { AccountProductView } from './views/account-product/account-product.view';
 import { AccountProductChooseUserView } from './views/account-product-choose-user/account-product-choose-user.view';
+import { ConfirmationProductView } from './views/confirmation-product/confirmation-product.view';
 
 
 
@@ -30,7 +31,8 @@ import { AccountProductChooseUserView } from './views/account-product-choose-use
     UserlistComponent,
     ProductlistComponent,
     AccountProductView,
-    AccountProductChooseUserView
+    AccountProductChooseUserView,
+    ConfirmationProductView
   ],
   imports: [
     BrowserModule,
