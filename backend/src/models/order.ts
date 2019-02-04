@@ -33,7 +33,6 @@ orderSchema.pre('validate', async function() {
                 throw new Error(Template.LOW_BALANCE(user.id));
             }
         }
-
     } catch (e) {
         throw e;
     }
