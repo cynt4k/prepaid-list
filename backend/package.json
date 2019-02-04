@@ -24,9 +24,12 @@
     "lusca": "^1.6.1",
     "method-override": "^3.0.0",
     "mongoose": "^5.3.8",
+    "mongoose-history": "^0.8.0",
+    "mongoose-timestamp": "^0.6.0",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "string-template": "^1.0.0",
     "tsc": "^1.20150623.0",
     "typescript": "^3.1.6"
   },
@@ -43,6 +46,8 @@
     "@types/mongoose": "^5.2.22",
     "@types/morgan": "^1.7.35",
     "@types/passport": "^0.4.7",
-    "@types/passport-local": "^1.0.33"
+    "@types/passport-local": "^1.0.33",
+    "@types/string-template": "^1.0.2",
+    "tslint": "^5.12.1"
   }
 }
