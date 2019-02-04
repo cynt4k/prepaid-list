@@ -12,6 +12,7 @@ export interface IUserModel extends Document, ITimestamp {
     };
     balance: number;
     role: IAclGroupModel;
+    active: boolean;
     compareToken: (checkToken: string, cb: (e: any, isMatch: any) => {}) => void;
     updateToken: (newToken: string) => void;
 }

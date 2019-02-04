@@ -8,3 +8,4 @@ export * from './acl-group';
 export * from './acl-right';
 export * from './language-code';
 export * from './translation';
+export * from './settings';

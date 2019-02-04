@@ -13,6 +13,7 @@ export const userSchema = new mongoose.Schema({
         lastname: { type: String }
     },
     balance: { type: Number, default: 0.0 },
+    active: { type: Boolean, required: true, default: true },
     role: { type: mongoose.Schema.Types.ObjectId, ref: 'acl-group', required: true }
 });
 

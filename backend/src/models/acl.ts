@@ -4,7 +4,7 @@ import mongooseHistory from 'mongoose-history';
 import mongooseTimestamp from 'mongoose-timestamp';
 
 const aclSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     rights: [{ type: AclRight, required: true }]
 });
 
