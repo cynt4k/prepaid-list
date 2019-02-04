@@ -1,6 +1,8 @@
 import { Document } from 'mongoose';
+import { ITimestamp } from './timestamp';
+import { IAclGroupModel } from './acl-group';
 
-export interface IUserModel extends Document {
+export interface IUserModel extends Document, ITimestamp {
     username: string;
     tokenUid: string;
     email: string;
@@ -9,6 +11,7 @@ export interface IUserModel extends Document {
         lastname: string
     };
     balance: number;
-    compareToken: (string, cb: (e: any, isMatch: any) => {}) => void;
-    updateToken: (string) => void;
+    role: IAclGroupModel;
+    compareToken: (checkToken: string, cb: (e: any, isMatch: any) => {}) => void;
+    updateToken: (newToken: string) => void;
 }

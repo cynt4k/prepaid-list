@@ -1,17 +1,19 @@
 import mongoose, { Model, model } from 'mongoose';
 import { IUserModel } from '../types/models';
 import bcrypt from 'bcrypt';
+import mongooseHistory from 'mongoose-history';
+import mongooseTimestamp from 'mongoose-timestamp';
 
-const userSchema = new mongoose.Schema({
+export const userSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
-    token: { type: String, unique: true, select: false },
+    tokenUid: { type: String, unique: true, select: false },
     email: { type: String, unique: true },
     name: {
         firstname: { type: String },
         lastname: { type: String }
     },
-    admin: Boolean,
-    balance: { type: Number, default: 0.0 }
+    balance: { type: Number, default: 0.0 },
+    role: { type: mongoose.Schema.Types.ObjectId, ref: 'acl-group', required: true }
 });
 
 userSchema.methods.toJson = function(this: IUserModel) {
@@ -31,5 +33,8 @@ userSchema.methods.compareToken = function(checkingToken: string, cb:(e: any, is
 userSchema.methods.updateToken = function(newToken: string) {
     this.token = bcrypt.hashSync(newToken, bcrypt.genSaltSync(10));
 };
+
+userSchema.plugin(mongooseHistory);
+
 
 export const User: Model<IUserModel> = mongoose.model<IUserModel>('User', userSchema, 'user');
