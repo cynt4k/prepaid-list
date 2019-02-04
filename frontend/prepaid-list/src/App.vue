@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app dark style="height: 100vh">
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <span>Digitale </span>
@@ -16,8 +16,9 @@
       </v-btn> -->
     </v-toolbar>
 
-    <v-content>
-      <HelloWorld/>
+    <v-content style="height: 100%">
+      <router-view></router-view>
+      <!-- <HelloWorld/> -->
     </v-content>
   </v-app>
 </template>
