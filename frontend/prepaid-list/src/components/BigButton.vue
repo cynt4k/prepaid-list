@@ -4,7 +4,7 @@
       text-xs-center wrap column
     >
         <v-icon size="100">{{icon}}</v-icon>
-        <v-card-title class="title"><h2>{{title}}</h2></v-card-title>
+        <v-card-title class="title" ><h2 class="font-weight-light">{{title}}</h2></v-card-title>
         </v-layout>
       </v-card>
 </template>

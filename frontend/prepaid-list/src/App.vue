@@ -6,14 +6,14 @@
         <span class="font-weight-light">Prepaid Liste</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
+      <!-- <v-btn
         flat
         href="https://github.com/vuetifyjs/vuetify/releases/latest"
         target="_blank"
       >
         <span class="mr-2">Latest Release</span>
         <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      </v-btn> -->
     </v-toolbar>
 
     <v-content>
@@ -23,13 +23,10 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  },
+
   data() {
     return {
       //
