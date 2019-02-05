@@ -8,6 +8,7 @@ import { Request, NextFunction } from 'express';
 import { IUserModel } from '../../types/models';
 import { IUser } from '../../types/express';
 import { Template } from '../../misc';
+import { randomBytes } from 'crypto';
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -27,6 +28,7 @@ declare global {
     namespace Express {
         interface Request {
             token?: string;
+            refreshToken?: string;
             user?: IUser | any;
         }
     }
@@ -108,19 +110,35 @@ passport.use('signup-user', new LocalStrategy({
 }));
 
 export namespace Passport {
-    export let generateToken = (req: Request) => {
+    const refreshToken: string = randomBytes(30).toString('hex');
+
+    export const generateToken = (req: Request) => {
         req.token = jwt.sign({
             username: (req.user || { username: undefined}).username,
             id: (req.user || {id: undefined}).id
         }, process.env.JWT_SECRET || '', {
-            expiresIn: '1h'
+            expiresIn: (req.body.unlimited ? 0 : '5m')
+        });
+        req.refreshToken = jwt.sign({
+            username: (req.user || { username: undefined}).username,
+            id: (req.user || {id: undefined}).id
+        }, refreshToken, {
+            expiresIn: (req.body.unlimited ? 0 : '1h')
         });
     };
 
-    export let respondToken = (req: Request) => {
+    export const respondToken = (req: Request) => {
         return {
             user: (req.user || {username: undefined}).username,
-            token: req.token
+            token: req.token,
+            refreshToken: req.refreshToken
         };
+    };
+
+    export const verifyRefreshToken = (token: string, cb: (e?: Error) => void): void => {
+        jwt.verify(token, refreshToken, (e: Error, decoded: any) => {
+            if (e) return cb(e);
+            return cb();
+        });
     };
 }

@@ -42,4 +42,16 @@ export namespace AuthController {
             });
         })(req, res, next);
     };
+
+    export const renewToken = (req: Request, res: Response, next: NextFunction) => {
+        if (req.body.refreshToken) {
+            Passport.verifyRefreshToken(req.body.refreshToken, (e) => {
+                if (e) return response(res, HttpCodes.BadRequest, res.__(e.message));
+                Passport.generateToken(req);
+                return response(res, HttpCodes.OK, res.__(Template.I18N_INFO_SUCCESS), Passport.respondToken(req));
+            });
+        } else {
+            return response(res, HttpCodes.BadRequest, res.__(Template.I18N_WARN_NO_REFRESH_TOKEN));
+        }
+    };
 }
