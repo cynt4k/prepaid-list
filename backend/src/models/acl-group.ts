@@ -5,7 +5,7 @@ import mongooseHistory from 'mongoose-history';
 import mongooseTimestamp from 'mongoose-timestamp';
 
 const aclGroupSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     childs: [{ type: Schema.Types.ObjectId, ref: 'acl-group' }],
     acls: [{ type: Schema.Types.ObjectId, ref: 'acl', required: true }]
 });

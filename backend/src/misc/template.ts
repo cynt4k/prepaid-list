@@ -3,6 +3,7 @@ import compile from 'string-template/compile';
 export const Template = {
     ERROR_USER_NOT_FOUND: compile('User {0} not found'),
     ERROR_LOW_BALANCE: compile('User {0} has low balance'),
+    ERROR_ACL_GROUP_NOT_FOUND: 'ACL Group was not found',
     ERROR_INTERNAL_SERVER: 'Internal server error',
     I18N_INFO_SUCCESS: 'OK',
     I18N_NO_ORDERS_FOUND: 'No orders found for user %s',

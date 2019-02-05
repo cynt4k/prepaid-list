@@ -14,7 +14,7 @@ export namespace AuthController {
             req.login(user, (eLogin) => {
                 if (eLogin) return next(eLogin);
                 Passport.generateToken(req);
-                return response(res, HttpCodes.OK, 'OK', Passport.respondToken(req));
+                return response(res, HttpCodes.OK, res.__(Template.I18N_INFO_SUCCESS), Passport.respondToken(req));
             });
         })(req, res, next);
     };
@@ -26,7 +26,7 @@ export namespace AuthController {
             req.login(user, (eLogin) => {
                 if (eLogin) return next(eLogin);
                 Passport.generateToken(req);
-                return response(res, HttpCodes.OK, 'OK', Passport.respondToken(req));
+                return response(res, HttpCodes.OK, res.__(Template.I18N_INFO_SUCCESS), Passport.respondToken(req));
             });
         })(req, res, next);
     };
@@ -38,7 +38,7 @@ export namespace AuthController {
             req.login(user, (eLogin) => {
                 if (eLogin) return next(eLogin);
                 Passport.generateToken(req);
-                return response(res, HttpCodes.OK , 'OK', Passport.respondToken(req));
+                return response(res, HttpCodes.OK , res.__(Template.I18N_INFO_SUCCESS), Passport.respondToken(req));
             });
         })(req, res, next);
     };
