@@ -1,4 +1,5 @@
-import mongoose, { Model } from 'mongoose';
+import { Model, Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import { ITranslationModel, LanguageCode } from '../types/models';
 import mongooseTimestamp from 'mongoose-timestamp';
 

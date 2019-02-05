@@ -1,4 +1,5 @@
-import mongoose, { Model, model } from 'mongoose';
+import { Model, model } from 'mongoose';
+import mongoose from 'mongoose';
 import { ISettingsModel } from '../types/models';
 import mongooseHistory from 'mongoose-history';
 import mongooseTimestamp from 'mongoose-timestamp';

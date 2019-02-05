@@ -1,11 +1,12 @@
-import mongoose, { Model, model } from 'mongoose';
+import { Model } from 'mongoose';
+import mongoose from 'mongoose';
 import { IAclModel, AclRight } from '../types/models';
 import mongooseHistory from 'mongoose-history';
 import mongooseTimestamp from 'mongoose-timestamp';
 
 const aclSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true },
-    rights: [{ type: AclRight, required: true }]
+    rights: [{ type: String, required: true }]
 });
 
 aclSchema.pre('save', function() {

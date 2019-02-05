@@ -1,12 +1,13 @@
-import mongoose, { Model, model, Schema } from 'mongoose';
+import { Model, Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import { IAclModel, AclRight, IAclGroupModel } from '../types/models';
 import mongooseHistory from 'mongoose-history';
 import mongooseTimestamp from 'mongoose-timestamp';
 
 const aclGroupSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    childs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'acl-group' }],
-    acls: [{ type: mongoose.Schema.Types.ObjectId, ref: 'acl', required: true }]
+    childs: [{ type: Schema.Types.ObjectId, ref: 'acl-group' }],
+    acls: [{ type: Schema.Types.ObjectId, ref: 'acl', required: true }]
 });
 
 aclGroupSchema.pre('save', function() {

@@ -2,6 +2,7 @@ import { response, HttpCodes }  from '../../core/express';
 import express, { Request, Response, NextFunction } from 'express';
 import { Order } from '../../models';
 import { IOrderModel } from '../../types/models';
+import { Template } from '../../misc';
 
 export namespace OrderController {
 
@@ -10,9 +11,9 @@ export namespace OrderController {
             const newOrder: IOrderModel = <IOrderModel> req.body;
             const result = await Order.create(newOrder);
             if (result) {
-                return response(res, HttpCodes.OK, 'OK', result);
+                return response(res, HttpCodes.OK, Template.INFO_SUCCESS, result);
             }
-            return response(res, HttpCodes.InternalServerError, 'Internal server error');
+            return response(res, HttpCodes.InternalServerError, Template.ERROR_INTERNAL_SERVER);
         } catch (e) {
             return next(e);
         }
@@ -21,9 +22,9 @@ export namespace OrderController {
         try {
             const result = await Order.find({user: req.user!.id});
             if (result) {
-                return response(res, HttpCodes.OK, 'OK', result);
+                return response(res, HttpCodes.OK, Template.INFO_SUCCESS, result);
             }
-            return response(res, HttpCodes.NotFound, 'Could not find orders for user');
+            return response(res, HttpCodes.NotFound, res.__(Template.I18N_NO_ORDERS_FOUND, req.user.username));
         } catch (e) {
             return next(e);
         }

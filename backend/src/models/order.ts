@@ -1,8 +1,8 @@
-import mongoose, { Model, Schema } from 'mongoose';
+import { Model, Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import { IOrderModel, IUserModel, AclRight } from '../types/models';
 import { ErrorCode } from '../types/error';
 import { AclCheck } from '../core/acl';
-import { productSchema } from './product';
 import { User } from './user';
 import { PrepaidListError } from '../errors';
 import { Settings } from './settings';

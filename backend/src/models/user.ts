@@ -1,4 +1,5 @@
-import mongoose, { Model, model } from 'mongoose';
+import { Model, Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import { IUserModel } from '../types/models';
 import bcrypt from 'bcrypt';
 import mongooseHistory from 'mongoose-history';
@@ -14,7 +15,7 @@ export const userSchema = new mongoose.Schema({
     },
     balance: { type: Number, default: 0.0 },
     active: { type: Boolean, required: true, default: true },
-    role: { type: mongoose.Schema.Types.ObjectId, ref: 'acl-group', required: true }
+    role: { type: Schema.Types.ObjectId, ref: 'acl-group', required: true }
 });
 
 userSchema.methods.toJson = function(this: IUserModel) {

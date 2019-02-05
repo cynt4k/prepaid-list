@@ -4,6 +4,8 @@
   "description": "Backend for the FSIM OTH-Regensburg prepaid list",
   "main": "dist/index.js",
   "scripts": {
+    "build": "npm run tsc && npm run tslint",
+    "tslint": "./node_modules/.bin/tslint --project .",
     "tsc": "./node_modules/.bin/tsc",
     "start": "tsc && cross-env NODE_ENV=prd node ./dist/index.js",
     "debug": "tsc && set NODE_ENV=dev && node ./dist/index.js",
