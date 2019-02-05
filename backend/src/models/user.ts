@@ -25,7 +25,7 @@ userSchema.methods.toJson = function(this: IUserModel) {
     return obj;
 };
 
-userSchema.methods.compareToken = function(checkingToken: string, cb:(e: any, isMatch: any) => {}) {
+userSchema.methods.compareToken = function(checkingToken: string, cb: (e: any, isMatch: any) => {}) {
     bcrypt.compare(checkingToken, this.token, (e: mongoose.Error, isMatch: boolean) => {
         cb(e, isMatch);
     });

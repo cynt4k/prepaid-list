@@ -10,7 +10,7 @@ export namespace UserValidator {
         } catch (e) {
             return Promise.reject(e);
         }
-    }
+    };
 
     export let userIdNotExist = async (value: Types.ObjectId) => {
         try {
@@ -20,7 +20,7 @@ export namespace UserValidator {
         } catch (e) {
             return Promise.reject(e);
         }
-    }
+    };
 
     export let usernameNotExist = async (value: string) => {
         try {
@@ -30,5 +30,5 @@ export namespace UserValidator {
         } catch (e) {
             return Promise.reject(e);
         }
-    }
+    };
 }

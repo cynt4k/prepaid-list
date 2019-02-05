@@ -1,11 +1,10 @@
-import { Response, NextFunction } from 'express';
-import { Request } from '../../types/express';
+import { Request, Response, NextFunction } from 'express';
 import { response, HttpCodes } from '../../core/express';
 import { User } from '../../models';
 import jwt from 'jsonwebtoken';
 
 export namespace CheckAuth {
-    export let isAuth = async (req: Request, res: Response, next: NextFunction) => {
+    export const isAuth = async (req: Request, res: Response, next: NextFunction) => {
         const token: string = req.token || req.headers['authorization'] as string;
 
         if (token) {
@@ -19,7 +18,7 @@ export namespace CheckAuth {
         }
     };
 
-    export let isAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    export const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
         return next();
     };
 }

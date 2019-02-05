@@ -1,11 +1,11 @@
 import { Document } from 'mongoose';
-import { ITranslation } from './translation';
+import { ITranslationModel } from './translation';
 import { IProductExtra } from './nested/product-extra';
 import { ITimestamp } from './timestamp';
 
 
 export interface IProductModel extends Document, ITimestamp {
-    name: ITranslation;
+    name: ITranslationModel;
     barcode: number;
     icon: string;
     price: number;

@@ -6,12 +6,14 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import { Request, Response, NextFunction } from 'express';
 import { errorHandler, unkownRouteHandler } from './core/express';
+import i18n from 'i18n';
+import './types/express';
 import methodOverride from 'method-override';
 import './core/auth';
 
-let logLevel: string = 'dev';
+let logLevel = 'dev';
 
-switch(process.env.NODE_ENV) {
+switch (process.env.NODE_ENV) {
     case 'test': logLevel = ''; break;
     case 'dev': logLevel = 'dev'; break;
     case 'prd': logLevel = 'common'; break;
@@ -32,15 +34,16 @@ app.use(lusca.xssProtection(true));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride());
+app.use(i18n.init);
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send('OK');
-})
+});
 
 import { AuthRouter, UserRouter, OrderRouter } from './routes';
 
 app.use('/auth', AuthRouter);
-app.use('/user',UserRouter);
+app.use('/user', UserRouter);
 app.use('/order', OrderRouter);
 
 app.all('*', unkownRouteHandler);

@@ -19,4 +19,4 @@ aclSchema.pre('save', function() {
 aclSchema.plugin(mongooseHistory);
 aclSchema.plugin(mongooseTimestamp);
 
-export const Acl: Model<IAclModel> = mongoose.model<IAclModel>('Acl', aclSchema, 'acl');\
+export const Acl: Model<IAclModel> = mongoose.model<IAclModel>('Acl', aclSchema, 'acl');

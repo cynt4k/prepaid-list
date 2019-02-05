@@ -1,8 +1,10 @@
 import mongoose, { Model, Schema } from 'mongoose';
 import { IOrderModel, IUserModel, AclRight } from '../types/models';
+import { ErrorCode } from '../types/error';
 import { AclCheck } from '../core/acl';
 import { productSchema } from './product';
 import { User } from './user';
+import { PrepaidListError } from '../errors';
 import { Settings } from './settings';
 import { Template } from '../misc/template';
 import mongooseTimestamp from 'mongoose-timestamp';
@@ -26,11 +28,11 @@ orderSchema.pre('validate', async function() {
         const settings = await Settings.find().exec();
         if (isPrepaid) {
             if (settings[0]!.prepaidMinBalance < user.balance - newDocument.totalPrice) {
-                throw new Error(Template.LOW_BALANCE(user.id));
+                throw new PrepaidListError(Template.ERROR_LOW_BALANCE(user.id), ErrorCode.LOW_BALANCE);
             }
         } else {
             if (user.balance - newDocument.totalPrice < 0) {
-                throw new Error(Template.LOW_BALANCE(user.id));
+                throw new PrepaidListError(Template.ERROR_LOW_BALANCE(user.id), ErrorCode.LOW_BALANCE);
             }
         }
     } catch (e) {

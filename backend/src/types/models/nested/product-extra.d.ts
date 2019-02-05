@@ -1,8 +1,8 @@
 import { Document, Types } from 'mongoose';
-import { ITranslation } from '../translation'; 
+import { ITranslationModel } from '../translation'; 
 
 export interface IProductExtra extends Document {
-    name: ITranslation;
+    name: ITranslationModel;
     icon: string;
     price: number;
 }

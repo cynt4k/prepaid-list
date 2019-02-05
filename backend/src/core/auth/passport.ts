@@ -4,9 +4,9 @@ import passportLocal, { VerifyFunction } from 'passport-local';
 import { User } from '../../models';
 import bcrypt from 'bcrypt';
 import { any } from 'bluebird';
-import { NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 import { IUserModel } from '../../types/models';
-import { Request } from '../../types/express';
+import { IUser } from '../../types/express';
 
 const LocalStrategy = passportLocal.Strategy as any;
 
@@ -22,6 +22,15 @@ passport.deserializeUser(async(id, done) => {
     });
 });
 
+declare global {
+    namespace Express {
+        interface Request {
+            token?: string;
+            user?: IUser | any;
+        }
+    }
+}
+
 passport.use('login-token', new LocalStrategy({
     usernameField: 'token',
     passwordField: 'token'
@@ -29,8 +38,8 @@ passport.use('login-token', new LocalStrategy({
     try {
         const users = await User.find({ token: { $exists: true }}, '+token');
         const res = users.find((user: IUserModel) => {
-            if (bcrypt.compareSync(token, user.token)) {
-                return true
+            if (bcrypt.compareSync(token, user.tokenUid)) {
+                return true;
             } else {
                 return false;
             }
@@ -66,9 +75,9 @@ passport.use('signup-user', new LocalStrategy({
 }, async (req: Request, username: string, token: string , done: any) => {
     const hashedToken: string | undefined = (username === token) ? undefined : bcrypt.hashSync(token, bcrypt.genSaltSync(10));
     try {
-        const user = await User.findOne({ username: username.toLowerCase() });
+        const userResult = await User.findOne({ username: username.toLowerCase() });
         const userToken = await User.findOne({ token: hashedToken });
-        if (user) {
+        if (userResult) {
             return done(undefined, false, { message: `User ${username} already exists` });
         }
         if (userToken) {
@@ -80,7 +89,7 @@ passport.use('signup-user', new LocalStrategy({
 
     const user: IUserModel = new User(<IUserModel>{
         username: username.toLowerCase(),
-        token: hashedToken,
+        tokenUid: hashedToken,
         name: {
             firstname: req.body.firstname,
             lastname: req.body.lastname
@@ -109,6 +118,6 @@ export namespace Passport {
         return {
             user: (req.user || {username: undefined}).username,
             token: req.token
-        }
-    }
+        };
+    };
 }

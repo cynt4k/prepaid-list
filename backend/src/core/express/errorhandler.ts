@@ -1,9 +1,8 @@
 import { response } from './response';
 import { HttpCodes } from './codes';
-import { Response, NextFunction, ErrorRequestHandler,  } from 'express';
+import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 import { validationResult } from 'express-validator/check';
 import { TypeError } from '../../errors/express';
-import { Request } from '../../types/express';
 
 export let errorHandler: ErrorRequestHandler = (e: any, req: Request, res: Response, next: NextFunction) => {
     if (e instanceof TypeError) {
