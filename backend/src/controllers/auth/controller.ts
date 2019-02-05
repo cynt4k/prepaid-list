@@ -3,13 +3,14 @@ import { response, HttpCodes } from '../../core/express';
 import passport from 'passport';
 import { Passport } from '../../core';
 import { IUserModel } from '../../types/models';
+import { Template } from '../../misc';
 import { IVerifyOptions } from 'passport-local';
 
 export namespace AuthController {
     export let postLoginUsername = (req: Request, res: Response, next: NextFunction) => {
-        passport.authenticate('login-username', { session: true }, (e: Error, user: IUserModel, info: IVerifyOptions ) => {
+        passport.authenticate('login-username', { session: true }, (e: Error, user: IUserModel, info: IVerifyOptions) => {
             if (e) return next(e);
-            if (!user) return response(res, HttpCodes.NotFound, 'User not found');
+            if (!user) return response(res, HttpCodes.NotFound, info.message);
             req.login(user, (eLogin) => {
                 if (eLogin) return next(eLogin);
                 Passport.generateToken(req);
@@ -21,7 +22,7 @@ export namespace AuthController {
     export let postLoginToken = (req: Request, res: Response, next: NextFunction) => {
         passport.authenticate('login-token', (e: Error, user: IUserModel, info: IVerifyOptions) => {
             if (e) return next(e);
-            if (!user) return response(res, HttpCodes.NotFound, 'Token not found');
+            if (!user) return response(res, HttpCodes.NotFound, info.message);
             req.login(user, (eLogin) => {
                 if (eLogin) return next(eLogin);
                 Passport.generateToken(req);

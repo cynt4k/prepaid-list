@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run tsc && npm run tslint",
     "tslint": "./node_modules/.bin/tslint --project .",
-    "tsc": "./node_modules/.bin/tsc",
+    "tsc": "./node_modules/.bin/tsc && copyfiles -f src/locales/*.json dist/locales",
     "start": "tsc && cross-env NODE_ENV=prd node ./dist/index.js",
     "debug": "tsc && set NODE_ENV=dev && node ./dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -52,6 +52,7 @@
     "@types/passport": "^0.4.7",
     "@types/passport-local": "^1.0.33",
     "@types/string-template": "^1.0.2",
+    "copyfiles": "^2.1.0",
     "tslint": "^5.12.1"
   }
 }

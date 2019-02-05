@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import { Request, Response, NextFunction } from 'express';
 import { errorHandler, unkownRouteHandler } from './core/express';
+import { Template } from './misc';
 import i18n from 'i18n';
 import './types/express';
 import methodOverride from 'method-override';
@@ -19,6 +20,12 @@ switch (process.env.NODE_ENV) {
     case 'prd': logLevel = 'common'; break;
     default: console.log('No environement specified - exit'); process.exit(1); break;
 }
+
+i18n.configure({
+    locales: ['en', 'de'],
+    directory: `${__dirname}/locales`,
+    syncFiles: true
+});
 
 const app = express();
 
@@ -37,7 +44,7 @@ app.use(methodOverride());
 app.use(i18n.init);
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).send('OK');
+    res.status(200).send(res.__(Template.I18N_INFO_SUCCESS));
 });
 
 import { AuthRouter, UserRouter, OrderRouter } from './routes';

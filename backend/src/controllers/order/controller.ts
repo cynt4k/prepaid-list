@@ -11,7 +11,7 @@ export namespace OrderController {
             const newOrder: IOrderModel = <IOrderModel> req.body;
             const result = await Order.create(newOrder);
             if (result) {
-                return response(res, HttpCodes.OK, Template.INFO_SUCCESS, result);
+                return response(res, HttpCodes.OK, res.__(Template.I18N_INFO_SUCCESS), result);
             }
             return response(res, HttpCodes.InternalServerError, Template.ERROR_INTERNAL_SERVER);
         } catch (e) {
@@ -22,7 +22,7 @@ export namespace OrderController {
         try {
             const result = await Order.find({user: req.user!.id});
             if (result) {
-                return response(res, HttpCodes.OK, Template.INFO_SUCCESS, result);
+                return response(res, HttpCodes.OK, res.__(Template.I18N_INFO_SUCCESS), result);
             }
             return response(res, HttpCodes.NotFound, res.__(Template.I18N_NO_ORDERS_FOUND, req.user.username));
         } catch (e) {

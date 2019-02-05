@@ -1,14 +1,15 @@
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
-import passportLocal, { VerifyFunction } from 'passport-local';
+import passportLocal from 'passport-local';
 import { User } from '../../models';
 import bcrypt from 'bcrypt';
 import { any } from 'bluebird';
 import { Request, NextFunction } from 'express';
 import { IUserModel } from '../../types/models';
 import { IUser } from '../../types/express';
+import { Template } from '../../misc';
 
-const LocalStrategy = passportLocal.Strategy as any;
+const LocalStrategy = passportLocal.Strategy;
 
 const secret: string = process.env.JWT_SECRET || '';
 
@@ -32,9 +33,10 @@ declare global {
 }
 
 passport.use('login-token', new LocalStrategy({
+    passReqToCallback: true,
     usernameField: 'token',
     passwordField: 'token'
-}, async (token: string, password: string, done) => {
+}, async (req: Request, token: string, password: string, done: any) => {
     try {
         const users = await User.find({ token: { $exists: true }}, '+token');
         const res = users.find((user: IUserModel) => {
@@ -45,7 +47,7 @@ passport.use('login-token', new LocalStrategy({
             }
         });
         if (!res) {
-            return done(undefined, false, { message: `Token ${token} not found` });
+            return done(undefined, false, { message: req.__(Template.I18N_WARN_UID_TOKEN_NOT_FOUND, token) });
         }
         return done(undefined, res);
     } catch (e) {
@@ -54,13 +56,14 @@ passport.use('login-token', new LocalStrategy({
 }));
 
 passport.use('login-username', new LocalStrategy({
+    passReqToCallback: true,
     usernameField: 'username',
     passwordField: 'username'
-}, async (username: string, password: string, done) => {
+}, async (req: Request, username: string, password: string, done) => {
     try {
         const user = await User.findOne({ username: username.toLowerCase() });
         if (!user) {
-            return done(undefined, false, { message: `Username ${username.toLowerCase()} not found`});
+            return done(undefined, false, { message: req.__(Template.I18N_WARN_USER_NOT_FOUND, username) });
         }
         return done(undefined, user);
     } catch (e) {
@@ -72,16 +75,16 @@ passport.use('signup-user', new LocalStrategy({
     passReqToCallback: true,
     usernameField: 'username',
     passwordField: 'token'
-}, async (req: Request, username: string, token: string , done: any) => {
+}, async (req: Request, username: string, token: string , done) => {
     const hashedToken: string | undefined = (username === token) ? undefined : bcrypt.hashSync(token, bcrypt.genSaltSync(10));
     try {
         const userResult = await User.findOne({ username: username.toLowerCase() });
         const userToken = await User.findOne({ token: hashedToken });
         if (userResult) {
-            return done(undefined, false, { message: `User ${username} already exists` });
+            return done(undefined, false, { message: req.__(Template.I18N_WARN_USER_EXIST, username) });
         }
         if (userToken) {
-            return done(undefined, false, { message: `Token ${token} already exists` });
+            return done(undefined, false, { message: req.__(Template.I18N_WARN_UID_TOKEN_EXIST, token) });
         }
     } catch (e) {
         return done(e);
