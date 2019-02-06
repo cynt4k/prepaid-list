@@ -1,11 +1,34 @@
+import { RequestHandler, Request, Response, NextFunction } from 'express';
 import { Types } from 'mongoose';
+import { I18n } from '../../misc';
 import { IAclModel, IUserModel, AclRight } from '../../types/models';
 import { Acl, User } from '../../models';
+import  { PrepaidListError } from '../../errors';
+import { ErrorCode } from '../../types/error';
 
-export namespace AclCheck {
+export namespace CheckAcl {
 
     export const init = (): void => {
 
+    };
+
+    export const middlewareIsAllowed = (right: AclRight): RequestHandler => {
+        const middleware: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const result = await isAllowed(req.user.id, right);
+                if (result) {
+                    return next();
+                } else {
+                    return next(new PrepaidListError(I18n.WARN_USER_NOT_ALLOWED, ErrorCode.USER_NOT_ALLOWED));
+                }
+            } catch (e) {
+                return next(e);
+            }
+        };
+
+        middleware.bind(right);
+
+        return middleware;
     };
 
     export const isAllowed = async (userId: Types.ObjectId, right: AclRight): Promise<boolean> => {
@@ -25,11 +48,11 @@ export namespace AclCheck {
     };
 
     const getFullUser = async (userId: Types.ObjectId): Promise<IUserModel> => {
-        let result = await User.findById(userId).populate('acl-group').exec();
+        let result = await User.findById(userId).populate('role').exec();
         if (!result) {
             throw new Error('User not found');
         }
-        result = await result.populate('childs').populate('acls').execPopulate();
+        result = await result.populate('childs').populate('acl').execPopulate();
         return result;
     };
 }

@@ -19,7 +19,7 @@ export const userSchema = new mongoose.Schema({
     },
     balance: { type: Number, default: 0.0 },
     active: { type: Boolean, required: true, default: true },
-    role: { type: Schema.Types.ObjectId, ref: 'acl-group', required: true }
+    role: { type: Schema.Types.ObjectId, ref: 'AclGroup', required: true }
 });
 
 userSchema.methods.toJson = function(this: IUserModel) {

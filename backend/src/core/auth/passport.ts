@@ -113,18 +113,28 @@ export namespace Passport {
     const refreshToken: string = randomBytes(30).toString('hex');
 
     export const generateToken = (req: Request) => {
+        let refreshObject: Object = { };
+        if (!req.body.unlimited) {
+            refreshObject = {
+                expiresIn: '5m'
+            };
+        }
+
         req.token = jwt.sign({
             username: (req.user || { username: undefined}).username,
             id: (req.user || {id: undefined}).id
-        }, process.env.JWT_SECRET || '', {
-            expiresIn: (req.body.unlimited ? 0 : '5m')
-        });
+        }, process.env.JWT_SECRET || '', refreshObject);
+
+        if (!req.body.unlimited) {
+            refreshObject = {
+                expiresIn: '1h'
+            };
+        }
+
         req.refreshToken = jwt.sign({
             username: (req.user || { username: undefined}).username,
             id: (req.user || {id: undefined}).id
-        }, refreshToken, {
-            expiresIn: (req.body.unlimited ? 0 : '1h')
-        });
+        }, refreshToken, refreshObject);
     };
 
     export const respondToken = (req: Request) => {

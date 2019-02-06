@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 
 import { AuthController } from '../controllers';
-import { CheckAuth } from '../core/auth';
+import { CheckAuth, CheckAcl } from '../core';
 
 const router: Router = Router();
 

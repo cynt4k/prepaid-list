@@ -2,7 +2,7 @@ import { Model, Schema } from 'mongoose';
 import mongoose from 'mongoose';
 import { IOrderModel, IUserModel, AclRight } from '../types/models';
 import { ErrorCode } from '../types/error';
-import { AclCheck } from '../core/acl';
+import { CheckAcl } from '../core/acl';
 import { User } from './user';
 import { PrepaidListError } from '../errors';
 import { Settings } from './settings';
@@ -24,7 +24,7 @@ orderSchema.pre('validate', async function() {
     const newDocument: IOrderModel = <IOrderModel> this;
     try {
         const user = await User.findById(newDocument.user).exec() as IUserModel;
-        const isPrepaid = await AclCheck.isAllowed(newDocument.user, AclRight.PREPAID_ALLOW);
+        const isPrepaid = await CheckAcl.isAllowed(newDocument.user, AclRight.PREPAID_ALLOW);
         const settings = await Settings.find().exec();
         if (isPrepaid) {
             if (settings[0]!.prepaidMinBalance < user.balance - newDocument.totalPrice) {
