@@ -7,9 +7,9 @@ import mongooseAutopopulate from 'mongoose-autopopulate';
 
 const aclGroupSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true },
-    childs: [{ type: Schema.Types.ObjectId, ref: 'AclGroup', autopopulate: true }],
-    acls: [{ type: Schema.Types.ObjectId, ref: 'Acl', required: true, autopopulate: true }]
-});
+    childs: [{ type: Schema.Types.ObjectId, ref: 'AclGroup' }],
+    acls: [{ type: Schema.Types.ObjectId, ref: 'Acl', required: true }]
+}, { toJSON: { virtuals: true }});
 
 aclGroupSchema.pre('save', function() {
     const newDocument = <IAclGroupModel> this;

@@ -57,7 +57,7 @@ export namespace CheckAcl {
         if (!result) {
             throw new PrepaidListError(I18n.WARN_USER_NOT_FOUND, ErrorCode.USER_NOT_FOUND);
         }
-        result = await result.populate('childs').populate('acls').execPopulate();
+        result = await result.populate('role.acls').populate('role.childs').execPopulate();
         return result;
     };
 }

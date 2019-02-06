@@ -17,6 +17,14 @@ aclSchema.pre('save', function() {
     }
 });
 
+aclSchema.methods.toJSON = function(this: IAclModel) {
+    const obj = this.toObject() as IAclModel;
+    obj.id = obj._id;
+    delete obj._id;
+    delete obj.__v;
+    return obj;
+};
+
 aclSchema.plugin(mongooseHistory);
 aclSchema.plugin(mongooseTimestamp);
 
