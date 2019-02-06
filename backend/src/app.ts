@@ -21,12 +21,6 @@ switch (process.env.NODE_ENV) {
     default: console.log('No environement specified - exit'); process.exit(1); break;
 }
 
-i18n.configure({
-    locales: ['en', 'de'],
-    directory: `${__dirname}/locales`,
-    syncFiles: true
-});
-
 const app = express();
 
 app.set('port', process.env.PORT || 3000);
@@ -41,7 +35,6 @@ app.use(lusca.xssProtection(true));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride());
-app.use(i18n.init);
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send(res.__(I18n.INFO_SUCCESS));
