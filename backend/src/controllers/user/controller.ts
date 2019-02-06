@@ -6,16 +6,28 @@ import { IUserModel } from '../../types/models/user';
 import { Template, I18n } from '../../misc';
 export namespace UserController {
 
-    export const registerUser = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
+    export const getAllUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const newUser: IUserModel = <IUserModel> req.body;
-            const result = await User.create(newUser);
-            if (result) {
-                return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, result);
-            }
-            return response(res, HttpCodes.InternalServerError, I18n.ERR_INTERNAL_SERVER);
+            const users = await User.find().exec();
+            if (!users) return response(res, HttpCodes.NotFound, I18n.INFO_SUCCESS, []);
+            const prettyUser = users.map((user) => {
+                if (user.name.firstname && user.name.lastname) {
+                    const name = `${user.name.firstname} ${user.name.lastname}`;
+                    return {
+                        nickname: user.username,
+                        name: name
+                    };
+                }
+                return {
+                    nickname: user.username
+                };
+            }).reduce((acc: any, curr) => {
+                acc.push(curr);
+                return acc;
+            }, []);
+            return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, prettyUser);
         } catch (e) {
-            return next(e);
+            throw e;
         }
     };
 }
