@@ -31,12 +31,11 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import {User} from '@/interfaces/User';
 
-@Component({components: {}})
+@Component({})
 export default class AlphabetList extends Vue {
 
     @Prop({default: null})
     private items!: User[];
-    private scrollingLetter : string = '';
     private alphaUserList: AlphabetUser[] = [];
 
     constructor() {
@@ -48,9 +47,9 @@ export default class AlphabetList extends Vue {
     }
 
     private mounted() {
-        const result = this.items.map((user) => ({letter: user.name[0], user})).reduce( (acc: any, curr) =>
-            { const letter = curr.letter.toLowerCase();
-              if (!acc[letter]) { acc[letter] = []; } acc[letter].push(curr.user); return acc; }, {});
+        const result = this.items.map((user) => ({letter: user.name[0], user}))
+            .reduce( (acc: any, curr) => { const letter = curr.letter.toLowerCase();
+                                           (acc[letter] =  acc[letter] || []).push(curr.user); return acc; }, {});
 
         this.alphabet.forEach((letter: string) => {
             const obj: AlphabetUser = {letter, users: result[letter]};
@@ -58,7 +57,7 @@ export default class AlphabetList extends Vue {
         });
     }
 
-    private emitUser(item:any) {
+    private emitUser(item: any) {
         this.$emit('user-selected', item);
     }
 
