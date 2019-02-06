@@ -1,8 +1,8 @@
 import { Document, Types } from 'mongoose';
 
-export interface IProductOrder extends Document {
+export interface IProductOrder {
     productId: Types.ObjectId,
-    price: Number,
-    totalPrice: Number,
-    quantity: Number    
+    price: number,
+    totalPrice: number,
+    quantity: number    
 }
