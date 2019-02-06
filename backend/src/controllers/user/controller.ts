@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from 'express';
 import { User } from '../../models/user';
 import { IUserModel } from '../../types/models/user';
 import { Template, I18n } from '../../misc';
+
 export namespace UserController {
 
     export const getAllUser = async (req: Request, res: Response, next: NextFunction) => {

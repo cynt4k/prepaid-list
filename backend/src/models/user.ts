@@ -22,7 +22,7 @@ export const userSchema = new mongoose.Schema({
     role: { type: Schema.Types.ObjectId, ref: 'AclGroup', required: true }
 });
 
-userSchema.methods.toJson = function(this: IUserModel) {
+userSchema.methods.toJSON = function(this: IUserModel) {
     let obj = this.toObject();
     obj.id = obj._id;
     delete obj.__v;
