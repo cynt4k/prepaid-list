@@ -3,11 +3,12 @@ import mongoose from 'mongoose';
 import { IAclModel, AclRight, IAclGroupModel } from '../types/models';
 import mongooseHistory from 'mongoose-history';
 import mongooseTimestamp from 'mongoose-timestamp';
+import mongooseAutopopulate from 'mongoose-autopopulate';
 
 const aclGroupSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true },
-    childs: [{ type: Schema.Types.ObjectId, ref: 'AclGroup' }],
-    acls: [{ type: Schema.Types.ObjectId, ref: 'Acl', required: true }]
+    childs: [{ type: Schema.Types.ObjectId, ref: 'AclGroup', autopopulate: true }],
+    acls: [{ type: Schema.Types.ObjectId, ref: 'Acl', required: true, autopopulate: true }]
 });
 
 aclGroupSchema.pre('save', function() {
@@ -25,5 +26,6 @@ aclGroupSchema.pre('save', function() {
 
 aclGroupSchema.plugin(mongooseHistory);
 aclGroupSchema.plugin(mongooseTimestamp);
+aclGroupSchema.plugin(mongooseAutopopulate);
 
 export const AclGroup: Model<IAclGroupModel> = mongoose.model<IAclGroupModel>('AclGroup', aclGroupSchema, 'acl-group');

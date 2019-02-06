@@ -35,16 +35,21 @@ export namespace CheckAcl {
         try {
             const user = await getFullUser(userId);
             // const acl = await Acl.find({rights: { $elemMatch: { right }}});
+            let success = false;
             user.role.acls.forEach((acl: IAclModel) => {
                 const result = acl.rights.find((searchAcl: AclRight) => searchAcl === right);
                 if (result) {
-                    return Promise.resolve(true);
+                    success = true;
+                    return;
                 }
             });
+            if (success) {
+                return Promise.resolve(true);
+            }
+            return Promise.resolve(false);
         } catch (e) {
-            throw e;
+            return Promise.reject(e);
         }
-        return Promise.resolve(false);
     };
 
     const getFullUser = async (userId: Types.ObjectId): Promise<IUserModel> => {
@@ -52,7 +57,7 @@ export namespace CheckAcl {
         if (!result) {
             throw new Error('User not found');
         }
-        result = await result.populate('childs').populate('acl').execPopulate();
+        result = await result.populate('childs').populate('acls').execPopulate();
         return result;
     };
 }
