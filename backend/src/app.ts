@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import { Request, Response, NextFunction } from 'express';
 import { errorHandler, unkownRouteHandler } from './core/express';
-import { Template } from './misc';
+import { Template, I18n } from './misc';
 import i18n from 'i18n';
 import './types/express';
 import methodOverride from 'method-override';
@@ -44,7 +44,7 @@ app.use(methodOverride());
 app.use(i18n.init);
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).send(res.__(Template.I18N_INFO_SUCCESS));
+    res.status(200).send(res.__(I18n.INFO_SUCCESS));
 });
 
 import { AuthRouter, UserRouter, OrderRouter } from './routes';

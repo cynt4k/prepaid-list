@@ -6,7 +6,7 @@ import { AclCheck } from '../core/acl';
 import { User } from './user';
 import { PrepaidListError } from '../errors';
 import { Settings } from './settings';
-import { Template } from '../misc/template';
+import { Template, I18n } from '../misc/template';
 import mongooseTimestamp from 'mongoose-timestamp';
 
 const orderSchema = new mongoose.Schema({
@@ -28,11 +28,11 @@ orderSchema.pre('validate', async function() {
         const settings = await Settings.find().exec();
         if (isPrepaid) {
             if (settings[0]!.prepaidMinBalance < user.balance - newDocument.totalPrice) {
-                throw new PrepaidListError(Template.ERROR_LOW_BALANCE(user.id), ErrorCode.LOW_BALANCE);
+                throw new PrepaidListError(I18n.ERR_LOW_BALANCE, ErrorCode.LOW_BALANCE);
             }
         } else {
             if (user.balance - newDocument.totalPrice < 0) {
-                throw new PrepaidListError(Template.ERROR_LOW_BALANCE(user.id), ErrorCode.LOW_BALANCE);
+                throw new PrepaidListError(I18n.ERR_LOW_BALANCE, ErrorCode.LOW_BALANCE);
             }
         }
     } catch (e) {

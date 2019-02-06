@@ -6,7 +6,7 @@ import { AclGroup } from './acl-group';
 import { PrepaidListError } from '../errors';
 import mongooseHistory from 'mongoose-history';
 import mongooseTimestamp from 'mongoose-timestamp';
-import { Template } from '../misc';
+import { Template, I18n } from '../misc';
 import { ErrorCode } from '../types/error';
 
 export const userSchema = new mongoose.Schema({
@@ -50,7 +50,7 @@ userSchema.pre('validate', async function (): Promise<void> {
     try {
         const aclGroup = await AclGroup.findOne({ name: process.env.DEFAULT_ACL_GROUP as string | 'User'}).exec();
         if (!aclGroup) {
-            throw new PrepaidListError(Template.ERROR_ACL_GROUP_NOT_FOUND, ErrorCode.ACL_GROUP_NOT_FOUND);
+            throw new PrepaidListError(I18n.ERR_ACL_GROUP_NOT_FOUND, ErrorCode.ACL_GROUP_NOT_FOUND);
         }
         newDocument.role = aclGroup;
     } catch (e) {

@@ -7,7 +7,7 @@ import { any } from 'bluebird';
 import { Request, NextFunction } from 'express';
 import { IUserModel } from '../../types/models';
 import { IUser } from '../../types/express';
-import { Template } from '../../misc';
+import { Template, I18n } from '../../misc';
 import { randomBytes } from 'crypto';
 
 const LocalStrategy = passportLocal.Strategy;
@@ -49,7 +49,7 @@ passport.use('login-token', new LocalStrategy({
             }
         });
         if (!res) {
-            return done(undefined, false, { message: req.__(Template.I18N_WARN_UID_TOKEN_NOT_FOUND, token) });
+            return done(undefined, false, { message: I18n.WARN_UID_TOKEN_NOT_FOUND  });
         }
         return done(undefined, res);
     } catch (e) {
@@ -65,7 +65,7 @@ passport.use('login-username', new LocalStrategy({
     try {
         const user = await User.findOne({ username: username.toLowerCase() });
         if (!user) {
-            return done(undefined, false, { message: req.__(Template.I18N_WARN_USER_NOT_FOUND, username) });
+            return done(undefined, false, { message: I18n.WARN_USER_NOT_FOUND });
         }
         return done(undefined, user);
     } catch (e) {
@@ -83,10 +83,10 @@ passport.use('signup-user', new LocalStrategy({
         const userResult = await User.findOne({ username: username.toLowerCase() });
         const userToken = await User.findOne({ token: hashedToken });
         if (userResult) {
-            return done(undefined, false, { message: req.__(Template.I18N_WARN_USER_EXIST, username) });
+            return done(undefined, false, { message: I18n.WARN_USER_EXIST });
         }
         if (userToken) {
-            return done(undefined, false, { message: req.__(Template.I18N_WARN_UID_TOKEN_EXIST, token) });
+            return done(undefined, false, { message: I18n.WARN_UID_TOKEN_EXIST });
         }
     } catch (e) {
         return done(e);

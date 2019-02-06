@@ -3,7 +3,7 @@ import { response, HttpCodes } from '../../core/express';
 import passport from 'passport';
 import { Passport } from '../../core';
 import { IUserModel } from '../../types/models';
-import { Template } from '../../misc';
+import { Template, I18n } from '../../misc';
 import { IVerifyOptions } from 'passport-local';
 
 export namespace AuthController {
@@ -14,7 +14,7 @@ export namespace AuthController {
             req.login(user, (eLogin) => {
                 if (eLogin) return next(eLogin);
                 Passport.generateToken(req);
-                return response(res, HttpCodes.OK, res.__(Template.I18N_INFO_SUCCESS), Passport.respondToken(req));
+                return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, Passport.respondToken(req));
             });
         })(req, res, next);
     };
@@ -26,7 +26,7 @@ export namespace AuthController {
             req.login(user, (eLogin) => {
                 if (eLogin) return next(eLogin);
                 Passport.generateToken(req);
-                return response(res, HttpCodes.OK, res.__(Template.I18N_INFO_SUCCESS), Passport.respondToken(req));
+                return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, Passport.respondToken(req));
             });
         })(req, res, next);
     };
@@ -38,7 +38,7 @@ export namespace AuthController {
             req.login(user, (eLogin) => {
                 if (eLogin) return next(eLogin);
                 Passport.generateToken(req);
-                return response(res, HttpCodes.OK , res.__(Template.I18N_INFO_SUCCESS), Passport.respondToken(req));
+                return response(res, HttpCodes.OK , I18n.INFO_SUCCESS, Passport.respondToken(req));
             });
         })(req, res, next);
     };
@@ -46,12 +46,12 @@ export namespace AuthController {
     export const renewToken = (req: Request, res: Response, next: NextFunction) => {
         if (req.body.refreshToken) {
             Passport.verifyRefreshToken(req.body.refreshToken, (e) => {
-                if (e) return response(res, HttpCodes.BadRequest, res.__(e.message));
+                if (e) return response(res, HttpCodes.BadRequest, e.message);
                 Passport.generateToken(req);
-                return response(res, HttpCodes.OK, res.__(Template.I18N_INFO_SUCCESS), Passport.respondToken(req));
+                return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, Passport.respondToken(req));
             });
         } else {
-            return response(res, HttpCodes.BadRequest, res.__(Template.I18N_WARN_NO_REFRESH_TOKEN));
+            return response(res, HttpCodes.BadRequest, I18n.WARN_NO_REFRESH_TOKEN);
         }
     };
 }
