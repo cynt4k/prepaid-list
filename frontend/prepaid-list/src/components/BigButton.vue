@@ -1,28 +1,33 @@
 <template>
-          <v-card class="bigButton" @click="emitClick()">
+<!-- <v-btn> -->
+          <v-btn class="bigButton" @click="emitClick()" :disabled="disabled" :class="[disabled == null ? '' : 'disabled']">
         <v-layout align-center justify-center
       text-xs-center wrap column
     >
-        <v-icon size="100">{{icon}}</v-icon>
+        <v-icon size="100" class="icon">{{icon}}</v-icon>
         <v-card-title class="title" ><h2 class="font-weight-light">{{title}}</h2></v-card-title>
         </v-layout>
-      </v-card>
+      </v-btn>
+<!-- </v-btn> -->
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-@Component({
-})
+@Component({})
 export default class BigButton extends Vue {
 
     @Prop({default: null})
     private icon!: string;
     @Prop({default: null})
     private title!: string;
+    @Prop({default: null})
+    private disabled!: string;
 
     private emitClick() {
-        this.$emit('click');
+        if (!this.disabled) {
+            this.$emit('click');
+         }
     }
 
 }
@@ -30,12 +35,15 @@ export default class BigButton extends Vue {
 <style lang="scss" scoped>
 .bigButton {
     cursor: pointer;
-    width: 250px;
-    height: 250px;
     display: flex;
-    .title {
-        // align-self: flex-end;
+    height: 100%;
+    width: 100%;
+}
+.bigButton.disabled {
+    .title, .icon {
+        color: grey;
     }
+    
 }
 </style>
 
