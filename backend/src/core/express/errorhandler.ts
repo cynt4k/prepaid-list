@@ -3,6 +3,7 @@ import { HttpCodes } from './codes';
 import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 import { validationResult } from 'express-validator/check';
 import { TypeError } from '../../errors/express';
+import { I18n } from '../../misc';
 
 export let errorHandler: ErrorRequestHandler = (e: any, req: Request, res: Response, next: NextFunction) => {
     if (e instanceof TypeError) {
@@ -27,7 +28,7 @@ export namespace ErrorHandler {
     export let validateBody = (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return next(new TypeError('Invalid params', errors.array()));
+            return next(new TypeError(I18n.WARN_INVALID_PARAMS, errors.array()));
         }
         return next();
     };

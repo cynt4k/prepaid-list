@@ -1,12 +1,14 @@
-import express, { Router } from 'express';
+import express, { Router, Request, Response, NextFunction } from 'express';
 
 import { OrderController } from '../controllers';
-import { CheckAcl, CheckAuth } from '../core';
+import { CheckAcl, CheckAuth, ErrorHandler } from '../core';
+import { OrderValidator } from '../misc/validators';
 import { AclRight } from '../types/models';
+import { body, check } from 'express-validator/check';
 
 const router: Router = Router();
 
-router.post('/', CheckAuth.isAuth, CheckAcl.middlewareIsAllowed(AclRight.PREPAID_ALLOW), OrderController.submitNewOrder);
+router.post('/', CheckAuth.isAuth, CheckAcl.middlewareIsAllowed(AclRight.PREPAID_ALLOW),
+    OrderValidator.newOrder(), OrderController.submitNewOrder);
 router.get('/ordersForUser', OrderController.getOrdersForUser);
-
 export const OrderRouter: Router = router;

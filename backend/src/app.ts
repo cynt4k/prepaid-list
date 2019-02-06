@@ -37,7 +37,7 @@ app.use(passport.session());
 app.use(methodOverride());
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).send(res.__(I18n.INFO_SUCCESS));
+    res.status(200).send(I18n.INFO_SUCCESS);
 });
 
 import { AuthRouter, UserRouter, OrderRouter } from './routes';

@@ -1,6 +1,6 @@
 import { RequestHandler, Request, Response, NextFunction } from 'express';
 import { Types } from 'mongoose';
-import { I18n } from '../../misc';
+import { I18n, Template } from '../../misc';
 import { IAclModel, IUserModel, AclRight } from '../../types/models';
 import { Acl, User } from '../../models';
 import  { PrepaidListError } from '../../errors';
@@ -55,7 +55,7 @@ export namespace CheckAcl {
     const getFullUser = async (userId: Types.ObjectId): Promise<IUserModel> => {
         let result = await User.findById(userId).populate('role').exec();
         if (!result) {
-            throw new Error('User not found');
+            throw new PrepaidListError(I18n.WARN_USER_NOT_FOUND, ErrorCode.USER_NOT_FOUND);
         }
         result = await result.populate('childs').populate('acls').execPopulate();
         return result;
