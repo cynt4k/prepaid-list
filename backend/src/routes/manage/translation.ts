@@ -8,6 +8,7 @@ import { body, check } from 'express-validator/check';
 
 const router: Router = Router();
 
+router.get('/', CheckAuth.isAuth, TranslationController.getTranslations);
 router.post('/', CheckAuth.isAuth, TranslationValidator.createTranslation(), TranslationController.postTranslation);
 
 export const TranslationManageRouter: Router = router;
