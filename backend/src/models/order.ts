@@ -18,7 +18,12 @@ const orderSchema = new mongoose.Schema({
     }],
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     totalPrice: { type: Number, required: true }
-});
+}, { toJSON: { transform: function(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    return ret;
+}}});
 
 orderSchema.pre('validate', async function() {
     const newDocument: IOrderModel = <IOrderModel> this;

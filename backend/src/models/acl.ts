@@ -18,10 +18,10 @@ aclSchema.pre('save', function() {
 });
 
 aclSchema.methods.toJSON = function(this: IAclModel) {
-    const obj = this.toObject() as IAclModel;
+    let obj = this.toObject();
     obj.id = obj._id;
-    delete obj._id;
     delete obj.__v;
+    delete obj._id;
     return obj;
 };
 

@@ -20,15 +20,13 @@ export const userSchema = new mongoose.Schema({
     balance: { type: Number, default: 0.0 },
     active: { type: Boolean, required: true, default: true },
     role: { type: Schema.Types.ObjectId, ref: 'AclGroup', required: true }
-});
-
-userSchema.methods.toJSON = function(this: IUserModel) {
-    let obj = this.toObject();
-    obj.id = obj._id;
-    delete obj.__v;
-    delete obj._id;
-    return obj;
-};
+}, { toJSON: { transform: function(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    delete ret.tokenUid;
+    return ret;
+}}});
 
 userSchema.methods.compareToken = function(checkingToken: string, cb: (e: any, isMatch: any) => {}) {
     bcrypt.compare(checkingToken, this.token, (e: mongoose.Error, isMatch: boolean) => {
