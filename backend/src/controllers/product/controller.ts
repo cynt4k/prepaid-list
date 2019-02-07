@@ -45,4 +45,15 @@ export namespace ProductController {
             return next(e);
         }
     };
+
+    export const postProduct = async (req: Request, res: Response, next: NextFunction) => {
+        const newProduct: IProductModel = new Product(req.body);
+
+        try {
+            const result = await newProduct.save();
+            return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, result);
+        } catch (e) {
+            return next(e);
+        }
+    };
 }

@@ -6,7 +6,7 @@ import { ITimestamp } from './timestamp';
 
 export interface IProductModel extends Document, ITimestamp {
     name: ITranslationModel;
-    barcode: number;
+    barcode: string;
     icon: string;
     price: number;
     extras: IProductExtra[];

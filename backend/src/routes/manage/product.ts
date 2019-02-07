@@ -9,5 +9,6 @@ import { body, check } from 'express-validator/check';
 const router: Router = Router();
 
 router.post('/category', CheckAuth.isAuth, ProductValidator.createCategory(), ProductController.postCategory);
+router.post('/', CheckAuth.isAuth, ProductValidator.createProduct(), ProductController.postProduct);
 
 export const ProductManageRouter: Router = router;
