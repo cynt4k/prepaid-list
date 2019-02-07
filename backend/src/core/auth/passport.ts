@@ -95,9 +95,10 @@ passport.use('signup-user', new LocalStrategy({
     const user: IUserModel = new User(<IUserModel>{
         username: username.toLowerCase(),
         tokenUid: hashedToken,
+        email: req.body.email,
         name: {
-            firstname: req.body.firstname,
-            lastname: req.body.lastname
+            firstname: req.body.name.firstname,
+            lastname: req.body.name.lastname
         }
     });
 

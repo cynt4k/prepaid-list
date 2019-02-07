@@ -1,7 +1,10 @@
 export enum AclRight {
+    USER_GET = 'user_get',
     USER_ADD = 'user_add',
     USER_DEL = 'user_delete',
     USER_MOD = 'user_mod',
+    USER_ENABLE = 'user_enable',
+    USER_DISABLE = 'user_disable',
     PREPAID_ALLOW = 'prepaid_allow',
     ORDER_GET = 'order_get',
     ORDER_ADD = 'order_add',
@@ -14,5 +17,10 @@ export enum AclRight {
     CATEGORY_GET = 'category_get',
     CATEGORY_ADD = 'category_add',
     CATEGORY_DEL = 'category_del',
-    CATEGORY_MOD = 'category_mod'
+    CATEGORY_MOD = 'category_mod',
+    PROFILE_GET = 'profile_get',
+    PROFILE_MOD = 'profile_mod',
+    PROFILE_DISABLE = 'profile_disable',
+    PROFILE_MOD_BALANCE = 'profile_mod_balance',
+    PROFILE_MOD_TOKENUID = 'profile_mod_tokenuid'
 }

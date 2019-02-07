@@ -1,0 +1,215 @@
+{
+    "acl": [
+        {
+            "_id": "5c5ae63cb68a2959cc4f04eb",
+            "name": "Allow prepaid",
+            "rights": [
+                "prepaid_allow"
+            ]
+        },
+        {
+            "_id": "5c5bf678b68a2959cc4f2762",
+            "name": "Allow create order",
+            "rights": [
+                "order_add",
+                "product_get",
+                "category_get"
+            ]
+        },
+        {
+            "_id": "5c5cb883b68a2959cc4f5832",
+            "name": "Allow edit profile",
+            "rights": [
+                "profile_mod",
+                "profile_get"
+            ]
+        },
+        {
+            "_id": "5c5cb8bbb68a2959cc4f583f",
+            "name": "Allow get products",
+            "rights": [
+                "product_get"
+            ]
+        },
+        {
+            "_id": "5c5cb8e4b68a2959cc4f5845",
+            "name": "Allow get category",
+            "rights": [
+                "category_get",
+                "product_get"
+            ]
+        },
+        {
+            "_id": "5c5cb90eb68a2959cc4f5850",
+            "name": "Allow get profile",
+            "rights": [
+                "profile_get"
+            ]
+        },
+        {
+            "_id": "5c5cb944b68a2959cc4f585d",
+            "name": "Allow disable profile",
+            "rights": [
+                "profile_get",
+                "profile_mod",
+                "profile_disable"
+            ]
+        },
+        {
+            "_id": "5c5cbdb7b68a2959cc4f5927",
+            "name": "Allow add product",
+            "rights": [
+                "product_get",
+                "product_add"
+            ]
+        },
+        {
+            "_id": "5c5cbdb7b68a2959cc4f5929",
+            "name": "Allow delete product",
+            "rights": [
+                "product_get",
+                "product_del"
+            ]
+        },
+        {
+            "_id": "5c5cbdb7b68a2959cc4f592b",
+            "name": "Allow modify product",
+            "rights": [
+                "product_get",
+                "product_mod"
+            ]
+        },
+        {
+            "_id": "5c5cbdb7b68a2959cc4f592d",
+            "name": "Allow add category",
+            "rights": [
+                "category_get",
+                "category_add"
+            ]
+        },
+        {
+            "_id": "5c5cbdb7b68a2959cc4f592f",
+            "name": "Allow delete category",
+            "rights": [
+                "category_get",
+                "category_del"
+            ]
+        },
+        {
+            "_id": "5c5cbdb7b68a2959cc4f5931",
+            "name": "Allow modify category",
+            "rights": [
+                "category_get",
+                "category_mod"
+            ]
+        },
+        {
+            "_id": "5c5cbde5b68a2959cc4f593c",
+            "name": "Allow delete user",
+            "rights": [
+                "user_get",
+                "user_del"
+            ]
+        },
+        {
+            "_id": "5c5cbed7b68a2959cc4f595f",
+            "name": "Allow disable user",
+            "rights": [
+                "user_get",
+                "user_disable"
+            ]
+        },
+        {
+            "_id": "5c5cbed7b68a2959cc4f5961",
+            "name": "Allow enable user",
+            "rights": [
+                "user_get",
+                "user_enable"
+            ]
+        }
+    ],
+    "acl-group": [
+        {
+            "_id": "5c5a122fb68a2959cc4ef706",
+            "name": "User",
+            "acls": [
+                "5c5bf678b68a2959cc4f2762",
+                "5c5cb883b68a2959cc4f5832",
+                "5c5cb8bbb68a2959cc4f583f",
+                "5c5cb8e4b68a2959cc4f5845",
+                "5c5cb90eb68a2959cc4f5850",
+                "5c5cb944b68a2959cc4f585d"
+            ]
+        },
+        {
+            "_id": "5c5cba8bb68a2959cc4f5899",
+            "name": "FSIM",
+            "acls": [
+                "5c5cbde5b68a2959cc4f593c",
+                "5c5cbed7b68a2959cc4f595f",
+                "5c5cbed7b68a2959cc4f5961"
+            ]
+        },
+        {
+            "_id": "5c5cbabeb68a2959cc4f58a2",
+            "name": "Treasurer",
+            "acls": []
+        },
+        {
+            "_id": "5c5cbae9b68a2959cc4f58ae",
+            "name": "Purchase",
+            "acls": [
+                "5c5cbdb7b68a2959cc4f5927",
+                "5c5cbdb7b68a2959cc4f5929",
+                "5c5cbdb7b68a2959cc4f592b",
+                "5c5cbdb7b68a2959cc4f592d",
+                "5c5cbdb7b68a2959cc4f592f",
+                "5c5cbdb7b68a2959cc4f5931"
+            ]
+        },
+        {
+            "_id": "5c5cbb84b68a2959cc4f58c7",
+            "name": "Trusted",
+            "acls": [
+                "5c5ae63cb68a2959cc4f04eb",
+                "5c5cb8bbb68a2959cc4f583f",
+                "5c5cb8e4b68a2959cc4f5845",
+                "5c5bf678b68a2959cc4f2762",
+                "5c5cb90eb68a2959cc4f5850",
+                "5c5cb944b68a2959cc4f585d",
+                "5c5cb883b68a2959cc4f5832"
+            ]
+        },
+        {
+            "_id": "5c5cbb9cb68a2959cc4f58cc",
+            "name": "Admin",
+            "acls": []
+        }
+    ],
+    "user": [
+        {
+            "_id" : "5c5a124c60f24f3925c3fdc4",
+            "balance" : 0,
+            "active" : true,
+            "username" : "user",
+            "name": {
+                "firstname": "Test",
+                "lastname": "User"
+            },
+            "role" : "5c5a122fb68a2959cc4ef706"
+        },
+        {
+            "_id" : "5c5cc4ee5bf0ce495c54da6a",
+            "balance" : 0,
+            "active" : true,
+            "username" : "admin",
+            "name": {
+                "firstname": "Admin",
+                "lastname": "User"
+            },
+            "tokenUid" : "$2b$10$XOxZTA2cnb/ZQCr6UGMO2uSD/ZkkTEdyYkVFO/zwQgZXcyFg5uT/C",
+            "email" : "admin@admin.de",
+            "role" : "5c5cbb9cb68a2959cc4f58cc"
+        }
+    ]
+}
