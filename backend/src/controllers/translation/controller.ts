@@ -16,4 +16,14 @@ export namespace TranslationController {
             return next(e);
         }
     };
+
+    export const getTranslations = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const result = await Translation.find().exec();
+            if (!result) return response(res, HttpCodes.NotFound, I18n.VAL_TRANSLATION_MISSING);
+            return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, result);
+        } catch (e) {
+            return next(e);
+        }
+    };
 }

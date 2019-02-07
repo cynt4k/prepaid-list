@@ -47,7 +47,7 @@ app.use('/auth', AuthRouter);
 app.use('/user', UserRouter);
 app.use('/order', OrderRouter);
 app.use('/profile', ProfileRouter);
-app.use('/product', ProductRouter);
+app.use('/info', ProductRouter);
 
 app.use('/manage/translation', TranslationManageRouter);
 app.use('/manage/product', ProductManageRouter);

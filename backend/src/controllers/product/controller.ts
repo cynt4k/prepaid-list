@@ -26,9 +26,19 @@ export namespace ProductController {
         }
     };
 
+    export const getAllProductsForCategory = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const products = await Category.findById(req.params.id).populate('products').exec();
+            if (!products) return response(res, HttpCodes.NotFound, I18n.WARN_NO_PRODUCTS_FOUND);
+            return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, products.products);
+        } catch (e) {
+            return next(e);
+        }
+    };
+
     export const getAll = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const categories = await Category.find().populate('name').populate('products').exec();
+            const categories = await Category.find().populate('products').exec();
             if (!categories) return response(res, HttpCodes.NotFound, I18n.WARN_NO_CATEGORIES_FOUND);
             return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, categories);
         } catch (e) {

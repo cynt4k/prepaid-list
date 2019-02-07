@@ -8,7 +8,12 @@ import { body, check } from 'express-validator/check';
 
 const router: Router = Router();
 
-router.get('/', CheckAuth.isAuth, CheckAcl.middlewareIsAllowed(AclRight.PRODUCT_GET), ProductController.getAllProducts);
+router.get('/products', CheckAuth.isAuth, CheckAcl.middlewareIsAllowed(AclRight.PRODUCT_GET), ProductController.getAllProducts);
+router.get('/categories/all', CheckAuth.isAuth, ProductController.getAll);
 router.get('/categories', CheckAuth.isAuth, CheckAcl.middlewareIsAllowed(AclRight.PRODUCT_GET), ProductController.getCategories);
+router.get('/category/:id/products',
+    CheckAuth.isAuth,
+    CheckAcl.middlewareIsAllowed(AclRight.CATEGORY_GET, AclRight.PRODUCT_GET),
+    ProductController.getAllProductsForCategory);
 
 export const ProductRouter: Router = router;

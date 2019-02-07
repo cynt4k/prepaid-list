@@ -12,11 +12,13 @@ export namespace CheckAcl {
 
     };
 
-    export const middlewareIsAllowed = (right: AclRight): RequestHandler => {
+    export const middlewareIsAllowed = (...rights: AclRight[]): RequestHandler => {
         const middleware: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
             try {
-                const result = await isAllowed(req.user.id, right);
-                if (result) {
+                const result = await Promise.all(rights.map(async (right) => {
+                    return await isAllowed(req.user.id, right);
+                }));
+                if (!result.includes(false)) {
                     return next();
                 } else {
                     return next(new PrepaidListError(I18n.WARN_USER_NOT_ALLOWED, ErrorCode.USER_NOT_ALLOWED));
@@ -26,7 +28,7 @@ export namespace CheckAcl {
             }
         };
 
-        middleware.bind(right);
+        middleware.bind(rights);
 
         return middleware;
     };
