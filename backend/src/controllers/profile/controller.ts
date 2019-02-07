@@ -39,4 +39,15 @@ export namespace ProfileController {
             return next(e);
         }
     };
+
+    export const putAddBalance = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const user = await User.findById(req.user.id).exec();
+            user!.balance += req.body.balance;
+            await user!.save();
+            return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, user);
+        } catch (e) {
+            return next(e);
+        }
+    };
 }

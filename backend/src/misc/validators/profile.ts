@@ -14,4 +14,11 @@ export namespace ProfileValidator {
             ErrorHandler.validateBody
         ];
     };
+
+    export const addBalance = (): RequestHandler[] => {
+        return [
+            check('balance', I18n.VAL_USER_BALANCE_NOT_PROVIDED).exists(),
+            ErrorHandler.validateBody
+        ];
+    };
 }
