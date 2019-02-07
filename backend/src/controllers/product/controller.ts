@@ -66,4 +66,15 @@ export namespace ProductController {
             return next(e);
         }
     };
+
+    export const getProductByBarcode = async (req: Request, res: Response, next: NextFunction) => {
+        const barcode: string = req.params.barcode;
+        try {
+            const product = await Product.find({ barcode: barcode }).exec();
+            if (!product) return response(res, HttpCodes.NotFound, I18n.WARN_PRODUCT_NOT_FOUND);
+            return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, product);
+        } catch (e) {
+            return next(e);
+        }
+    };
 }
