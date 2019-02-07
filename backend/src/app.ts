@@ -40,12 +40,17 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
     res.status(200).send(I18n.INFO_SUCCESS);
 });
 
-import { AuthRouter, UserRouter, OrderRouter, ProfileRouter } from './routes';
+import { AuthRouter, UserRouter, OrderRouter, ProfileRouter, ProductRouter } from './routes';
+import { TranslationManageRouter, ProductManageRouter } from './routes/manage';
 
 app.use('/auth', AuthRouter);
 app.use('/user', UserRouter);
 app.use('/order', OrderRouter);
 app.use('/profile', ProfileRouter);
+app.use('/product', ProductRouter);
+
+app.use('/manage/translation', TranslationManageRouter);
+app.use('/manage/product', ProductManageRouter);
 
 app.all('*', unkownRouteHandler);
 
