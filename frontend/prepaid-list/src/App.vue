@@ -1,6 +1,6 @@
 <template>
   <v-app dark style="height: 100vh">
-    <v-toolbar app>
+    <!-- <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <span>Digitale </span>
         <span class="font-weight-light">Prepaid Liste</span>
@@ -13,13 +13,13 @@
       >
         <span class="mr-2">Latest Release</span>
         <v-icon>mdi-open-in-new</v-icon>
-      </v-btn> -->
+      </v-btn> 
     </v-toolbar>
 
     <v-content style="height: 100%">
       <router-view></router-view>
-      <!-- <HelloWorld/> -->
-    </v-content>
+    </v-content> -->
+    <router-view></router-view>
   </v-app>
 </template>
 
