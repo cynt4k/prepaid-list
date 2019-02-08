@@ -67,4 +67,13 @@ export namespace MinioClient {
             return Promise.reject(e);
         }
     };
+
+    export const getIconUrl = async(icon: string): Promise<string> => {
+        try {
+            const url = await client.presignedGetObject('icon', icon, 60 * 60);
+            return Promise.resolve(url);
+        } catch (e) {
+            return Promise.reject(e);
+        }
+    };
 }

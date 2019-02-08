@@ -7,6 +7,7 @@ import mongooseAutopopulate from 'mongoose-autopopulate';
 import { Translation } from './translation';
 import { PrepaidListError } from '../errors';
 import { I18n } from '../misc';
+import { MinioClient } from '../core';
 import { ErrorCode } from '../types/error';
 
 const productExtraSchema = new mongoose.Schema({
@@ -33,6 +34,24 @@ productSchema.pre('validate', async function() {
     try {
         const result = await Translation.findById(newDocument.name).where('type').equals(LanguageType.PRODUCT).exec();
         if (!result) throw new PrepaidListError(I18n.ERR_TRANSLATION_NOT_FOUND, ErrorCode.TRANSLATION_NOT_FOUND);
+    } catch (e) {
+        throw e;
+    }
+});
+
+productSchema.post('find', async function(results: any) {
+    let docs: IProductModel[] = <IProductModel[]> results;
+    try {
+        const docsPromise = docs.map(async (doc) => {
+            if (doc.icon) {
+                const url = await MinioClient.getIconUrl(doc.icon);
+                if (!url) doc.icon = I18n.ERR_ICON_NOT_FOUND;
+                doc.icon = url;
+            }
+            return Promise.resolve(doc);
+        });
+        docs = await Promise.all(docsPromise);
+        const test = docs;
     } catch (e) {
         throw e;
     }

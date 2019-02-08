@@ -8,6 +8,13 @@ export namespace ProductValidator {
     export const createCategory = (): RequestHandler[] => {
         return [
             check('name').isString(),
+            check('icon', I18n.VAL_CATEGORY_ICON_NOT_VALID).optional().isString().custom((icon: string) => {
+                const reg = /^data:image\/([\w+]+);base64,([\s\S]+)/;
+                const data = icon.match(reg);
+                if (!data) return false;
+                if (data.length !== 3) return false;
+                return true;
+            }),
             ErrorHandler.validateBody
         ];
     };
