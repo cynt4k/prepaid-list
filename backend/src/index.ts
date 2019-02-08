@@ -15,6 +15,7 @@ const mongouri = process.env.MONGODB_URI as string;
 (<any>mongoose).Promise = bluebird;
 
 import app from './app';
+import { InitDb } from './misc';
 
 (async () => {
     try {
@@ -31,6 +32,16 @@ import app from './app';
     } catch (e) {
         console.error(`Check your express server: ${e}`);
         process.exit(1);
+    }
+
+    if (process.env.INIT_DB) {
+        try {
+            const status = await InitDb.importData();
+            console.log(`Import success`);
+        } catch (e) {
+            console.error(`Check your import: ${e}`);
+            process.exit(1);
+        }
     }
 
     console.log('Press CTRL-C to stop \n');

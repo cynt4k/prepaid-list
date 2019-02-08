@@ -128,7 +128,7 @@
             ]
         }
     ],
-    "acl-group": [
+    "acl_group": [
         {
             "_id": "5c5a122fb68a2959cc4ef706",
             "name": "User",
