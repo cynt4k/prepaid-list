@@ -1,3 +1,4 @@
 export enum StateNamespaces {
-    USER_STATE = 'User',
+    USER_STATE = 'UserModule',
+    CART_STATE = 'CartModule'
 }

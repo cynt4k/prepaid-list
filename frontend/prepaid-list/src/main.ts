@@ -6,7 +6,6 @@ import router from './router';
 import 'roboto-fontface/css/roboto/roboto-fontface.css';
 import '@mdi/font/css/materialdesignicons.css';
 import { store } from './store';
-import { userFacade } from './store/UserFacade';
 
 Vue.config.productionTip = false;
 
