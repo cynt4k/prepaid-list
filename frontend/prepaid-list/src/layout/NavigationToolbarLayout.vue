@@ -1,8 +1,8 @@
 <template>
   <toolbar-layout class="navigation-toolbar-layout">
     <template v-slot:toolbar>
-      <v-btn flat :to="{name: 'Dashboard'}">
-        <v-icon dark>mdi-home</v-icon>
+      <v-btn flat color="red" title="Logout" @click="logout()">
+        <v-icon dark>mdi-logout-variant</v-icon>
       </v-btn>
     </template>
     <v-navigation-drawer
@@ -10,7 +10,7 @@
       absolute
       temporary
       hide-overlay
-      class="custom-navigation"
+      class="custom-navigation-drawer"
       mini-variant-width="60"
     >
       <v-toolbar flat class="transparent nav-toolbar" dark>
@@ -31,67 +31,62 @@
           title="Home"
           icon="mdi-home"
           :class="{hidden: mini}"
-          class="navigation-btn"
         />
         <navigation-button
           nameOfRoute="BuyProduct"
           title="Produkt kaufen"
           icon="mdi-beer"
           :class="{hidden: mini}"
-          class="navigation-btn"
         />
       </v-list>
     </v-navigation-drawer>
-    <!-- <template> -->
     <slot></slot>
-    <!-- </template> -->
   </toolbar-layout>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
-import ToolbarLayout from "@/layout/ToolbarLayout.vue";
-import NavigationButton from "@/layout/navigation-drawer/NavigationButton.vue";
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import ToolbarLayout from '@/layout/ToolbarLayout.vue';
+import NavigationButton from '@/layout/navigation-drawer/NavigationButton.vue';
 
 @Component({ components: { ToolbarLayout, NavigationButton } })
 export default class NavigationToolbarLayout extends Vue {
-  private mini: boolean = true;
+    private mini: boolean = true;
+    private logout() {
+        localStorage.user = null;
+        setTimeout(() => this.$router.push({ name: 'Home' }), 100);
+    }
 }
 </script>
 
 <style lang="scss" scoped>
-.custom-action {
-  justify-content: center;
-}
-.custom-navigation {
-  background-color: rgb(33, 33, 33);
-  .title {
-    height: unset;
-    font-weight: 300;
-  }
+.custom-navigation-drawer {
+    background-color: rgb(33, 33, 33);
+    .title {
+        height: unset;
+        font-weight: 300;
+    }
 }
 .nav-toolbar {
-  justify-content: center;
-  display: flex;
+    justify-content: center;
+    display: flex;
+}
+.custom-navigation-drawer {
+    transform: translateX(0px) !important;
 }
 </style>
 <style lang="scss">
 .navigation-toolbar-layout {
-  .navigation-btn {
-    &.hidden {
-      a {
-        justify-content: center;
-      }
-      .nav-btn-content {
-        display: none;
-      }
+    .navigation-button.hidden {
+        a {
+            justify-content: center;
+        }
+        .navigation-button-content {
+            display: none;
+        }
     }
-  }
-  .page-content > div {
-    padding-left: 50px;
-  }
-  .custom-navigation{
-          transform: translateX(0px)!important;
-  }
+    .page-content > div {
+        padding-left: 50px;
+    }
 }
 </style>
 

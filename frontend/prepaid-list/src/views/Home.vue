@@ -1,6 +1,6 @@
 <template>
   <toolbar-layout>
-    <v-container class="home" fluid fill-height>
+    <v-container fluid fill-height>
       <v-layout align-center justify-center text-xs-center wrap class="btn-list-layout">
         <big-button-flex icon="mdi-account-plus" title="Registrieren"></big-button-flex>
         <big-button-flex icon="mdi-login-variant" title="Login" @click="login()"></big-button-flex>

@@ -37,7 +37,7 @@ export default class UserSelect extends Vue {
 
   private openDashboard(user: User) {
     localStorage.user = JSON.stringify(user);
-    setTimeout(() => this.$router.push({ name: 'Dashboard' }), 100);
+    setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
   }
 }
 </script>

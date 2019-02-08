@@ -24,12 +24,12 @@ export default class BuyProduct extends Vue {
 
   constructor() {
     super();
-    this.categories.push({ name: 'Kaffee', icon:'mdi-coffee' });
+    this.categories.push({ name: 'Kaffee', icon: 'mdi-coffee' });
     this.categories.push({ name: 'Bier', icon: 'mdi-bottle-wine'});
-    this.categories.push({ name: 'Softgetränke', icon:'mdi-cup-water' });
+    this.categories.push({ name: 'Softgetränke', icon: 'mdi-cup-water' });
     this.categories.push({ name: 'TK-Produkte',  icon: 'mdi-pizza'});
-    this.categories.push({ name: 'Snacks', icon:'mdi-food-croissant' });
-    this.categories.push({ name: 'Divers', icon:'mdi-fish' });
+    this.categories.push({ name: 'Snacks', icon: 'mdi-food-croissant' });
+    this.categories.push({ name: 'Divers', icon: 'mdi-fish' });
   }
 }
 </script>
