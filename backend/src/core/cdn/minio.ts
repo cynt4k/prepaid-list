@@ -7,6 +7,7 @@ import { I18n } from '../../misc';
 interface Image {
     filetype: string;
     filename: string;
+    name: string;
     image: Buffer;
 }
 
@@ -51,6 +52,7 @@ export namespace MinioClient {
         return {
             filename: filename,
             filetype: data[1],
+            name: `${filename}.${data[1]}`,
             image: Buffer.from(data[2], 'base64')
         };
     };
@@ -59,7 +61,7 @@ export namespace MinioClient {
         try {
             const iconBuffer = base64ToImg(icon, name);
             await checkIconBucket();
-            const result = await client.putObject('icon', `${iconBuffer.filename}.${iconBuffer.filetype}`, iconBuffer.image);
+            const result = await client.putObject('icon', iconBuffer.name, iconBuffer.image);
             return Promise.resolve();
         } catch (e) {
             return Promise.reject(e);
