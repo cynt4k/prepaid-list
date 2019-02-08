@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import bluebird from 'bluebird';
+import fs from 'fs';
 
 switch (process.env.NODE_ENV) {
     case 'dev': dotenv.config({ path: '.env-dev'}); break;
@@ -16,6 +17,7 @@ const mongouri = process.env.MONGODB_URI as string;
 
 import app from './app';
 import { InitDb } from './misc';
+import { MinioClient } from './core';
 
 (async () => {
     try {
@@ -31,6 +33,14 @@ import { InitDb } from './misc';
         console.log(`App is running at http://localhost:${app.get('port')} in ${app.get('env')} mode`);
     } catch (e) {
         console.error(`Check your express server: ${e}`);
+        process.exit(1);
+    }
+
+    try {
+        const status = await MinioClient.init();
+        console.log(`Connection to minio established`);
+    } catch (e) {
+        console.error(`Check your minio connection: ${e}`);
         process.exit(1);
     }
 

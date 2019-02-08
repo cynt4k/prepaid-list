@@ -1,6 +1,7 @@
 export enum ErrorCode {
     UNKNOWN,
     USER_NOT_FOUND,
+    ICON_NOT_VALID,
     USER_WRONG_PASSWORD,
     LOW_BALANCE,
     USER_NOT_ALLOWED,
