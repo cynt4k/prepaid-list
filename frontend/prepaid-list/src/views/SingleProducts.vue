@@ -12,15 +12,38 @@
           :key="product.name"
           :title="product.name"
           :additional="product | extras | currency(product.extras ? 'ab ' : '')"
+          @click="product.extras ? showDialog(product) : addToCart(product)"
         ></big-button-flex>
       </template>
     </v-layout>
+    <v-dialog v-model="dialog2" v-if="selectedProduct">
+      <v-card>
+        <v-card-title>
+          <h2>Typ auswählen</h2>
+        </v-card-title>
+        <v-card-text>
+          <div class="button-container">
+            <big-button-flex
+              v-for="extra in selectedProduct.extras"
+              :key="extra.id"
+              :title="extra.name"
+              :additional="extra.price | currency"
+              @click="addExtraToCart(extra)"
+            />
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" flat @click="dialog2=false">Schließen</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import { Product } from '@/interfaces/Product';
+import { ProductExtra } from '@/interfaces/ProductExtra';
 
 @Component({
     components: { BigButtonFlex },
@@ -34,6 +57,7 @@ import { Product } from '@/interfaces/Product';
             return product.price;
         },
         currency(s: number, prevString: string) {
+            prevString = prevString ? prevString : '';
             const formatter: Intl.NumberFormat = new Intl.NumberFormat('de', {
                 style: 'currency',
                 currency: 'EUR',
@@ -44,6 +68,8 @@ import { Product } from '@/interfaces/Product';
 })
 export default class SingleProducts extends Vue {
     private products: Product[] = [];
+    private dialog2: boolean = false;
+    private selectedProduct: Product | null = null;
 
     constructor() {
         super();
@@ -77,10 +103,22 @@ export default class SingleProducts extends Vue {
             price: 0.4,
         });
     }
+
+    private showDialog(p: Product) {
+        this.dialog2 = true;
+        this.selectedProduct = p;
+    }
+
+    private addToCart(p: Product) {}
+    private addExtraToCart(extra: ProductExtra) {}
 }
 </script>
 <style lang="scss" scoped>
 .content-container {
     overflow: auto;
+}
+.button-container {
+    display: flex;
+    flex-flow: wrap;
 }
 </style>
