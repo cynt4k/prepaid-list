@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import Register from '@/views/Register.vue';
 import UserSelect from '@/views/UserSelect.vue';
 import Dashboard from '@/views/Dashboard.vue';
 import BuyProduct from '@/views/BuyProduct.vue';
@@ -17,6 +18,11 @@ export default new Router({
             component: Home,
         },
         {
+            path: '/register',
+            name: 'Register',
+            component: Register,
+        },
+        {
             path: '/userSelect',
             name: 'UserSelect',
             component: UserSelect,
@@ -26,21 +32,21 @@ export default new Router({
             name: 'Dashboard',
             component: Dashboard,
         },
-        {
-            path: '',
-            component: NavigationToolbarLayout,
-            children: [
-                {
-                    path: 'user/buyProducts',
-                    name: 'BuyProduct',
-                    component: BuyProduct,
-                },
-                {
-                    path: 'user/buyProducts/products/:category',
-                    name: 'SingleProducts',
-                    component: SingleProducts,
-                },
-            ],
-        },
+        // {
+        //     path: '',
+        //     component: NavigationToolbarLayout,
+        //     children: [
+        //         {
+        //             path: 'user/buyProducts',
+        //             name: 'BuyProduct',
+        //             component: BuyProduct,
+        //         },
+        //         {
+        //             path: 'user/buyProducts/products/:category',
+        //             name: 'SingleProducts',
+        //             component: SingleProducts,
+        //         },
+        //     ],
+        // },
     ],
 });
