@@ -40,7 +40,7 @@
         />
       </v-list>
     </v-navigation-drawer>
-    <slot></slot>
+    <router-view />
   </toolbar-layout>
 </template>
 <script lang="ts">
