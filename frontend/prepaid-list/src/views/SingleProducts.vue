@@ -8,7 +8,11 @@
       class="btn-list-layout content-container"
     >
       <template v-for="product in products">
-        <big-button-flex :key="product.name" :title="product.name" :additional="product.price | stringFormat"></big-button-flex>
+        <big-button-flex
+          :key="product.name"
+          :title="product.name"
+          :additional="product | extras | currency(product.extras ? 'ab ' : '')"
+        ></big-button-flex>
       </template>
     </v-layout>
   </v-container>
@@ -21,12 +25,20 @@ import { Product } from '@/interfaces/Product';
 @Component({
     components: { BigButtonFlex },
     filters: {
-        stringFormat(s: number) {
+        extras(product: Product): number {
+            if (product.extras) {
+                return product.extras.reduce((acc, val) =>
+                    acc.price < val.price ? acc : val
+                ).price;
+            }
+            return product.price;
+        },
+        currency(s: number, prevString: string) {
             const formatter: Intl.NumberFormat = new Intl.NumberFormat('de', {
                 style: 'currency',
                 currency: 'EUR',
             });
-            return formatter.format(s);
+            return prevString + formatter.format(s);
         },
     },
 })
@@ -40,6 +52,11 @@ export default class SingleProducts extends Vue {
             icon: 'mdi-coffee',
             id: 1,
             price: 0.3,
+            extras: [
+                { name: 'double-shot', price: 0.35 },
+                { name: 'double-shot+', price: 0.5 },
+                { name: 'normal', price: 0.3 },
+            ],
         });
         this.products.push({
             name: 'Latte Macchiato',
