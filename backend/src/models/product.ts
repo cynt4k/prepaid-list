@@ -6,7 +6,7 @@ import mongooseTimestamp from 'mongoose-timestamp';
 import mongooseAutopopulate from 'mongoose-autopopulate';
 import { Translation } from './translation';
 import { PrepaidListError } from '../errors';
-import { I18n } from '../misc';
+import { I18n, IconValidator } from '../misc';
 import { MinioClient } from '../core';
 import { ErrorCode } from '../types/error';
 
@@ -31,11 +31,32 @@ export const productSchema = new mongoose.Schema({
 
 productSchema.pre('validate', async function() {
     const newDocument: IProductModel = <IProductModel> this;
+    if (newDocument.icon) {
+        if (!IconValidator.validate(newDocument.icon)) {
+            throw new PrepaidListError(I18n.ERR_ICON_NOT_VALID, ErrorCode.ICON_NOT_VALID);
+        }
+    }
     try {
         const result = await Translation.findById(newDocument.name).where('type').equals(LanguageType.PRODUCT).exec();
         if (!result) throw new PrepaidListError(I18n.ERR_TRANSLATION_NOT_FOUND, ErrorCode.TRANSLATION_NOT_FOUND);
     } catch (e) {
         throw e;
+    }
+});
+
+productSchema.pre('save', async function() {
+    const newDocument: IProductModel = <IProductModel> this;
+    try {
+        if (newDocument.icon) {
+            const url = await MinioClient.putIcon(newDocument.icon, this.id);
+            newDocument.icon = `${newDocument.id}.${IconValidator.getFileType(newDocument.icon)}`;
+            return Promise.resolve();
+        }
+        return Promise.resolve();
+    } catch (e) {
+        newDocument.icon = '';
+        console.warn(`Could not save image`);
+        return Promise.resolve();
     }
 });
 

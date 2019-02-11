@@ -28,8 +28,10 @@ app.use(compression());
 if (process.env.NODE_ENV !== 'test') {
     app.use(logger(logLevel));
 }
+
+app.use(bodyParser({ limit: '20mb'}));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '20mb' }));
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.use(passport.initialize());
