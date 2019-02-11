@@ -1,6 +1,14 @@
 <template>
   <v-flex xs12 sm6 md4 lg4 class="big-button-flex">
-    <big-button :red="red" :disabled="disabled" :icon="icon" :title="title" @click="emitClick()"></big-button>
+    <big-button
+      :red="red"
+      :disabled="disabled"
+      :icon="icon"
+      :title="title"
+      @click="emitClick()"
+      :to="to"
+      :additional="additional"
+    ></big-button>
   </v-flex>
 </template>
 <script lang="ts">
@@ -17,6 +25,10 @@ export default class BigButtonFlex extends Vue {
     private red!: string;
     @Prop({ default: null })
     private disabled!: string;
+    @Prop()
+    private to!: string;
+    @Prop()
+    private additional!: string;
 
     private emitClick() {
         this.$emit('click');
