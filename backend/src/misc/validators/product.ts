@@ -27,7 +27,7 @@ export namespace ProductValidator {
                     return true;
                 });
             }),
-            check('icon').optional().isString().custom(IconValidator.validate),
+            check('icon', I18n.VAL_PRODUCT_ICON_NOT_VALID).optional().isString().custom(IconValidator.validate),
             ErrorHandler.validateBody
         ];
     };

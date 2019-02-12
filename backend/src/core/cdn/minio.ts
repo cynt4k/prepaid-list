@@ -70,7 +70,10 @@ export namespace MinioClient {
 
     export const getIconUrl = async(icon: string): Promise<string> => {
         try {
-            const url = await client.presignedGetObject('icon', icon, 60 * 60);
+            let url = await client.presignedGetObject('icon', icon, 60 * 60);
+            if (url) {
+                url = url.replace(process.env.MINIO_SERVER || 'localhost', process.env.MINIO_URL || 'localhost');
+            }
             return Promise.resolve(url);
         } catch (e) {
             return Promise.reject(e);
