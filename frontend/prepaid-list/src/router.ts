@@ -32,21 +32,21 @@ export default new Router({
             name: 'Dashboard',
             component: Dashboard,
         },
-        // {
-        //     path: '',
-        //     component: NavigationToolbarLayout,
-        //     children: [
-        //         {
-        //             path: 'user/buyProducts',
-        //             name: 'BuyProduct',
-        //             component: BuyProduct,
-        //         },
-        //         {
-        //             path: 'user/buyProducts/products/:category',
-        //             name: 'SingleProducts',
-        //             component: SingleProducts,
-        //         },
-        //     ],
-        // },
+        {
+            path: '',
+            component: NavigationToolbarLayout,
+            children: [
+                {
+                    path: 'user/buyProducts',
+                    name: 'BuyProduct',
+                    component: BuyProduct,
+                },
+                {
+                    path: 'user/buyProducts/products/:category',
+                    name: 'SingleProducts',
+                    component: SingleProducts,
+                },
+            ],
+        },
     ],
 });
