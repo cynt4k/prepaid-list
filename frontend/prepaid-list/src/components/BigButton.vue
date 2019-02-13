@@ -56,6 +56,7 @@ export default class BigButton extends Vue {
         flex-flow: column;
         h1 {
             margin-bottom: 20px;
+            text-transform: none;
         }
     }
 }
