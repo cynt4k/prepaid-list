@@ -1,37 +1,29 @@
 <template>
-  <v-app dark style="height: 100vh">
-    <!-- <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Digitale </span>
-        <span class="font-weight-light">Prepaid Liste</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <!-- <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn> 
-    </v-toolbar>
-
-    <v-content style="height: 100%">
-      <router-view></router-view>
-    </v-content> -->
+  <v-app dark style="height: 100vh;">
+    <v-snackbar top v-model="snackbar" :color="snackbarType">
+      <v-alert :value="true" :type="snackbarType" class="panel" style="width:100%">
+        <h3>{{text}}</h3>
+      </v-alert>
+    </v-snackbar>
     <router-view></router-view>
   </v-app>
 </template>
 
-<script>
-
-export default {
-  name: 'App',
-
-  data() {
-    return {
-      //
-    };
-  }
-};
+<script lang="ts">
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { EventBus } from '@/assets/EventBus';
+@Component({})
+export default class App extends Vue {
+    private text: string = 'asdf';
+    private snackbar: boolean = true;
+    private snackbarType: string = '';
+    private mounted() {
+        EventBus.$on('message', (options: any) => {
+            const duration = options.duration ? options.duration : 3000;
+            this.snackbar = true;
+            this.text = options.message;
+            this.snackbarType = options.snackbarType;
+        });
+    }
+}
 </script>

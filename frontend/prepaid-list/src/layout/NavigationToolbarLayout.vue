@@ -1,9 +1,10 @@
 <template>
-  <toolbar-layout class="navigation-toolbar-layout">
+  <toolbar-layout class="navigation-toolbar-layout" :showBackBtn="true" :showUserAndLogout="true">
     <template v-slot:toolbar>
-      <v-btn flat color="red" title="Logout" @click="logout()">
-        <v-icon dark>mdi-logout-variant</v-icon>
-      </v-btn>
+      <v-toolbar-title class="headline text-uppercase">
+        <span>{{titleFirst}}&nbsp;</span>
+        <span class="font-weight-light">{{titleSecond}}</span>
+      </v-toolbar-title>
     </template>
     <v-navigation-drawer
       :mini-variant.sync="mini"
@@ -40,7 +41,8 @@
         />
       </v-list>
     </v-navigation-drawer>
-    <router-view />
+    <!-- <router-view/> -->
+    <slot></slot>
   </toolbar-layout>
 </template>
 <script lang="ts">
@@ -50,11 +52,11 @@ import NavigationButton from '@/layout/navigation-drawer/NavigationButton.vue';
 
 @Component({ components: { ToolbarLayout, NavigationButton } })
 export default class NavigationToolbarLayout extends Vue {
+    @Prop()
+    private titleFirst!: string;
+    @Prop()
+    private titleSecond!: string;
     private mini: boolean = true;
-    private logout() {
-        localStorage.user = null;
-        setTimeout(() => this.$router.push({ name: 'Home' }), 100);
-    }
 }
 </script>
 

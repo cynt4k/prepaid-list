@@ -1,4 +1,5 @@
 <template>
+<navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
   <v-container class="home" fluid fill-height>
     <v-layout
       align-center
@@ -38,15 +39,17 @@
       </v-card>
     </v-dialog>
   </v-container>
+  </navigation-toolbar-layout>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import { Product } from '@/interfaces/Product';
 import { ProductExtra } from '@/interfaces/ProductExtra';
+import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 
 @Component({
-    components: { BigButtonFlex },
+    components: { BigButtonFlex, NavigationToolbarLayout },
     filters: {
         extras(product: Product): number {
             if (product.extras) {

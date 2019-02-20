@@ -1,5 +1,11 @@
 <template>
-  <toolbar-layout>
+  <toolbar-layout :showBackBtn="true">
+    <template v-slot:toolbar>
+      <v-toolbar-title class="headline text-uppercase">
+        <span>Benutzer&nbsp;</span>
+        <span class="font-weight-light">Auswahl</span>
+      </v-toolbar-title>
+    </template>
     <v-container fluid fill-height column>
       <v-layout align-center justify-center text-xs-center column>
         <v-alert :value="true" type="info" class="panel">
@@ -20,36 +26,36 @@ import ToolbarLayout from '@/layout/ToolbarLayout.vue';
 
 @Component({ components: { AlphabetList, ToolbarLayout } })
 export default class UserSelect extends Vue {
-  private users: User[];
+    private users: User[];
 
-  constructor() {
-    super();
-    this.users = [];
-    this.users.push({ name: 'Andreas', nick: 'Undefined' });
-    this.users.push({ name: 'Fridtjof', nick: 'Euan' });
-    this.users.push({ name: 'Feruza', nick: 'Knute' });
-    this.users.push({ name: 'Apolônia', nick: 'Ural' });
-    this.users.push({ name: 'Sieghard', nick: 'Caecilia' });
-    this.users.push({ name: 'Margareta', nick: 'Ilsa' });
-    this.users.push({ name: 'Bert', nick: 'Stefan' });
-    this.users.push({ name: 'Alexa', nick: 'Stephanie' });
-  }
+    constructor() {
+        super();
+        this.users = [];
+        this.users.push({ name: 'Andreas', nick: 'Undefined' });
+        this.users.push({ name: 'Fridtjof', nick: 'Euan' });
+        this.users.push({ name: 'Feruza', nick: 'Knute' });
+        this.users.push({ name: 'Apolônia', nick: 'Ural' });
+        this.users.push({ name: 'Sieghard', nick: 'Caecilia' });
+        this.users.push({ name: 'Margareta', nick: 'Ilsa' });
+        this.users.push({ name: 'Bert', nick: 'Stefan' });
+        this.users.push({ name: 'Alexa', nick: 'Stephanie' });
+    }
 
-  private openDashboard(user: User) {
-    localStorage.user = JSON.stringify(user);
-    setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
-  }
+    private openDashboard(user: User) {
+        localStorage.user = JSON.stringify(user);
+        setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
+    }
 }
 </script>
 <style lang="scss" scoped>
 .alphabet-list {
-  width: 100%;
+    width: 100%;
 }
 .panel {
-  width: 100%;
-  background-color: grey;
-  margin: 10px;
-  margin-top: 0;
+    width: 100%;
+    background-color: grey;
+    margin: 10px;
+    margin-top: 0;
 }
 </style>
 

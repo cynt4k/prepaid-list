@@ -1,4 +1,5 @@
 <template>
+<navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
   <v-container class="home" fluid fill-height>
     <v-layout
       align-center
@@ -22,6 +23,7 @@
       </v-chip>
       </v-footer>
   </v-container>
+  </navigation-toolbar-layout>
 </template>
 
 <script lang="ts">
