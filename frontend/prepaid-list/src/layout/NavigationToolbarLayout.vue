@@ -87,7 +87,7 @@ export default class NavigationToolbarLayout extends Vue {
         }
     }
     .page-content > div {
-        padding-left: 50px;
+        padding-left: 60px;
     }
 }
 </style>

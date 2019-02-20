@@ -1,28 +1,31 @@
 <template>
-<navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
-  <v-container class="home" fluid fill-height>
-    <v-layout
-      align-center
-      justify-center
-      text-xs-center
-      wrap
-      class="btn-list-layout content-container"
-    >
-      <template v-for="category in categories">
-        <big-button-flex
-          :key="category.name"
-          :icon="category.icon"
-          :title="category.name"
-          :to="{name: 'SingleProducts', params: {category: category.id}}"
-        ></big-button-flex>
-      </template>
-    </v-layout>
-      <v-footer>
-              <v-chip color="green" text-color="white">
-        <v-avatar class="green darken-4"><v-icon style="font-size: 21px">mdi-cart</v-icon></v-avatar>10,80 €
+  <navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen" style="display:flex; flex-layout:column">
+    <v-container class="home" fluid fill-height>
+      <v-layout
+        align-center
+        justify-center
+        text-xs-center
+        wrap
+        class="btn-list-layout content-container"
+      >
+        <template v-for="category in categories">
+          <big-button-flex
+            :key="category.name"
+            :icon="category.icon"
+            :title="category.name"
+            :to="{name: 'SingleProducts', params: {category: category.id}}"
+          ></big-button-flex>
+        </template>
+      </v-layout>
+    </v-container>
+    <v-footer>
+      <v-chip color="green" text-color="white">
+        <v-avatar class="green darken-4">
+          <v-icon style="font-size: 21px">mdi-cart</v-icon>
+        </v-avatar>
+        10,80 €
       </v-chip>
-      </v-footer>
-  </v-container>
+    </v-footer>
   </navigation-toolbar-layout>
 </template>
 
@@ -64,9 +67,9 @@ export default class BuyProduct extends Vue {
     overflow: auto;
 }
 .home {
-  flex-flow: column;
-  footer {
-    width: 100%;
-  }
+    flex-flow: column;
+    footer {
+        width: 100%;
+    }
 }
 </style>

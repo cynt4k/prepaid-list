@@ -37,4 +37,8 @@ export default class ToolbarLayout extends Vue {
 .toolbar-layout {
     height: 100%;
 }
+.page-content > div {
+  display: flex;
+  flex-flow: column;
+}
 </style>
