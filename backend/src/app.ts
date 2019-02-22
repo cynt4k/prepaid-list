@@ -4,6 +4,8 @@ import lusca from 'lusca';
 import passport from 'passport';
 import bodyParser from 'body-parser';
 import compression from 'compression';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './doc/swagger.json';
 import { Request, Response, NextFunction } from 'express';
 import { errorHandler, unkownRouteHandler } from './core/express';
 import { Template, I18n } from './misc';
@@ -53,6 +55,8 @@ app.use('/info', ProductRouter);
 
 app.use('/manage/translation', TranslationManageRouter);
 app.use('/manage/product', ProductManageRouter);
+
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.all('*', unkownRouteHandler);
 

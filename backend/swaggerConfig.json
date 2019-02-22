@@ -1,0 +1,13 @@
+{
+    "swagger": {
+        "outputDirectory": "./src/doc",
+        "entryFile": "./src/doc/apis.ts",
+        "securityDefinitions": {
+            "api_key": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}
