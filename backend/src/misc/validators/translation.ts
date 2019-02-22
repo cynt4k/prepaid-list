@@ -9,10 +9,11 @@ export namespace TranslationValidator {
     export const createTranslation = (): RequestHandler[] => {
         return [
             check('translations', I18n.VAL_TRANSLATION_MISSING).isArray().custom((arr: ILanguageTranslation[]) => {
-                const missingAttribute = arr.filter((value) => {
+                const missingAttribute = arr.filter((value): boolean => {
                     if (!value.languageCode || !value.name) {
                         return false;
                     }
+                    return true;
                 });
 
                 if (missingAttribute.length !== 0) {
