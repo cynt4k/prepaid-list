@@ -1,5 +1,9 @@
 <template>
-  <navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen" style="display:flex; flex-layout:column">
+  <navigation-toolbar-layout
+    titleFirst="Produkt"
+    titleSecond="kaufen"
+    style="display:flex; flex-layout:column"
+  >
     <v-container class="home" fluid fill-height>
       <v-layout
         align-center
@@ -18,14 +22,7 @@
         </template>
       </v-layout>
     </v-container>
-    <v-footer>
-      <v-chip color="green" text-color="white">
-        <v-avatar class="green darken-4">
-          <v-icon style="font-size: 21px">mdi-cart</v-icon>
-        </v-avatar>
-        10,80 €
-      </v-chip>
-    </v-footer>
+    <navigation-footer />
   </navigation-toolbar-layout>
 </template>
 
@@ -34,8 +31,9 @@ import { Component, Vue } from 'vue-property-decorator';
 import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import { Category } from '@/interfaces/Category';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
+import NavigationFooter from '@/components/NavigationFooter.vue';
 
-@Component({ components: { NavigationToolbarLayout, BigButtonFlex } })
+@Component({ components: { NavigationToolbarLayout, BigButtonFlex, NavigationFooter } })
 export default class BuyProduct extends Vue {
     private categories: Category[] = [];
 
@@ -68,8 +66,5 @@ export default class BuyProduct extends Vue {
 }
 .home {
     flex-flow: column;
-    footer {
-        width: 100%;
-    }
 }
 </style>
