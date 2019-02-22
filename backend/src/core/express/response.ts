@@ -3,7 +3,7 @@ import { IResponse } from '../../types/express';
 import { Response, NextFunction } from 'express';
 
 export let response = (res: Response, code: HttpCodes, msg?: string, data?: any) => {
-    let responseMessage: IResponse = <IResponse>{};
+    let responseMessage: IResponse<any> = <IResponse<any>>{};
 
     if (code >= 400) {
         responseMessage.status = 'error';

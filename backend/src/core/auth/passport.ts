@@ -76,9 +76,9 @@ passport.use('login-username', new LocalStrategy({
 passport.use('signup-user', new LocalStrategy({
     passReqToCallback: true,
     usernameField: 'username',
-    passwordField: 'token'
+    passwordField: 'username'
 }, async (req: Request, username: string, token: string , done) => {
-    const hashedToken: string | undefined = (username === token) ? undefined : bcrypt.hashSync(token, bcrypt.genSaltSync(10));
+    const hashedToken: string | undefined = (username === req.body.token) ? undefined : bcrypt.hashSync(token, bcrypt.genSaltSync(10));
     try {
         const userResult = await User.findOne({ username: username.toLowerCase() });
         const userToken = await User.findOne({ token: hashedToken });
