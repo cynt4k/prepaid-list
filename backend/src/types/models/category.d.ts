@@ -6,5 +6,5 @@ import { ITranslationModel } from './translation';
 export interface ICategoryModel extends Document, ITimestamp {
     name: ITranslationModel;
     products: IProductModel[];
-    price: number;
+    icon: string;
 }

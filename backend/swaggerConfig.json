@@ -3,7 +3,7 @@
         "outputDirectory": "./src/doc",
         "entryFile": "./src/doc/apis.ts",
         "securityDefinitions": {
-            "api_key": {
+            "token": {
                 "type": "apiKey",
                 "name": "Authorization",
                 "in": "header"

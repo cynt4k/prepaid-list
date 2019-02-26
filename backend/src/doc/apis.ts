@@ -1,5 +1,5 @@
-import { Path, Accept, GET, POST, Param, Security } from 'typescript-rest';
-import { Tags, Response, Example } from 'typescript-rest-swagger';
+import { Path, Accept, GET, POST, Param, Security, PathParam, PUT } from 'typescript-rest';
+import { Tags, Response, Example, IsLong } from 'typescript-rest-swagger';
 
 export interface IResponse<T> {
     status: string;
@@ -86,6 +86,20 @@ export interface IUserModel {
     balance: number;
     role: IAclGroupModel;
     active: boolean;
+}
+
+export interface IUser {
+    username: string;
+    name: {
+        firstname: string;
+        lastname: string;
+    };
+}
+
+export interface ICategoryModel {
+    name: ITranslationModel;
+    products: IProductModel[];
+    icon: string;
 }
 
 export interface IProductOrder {
@@ -176,7 +190,7 @@ export class Auth {
     registerUser(register: IUserRegister): IResponse<IResponseToken> { }
 
     @Path('refresh')
-    @Security('api_key')
+    @Security('token')
     @POST
     @Tags('auth')
     @Accept('application/json')
@@ -188,7 +202,7 @@ export class Auth {
 @Path('order')
 export class Order {
 
-    @Security('api_key')
+    @Security('token')
     @POST
     @Tags('order')
     @Accept('application/json')
@@ -196,7 +210,7 @@ export class Order {
     // @ts-ignore
     createOrder(newOrder: INewOrder): IResponse<IOrder> { }
 
-    @Security('api_key')
+    @Security('token')
     @Path('ordersForUser')
     @GET
     @Tags('order')
@@ -205,14 +219,65 @@ export class Order {
     getOrders(): IResponse<IOrder[]> { }
 }
 
-@Path('product')
-export class Product {
+@Path('info')
+export class Info {
 
-    @Security('api_key')
+    @Security('token')
     @Path('products')
     @GET
     @Tags('product')
     @Response<IResponse<IProductModel[]>>(200, 'Get all available products')
     // @ts-ignore
     getProducts(): IResponse<IProductModel[]> { }
+
+    @Path('product/:id')
+    @GET
+    @Tags('product')
+    @Response<IResponse<IProductModel>>(200, 'Get the product by the barcode')
+    // @ts-ignore
+    getProductByBarcode(@PathParam('id') @IsLong id: number) { }
+
+    @Security('token')
+    @Path('categories/all')
+    @GET
+    @Tags('product')
+    @Response<IResponse<ICategoryModel[]>>(200, 'Get all categories with all products')
+    // @ts-ignore
+    getAllCategories() { }
+
+    @Security('token')
+    @Path('categories/:id')
+    @GET
+    @Tags('product')
+    @Response<IResponse<ICategoryModel>>(200, 'Get all products for an category')
+    // @ts-ignore
+    getCategory(@PathParam('id') id: string) { }
+}
+
+@Path('user')
+export class User {
+
+    @GET
+    @Tags('user')
+    @Response<IResponse<IUser[]>>(200, 'Get all available users')
+    // @ts-ignore
+    getUsers() { }
+}
+
+@Path('profile')
+export class Profile {
+
+    @Security('token')
+    @GET
+    @Tags('profile')
+    @Response<IResponse<IUserModel>>(200, 'Get data for the current user')
+    // @ts-ignore
+    getProfile() { }
+
+    @Security('token')
+    @PUT
+    @Tags('profile')
+    // @Response<IResponse<IUserModel>>(200, 'Update the data for the current user')
+    // @ts-ignore
+    updateProfile(updateUser: IUserModel): IResponse<IUserModel> { }
 }
