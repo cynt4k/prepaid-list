@@ -4,7 +4,7 @@
   "description": "Backend for the FSIM OTH-Regensburg prepaid list",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npm run transpile && npm run tslint && npm run swagger",
+    "build": "npm run swagger && npm run transpile && npm run tslint",
     "tslint": "./node_modules/.bin/tslint --project .",
     "swagger": "swaggerGen -c ./swaggerConfig.json && npm run copyFiles",
     "copyFiles": "copyfiles -f src/doc/swagger* dist/doc",
