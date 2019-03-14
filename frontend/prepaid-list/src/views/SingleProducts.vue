@@ -1,44 +1,45 @@
 <template>
-<navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
-  <v-container class="home" fluid fill-height>
-    <v-layout
-      align-center
-      justify-center
-      text-xs-center
-      wrap
-      class="btn-list-layout content-container"
-    >
-      <template v-for="product in products">
-        <big-button-flex
-          :key="product.name"
-          :title="product.name"
-          :additional="product | extras | currency(product.extras ? 'ab ' : '')"
-          @click="product.extras ? showDialog(product) : addToCart(product)"
-        ></big-button-flex>
-      </template>
-    </v-layout>
-    <v-dialog v-model="dialog2" v-if="selectedProduct">
-      <v-card>
-        <v-card-title>
-          <h2>Typ auswählen</h2>
-        </v-card-title>
-        <v-card-text>
-          <div class="button-container">
-            <big-button-flex
-              v-for="extra in selectedProduct.extras"
-              :key="extra.id"
-              :title="extra.name"
-              :additional="extra.price | currency"
-              @click="addExtraToCart(extra)"
-            />
-          </div>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" flat @click="dialog2=false">Schließen</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-container>
+  <navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
+    <v-container class="home" fluid fill-height>
+      <v-layout
+        align-center
+        justify-center
+        text-xs-center
+        wrap
+        class="btn-list-layout content-container"
+      >
+        <template v-for="product in products">
+          <big-button-flex
+            :key="product.name"
+            :title="product.name"
+            :additional="product | extras | currency(product.extras ? 'ab ' : '')"
+            @click="product.extras ? showDialog(product) : addToCart(product)"
+          ></big-button-flex>
+        </template>
+      </v-layout>
+      <v-dialog v-model="dialog2" v-if="selectedProduct">
+        <v-card>
+          <v-card-title>
+            <h2>Typ auswählen</h2>
+          </v-card-title>
+          <v-card-text>
+            <div class="button-container">
+              <big-button-flex
+                v-for="extra in selectedProduct.extras"
+                :key="extra.id"
+                :title="extra.name"
+                :additional="extra.price | currency"
+                @click="addExtraToCart(extra)"
+              />
+            </div>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" flat @click="dialog2=false">Schließen</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-container>
+    <navigation-footer />
   </navigation-toolbar-layout>
 </template>
 <script lang="ts">
@@ -47,9 +48,10 @@ import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import { Product } from '@/interfaces/Product';
 import { ProductExtra } from '@/interfaces/ProductExtra';
 import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
+import NavigationFooter from '@/components/NavigationFooter.vue';
 
 @Component({
-    components: { BigButtonFlex, NavigationToolbarLayout },
+    components: { BigButtonFlex, NavigationToolbarLayout, NavigationFooter },
     filters: {
         extras(product: Product): number {
             if (product.extras) {

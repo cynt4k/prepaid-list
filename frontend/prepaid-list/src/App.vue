@@ -14,8 +14,8 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { EventBus } from '@/assets/EventBus';
 @Component({})
 export default class App extends Vue {
-    private text: string = 'asdf';
-    private snackbar: boolean = true;
+    private text: string = '';
+    private snackbar: boolean = false;
     private snackbarType: string = '';
     private mounted() {
         EventBus.$on('message', (options: any) => {
