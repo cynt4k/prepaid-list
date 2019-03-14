@@ -26,12 +26,20 @@ import BigButton from '@/components/BigButton.vue';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import ToolbarLayout from '@/layout/ToolbarLayout.vue';
 import { EventBus } from '@/assets/EventBus';
+import { userGetters } from '../store/user-state';
+
+import { User } from '@/interfaces/User';
+import { UserActionTypes } from '../store/user-state';
+import { ChangeUserAction } from '../store/user-state';
+import { State, Getter, Mutation, Action, namespace } from 'vuex-class';
+import { StateNamespaces } from '../store/namespaces';
+
+const userModule = namespace(StateNamespaces.USER_STATE);
 
 @Component({ components: { BigButton, BigButtonFlex, ToolbarLayout } })
 export default class Dashboard extends Vue {
-    private get user() {
-        return JSON.parse(localStorage.user).nick;
-    }
+    @userModule.Getter
+    private user!: User;
 
     private buyProduct() {
         setTimeout(() => this.$router.push({ name: 'BuyProduct' }), 100);
@@ -43,8 +51,11 @@ export default class Dashboard extends Vue {
     }
 
     private mounted() {
-      const message = {message: `Servus, ${this.user}`, snackbarType: 'info'};
-      EventBus.$emit('message', message);
+        const message = {
+            message: `Servus, ${this.user.nick}`,
+            snackbarType: 'info',
+        };
+        EventBus.$emit('message', message);
     }
 }
 </script>

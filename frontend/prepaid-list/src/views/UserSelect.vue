@@ -21,11 +21,21 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import AlphabetList from '@/components/AlphabetList.vue';
-import { User } from '@/interfaces/User';
+import { User } from '../interfaces/User';
 import ToolbarLayout from '@/layout/ToolbarLayout.vue';
+
+import { UserActionTypes, ChangeUserAction } from '../store/user-state';
+import { Action, namespace } from 'vuex-class';
+import { StateNamespaces } from '../store/namespaces';
+
+const userModule = namespace(StateNamespaces.USER_STATE);
 
 @Component({ components: { AlphabetList, ToolbarLayout } })
 export default class UserSelect extends Vue {
+
+    @userModule.Action(UserActionTypes.CHANGE_USER)
+    private changeUserAction!: ChangeUserAction;
+
     private users: User[];
 
     constructor() {
@@ -40,9 +50,11 @@ export default class UserSelect extends Vue {
         this.users.push({ name: 'Bert', nick: 'Stefan' });
         this.users.push({ name: 'Alexa', nick: 'Stephanie' });
     }
-
+  
+   
     private openDashboard(user: User) {
-        localStorage.user = JSON.stringify(user);
+		this.changeUserAction(user);
+        //localStorage.user = JSON.stringify(user);
         setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
     }
 }
