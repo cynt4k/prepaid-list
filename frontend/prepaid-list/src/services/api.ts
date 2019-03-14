@@ -1,7 +1,8 @@
 import { injectable} from 'inversify';
 import axios, { AxiosPromise } from 'axios';
-import { Observable, from } from 'rxjs';
+import { Observable, from, observable } from 'rxjs';
 import { IApiService } from '@/types';
+import { IApiResponse } from '@/interfaces/services';
 
 @injectable()
 export class ApiService implements IApiService {
@@ -19,7 +20,7 @@ export class ApiService implements IApiService {
     //     return from(axios.get(url));
     // }
 
-    public get(path: string): Observable<any> {
+    public get(path: string): Observable<IApiResponse<any>> {
         const url = `${this.api}/${path}`;
         return Observable.create((observer: any) => {
             axios.get(url).then((response) => {
@@ -31,8 +32,20 @@ export class ApiService implements IApiService {
         });
     }
 
-    public post(path: string, data: any): Observable<any> {
+    // public post(path: string, data: any): Observable<any> {
+    //     const url = `${this.api}/${path}`;
+    //     return from(axios.post(url, data));
+    // }
+
+    public post(path: string, data: any): Observable<IApiResponse<any>> {
         const url = `${this.api}/${path}`;
-        return from(axios.post(url, data));
+        return Observable.create((observable: any) => {
+            axios.post(url, data).then((response) => {
+                observable.next(response.data);
+                observable.complete();
+            }).catch((e) => {
+                observable.error(e);
+            });
+        });
     }
 }

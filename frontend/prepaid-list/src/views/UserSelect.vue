@@ -45,9 +45,7 @@ export default class UserSelect extends Vue {
         this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
         this._api
             .get('user')
-            .pipe(
-              map(data => data.data)
-            )
+            .pipe(map(data => data.data))
             .subscribe(
                 data => {
                     this.users = data;
@@ -57,6 +55,10 @@ export default class UserSelect extends Vue {
     }
 
     private openDashboard(user: User) {
+      this._api.post('auth/login/user', { username: user.nickname }).pipe(
+        map(response => response.data)
+      ).subscribe((data) => console.log(data), (e) => console.error(e));
+      debugger;
         localStorage.user = JSON.stringify(user);
         setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
     }
