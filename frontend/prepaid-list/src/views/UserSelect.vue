@@ -20,25 +20,40 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { inject } from 'inversify';
 import AlphabetList from '@/components/AlphabetList.vue';
 import { User } from '@/interfaces/User';
+import { map } from 'rxjs/operators';
 import ToolbarLayout from '@/layout/ToolbarLayout.vue';
+import { SERVICE_IDENTIFIER } from '../models/Identifiers';
+import { ApiService } from '../services/api';
+import { container } from '../inversify.config';
+import { IApiService } from '@/types';
 
 @Component({ components: { AlphabetList, ToolbarLayout } })
 export default class UserSelect extends Vue {
     private users: User[];
+    private _api: IApiService;
 
     constructor() {
         super();
         this.users = [];
-        this.users.push({ name: 'Andreas', nick: 'Undefined' });
-        this.users.push({ name: 'Fridtjof', nick: 'Euan' });
-        this.users.push({ name: 'Feruza', nick: 'Knute' });
-        this.users.push({ name: 'Apolônia', nick: 'Ural' });
-        this.users.push({ name: 'Sieghard', nick: 'Caecilia' });
-        this.users.push({ name: 'Margareta', nick: 'Ilsa' });
-        this.users.push({ name: 'Bert', nick: 'Stefan' });
-        this.users.push({ name: 'Alexa', nick: 'Stephanie' });
+        this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
+    }
+
+    private mounted() {
+        this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
+        this._api
+            .get('user')
+            .pipe(
+              map(data => data.data)
+            )
+            .subscribe(
+                data => {
+                    this.users = data;
+                },
+                err => console.error(err)
+            );
     }
 
     private openDashboard(user: User) {
