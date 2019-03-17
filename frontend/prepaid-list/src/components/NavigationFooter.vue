@@ -39,7 +39,7 @@
               <td>{{ props.item.product.price | currency}}</td>
               <td>{{ (props.item.amount * props.item.product.price) | currency }}</td>
               <td class="text-xs-right">
-                <v-btn icon color="error" flat>
+                <v-btn icon color="error" flat @click="removeItem(props.item)">
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </td>
@@ -70,7 +70,11 @@ import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
 
 import { Getter, namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
-import { UserActionTypes, ChangeUserAction } from '../store/user-state';
+
+import {
+    ShoppingCartActionTypes,
+    RemoveProductAction,
+} from '@/store/shoppingcart-state/shoppingcart-state';
 
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
@@ -95,12 +99,19 @@ export default class ComponentName extends Vue {
 
     private animate: boolean = false;
 
+     @shoppingCartModule.Action(ShoppingCartActionTypes.REMOVE_PRODUCT)
+    private removeProductAction!: RemoveProductAction;
+
     constructor() {
         super();
     }
 
     public update() {
         this.animate = true;
+    }
+
+    private removeItem(item: ShoppingCartItem) {
+      this.removeProductAction(item);
     }
 
     private get headers() {

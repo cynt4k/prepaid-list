@@ -1,7 +1,5 @@
 <template>
-  <navigation-toolbar-layout
-    titleFirst="Produkt"
-    titleSecond="kaufen" >
+  <navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
     <v-container class="home" fluid fill-height>
       <v-layout
         align-center
@@ -19,7 +17,7 @@
           ></big-button-flex>
         </template>
       </v-layout>
-      <v-dialog v-model="dialog2" v-if="selectedProduct">
+      <v-dialog v-model="dialogExtraProduct" v-if="selectedProduct">
         <v-card>
           <v-card-title>
             <h2>Typ auswählen</h2>
@@ -36,12 +34,12 @@
             </div>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" flat @click="dialog2=false">Schließen</v-btn>
+            <v-btn color="primary" flat @click="dialogExtraProduct=false">Schließen</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-container>
-    <navigation-footer ref="footer" />
+    <navigation-footer ref="footer"/>
   </navigation-toolbar-layout>
 </template>
 <script lang="ts">
@@ -85,9 +83,8 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 })
 export default class SingleProducts extends Vue {
     private products: Product[] = [];
-    private dialog2: boolean = false;
+    private dialogExtraProduct: boolean = false;
     private selectedProduct: Product | null = null;
-
 
     @shoppingCartModule.Action(ShoppingCartActionTypes.ADD_PRODUCT)
     private addProductAction!: AddProductAction;
@@ -126,7 +123,7 @@ export default class SingleProducts extends Vue {
     }
 
     private showDialog(p: Product) {
-        this.dialog2 = true;
+        this.dialogExtraProduct = true;
         this.selectedProduct = p;
     }
 
@@ -136,7 +133,12 @@ export default class SingleProducts extends Vue {
         this.$refs['footer'].update();
     }
 
-    private addExtraToCart(extra: ProductExtra) {}
+    private addExtraToCart(extra: ProductExtra) {
+        const item: ShoppingCartItem = { product: extra, amount: 1 };
+        this.addProductAction(item);
+        this.$refs['footer'].update();
+        this.dialogExtraProduct = false;
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -147,5 +149,4 @@ export default class SingleProducts extends Vue {
     display: flex;
     flex-flow: wrap;
 }
-
 </style>
