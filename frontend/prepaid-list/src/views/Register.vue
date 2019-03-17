@@ -100,12 +100,12 @@ export default class Register extends Vue {
     private terms: boolean = false;
 
     private nameRules = [
-        val => (val || '').length > 0 || 'Dieses Feld muss gefüllt sein',
-        val => /[0-9]/.test(val) || 'Das Feld enthält ungültige Zeichen',
+        (val: any) => (val || '').length > 0 || 'Dieses Feld muss gefüllt sein',
+        (val: any) => /[0-9]/.test(val) || 'Das Feld enthält ungültige Zeichen',
     ];
 
     private emailRules = [
-        val =>
+        (val: any) =>
             (val || '').length == 0 ||
             /.+@.+/.test(val) ||
             'E-Mailadresse ist ungültig',
