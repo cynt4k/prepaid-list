@@ -1,5 +1,7 @@
 <template>
-  <navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
+  <navigation-toolbar-layout
+    titleFirst="Produkt"
+    titleSecond="kaufen" >
     <v-container class="home" fluid fill-height>
       <v-layout
         align-center
@@ -39,7 +41,7 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <navigation-footer />
+    <navigation-footer ref="footer" />
   </navigation-toolbar-layout>
 </template>
 <script lang="ts">
@@ -49,6 +51,16 @@ import { Product } from '@/interfaces/Product';
 import { ProductExtra } from '@/interfaces/ProductExtra';
 import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import NavigationFooter from '@/components/NavigationFooter.vue';
+import { Getter, namespace } from 'vuex-class';
+import {
+    ShoppingCartActionTypes,
+    AddProductAction,
+} from '@/store/shoppingcart-state/shoppingcart-state';
+
+import { StateNamespaces } from '../store/namespaces';
+import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
+
+const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
 @Component({
     components: { BigButtonFlex, NavigationToolbarLayout, NavigationFooter },
@@ -75,6 +87,10 @@ export default class SingleProducts extends Vue {
     private products: Product[] = [];
     private dialog2: boolean = false;
     private selectedProduct: Product | null = null;
+
+
+    @shoppingCartModule.Action(ShoppingCartActionTypes.ADD_PRODUCT)
+    private addProductAction!: AddProductAction;
 
     constructor() {
         super();
@@ -114,7 +130,12 @@ export default class SingleProducts extends Vue {
         this.selectedProduct = p;
     }
 
-    private addToCart(p: Product) {}
+    private addToCart(p: Product) {
+        const item: ShoppingCartItem = { product: p, amount: 1 };
+        this.addProductAction(item);
+        this.$refs['footer'].update();
+    }
+
     private addExtraToCart(extra: ProductExtra) {}
 }
 </script>
@@ -126,4 +147,5 @@ export default class SingleProducts extends Vue {
     display: flex;
     flex-flow: wrap;
 }
+
 </style>
