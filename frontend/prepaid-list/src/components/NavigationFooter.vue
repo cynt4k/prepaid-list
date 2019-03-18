@@ -11,7 +11,8 @@
       >
         <v-avatar class="orange darken-4">
           <v-icon style="font-size: 21px">mdi-cart</v-icon>
-        </v-avatar>{{sum | currency}}
+        </v-avatar>
+        {{sum | currency}}
       </v-chip>
       <v-card>
         <v-card-title>
@@ -26,7 +27,7 @@
         <div>
           <v-data-table :hide-actions="true" :headers="headers" :items="items" class="elevation-1">
             <template slot="items" slot-scope="props">
-              <td>{{ props.item.product.name }}</td>
+              <td>{{ props.item.product.name }} {{ props.item.productExtra ? `(${props.item.productExtra.name})` : ''}}</td>
               <td>
                 <v-btn icon flat>
                   <v-icon>mdi-minus-circle</v-icon>
@@ -99,7 +100,7 @@ export default class ComponentName extends Vue {
 
     private animate: boolean = false;
 
-     @shoppingCartModule.Action(ShoppingCartActionTypes.REMOVE_PRODUCT)
+    @shoppingCartModule.Action(ShoppingCartActionTypes.REMOVE_PRODUCT)
     private removeProductAction!: RemoveProductAction;
 
     constructor() {
@@ -111,7 +112,7 @@ export default class ComponentName extends Vue {
     }
 
     private removeItem(item: ShoppingCartItem) {
-      this.removeProductAction(item);
+        this.removeProductAction(item);
     }
 
     private get headers() {

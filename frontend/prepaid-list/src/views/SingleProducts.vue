@@ -29,7 +29,7 @@
                 :key="extra.id"
                 :title="extra.name"
                 :additional="extra.price | currency"
-                @click="addExtraToCart(extra)"
+                @click="addExtraToCart(selectedProduct, extra)"
               />
             </div>
           </v-card-text>
@@ -133,8 +133,8 @@ export default class SingleProducts extends Vue {
         this.$refs['footer'].update();
     }
 
-    private addExtraToCart(extra: ProductExtra) {
-        const item: ShoppingCartItem = { product: extra, amount: 1 };
+    private addExtraToCart(product: Product, extra: ProductExtra) {
+        const item: ShoppingCartItem = { product, amount: 1, productExtra: extra };
         this.addProductAction(item);
         this.$refs['footer'].update();
         this.dialogExtraProduct = false;
