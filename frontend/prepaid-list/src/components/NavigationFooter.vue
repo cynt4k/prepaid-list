@@ -29,11 +29,11 @@
             <template slot="items" slot-scope="props">
               <td>{{ props.item.product.name }} {{ props.item.productExtra ? `(${props.item.productExtra.name})` : ''}}</td>
               <td>
-                <v-btn icon flat>
+                <v-btn icon flat @click="decreaseProduct(props.item)">
                   <v-icon>mdi-minus-circle</v-icon>
                 </v-btn>
                 {{ props.item.amount }}
-                <v-btn icon flat>
+                <v-btn icon flat @click="addProduct(props.item)">
                   <v-icon>mdi-plus-circle</v-icon>
                 </v-btn>
               </td>
@@ -58,7 +58,8 @@
       </v-card>
     </v-dialog>
 
-    <v-btn color="success" class="next-btn">Bestätigen
+    <v-btn color="success" class="next-btn">
+      Bestätigen
       <v-icon right>mdi-chevron-right-circle</v-icon>
     </v-btn>
   </v-footer>
@@ -75,6 +76,8 @@ import { StateNamespaces } from '../store/namespaces';
 import {
     ShoppingCartActionTypes,
     RemoveProductAction,
+    AddProductAction,
+    DeleteProductAction,
 } from '@/store/shoppingcart-state/shoppingcart-state';
 
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
@@ -100,8 +103,12 @@ export default class ComponentName extends Vue {
 
     private animate: boolean = false;
 
+    @shoppingCartModule.Action(ShoppingCartActionTypes.DELETE_PRODUCT)
+    private deleteProductAction!: DeleteProductAction;
     @shoppingCartModule.Action(ShoppingCartActionTypes.REMOVE_PRODUCT)
-    private removeProductAction!: RemoveProductAction;
+    private decreaseProductAction!: RemoveProductAction;
+    @shoppingCartModule.Action(ShoppingCartActionTypes.ADD_PRODUCT)
+    private addProductAction!: AddProductAction;
 
     constructor() {
         super();
@@ -111,8 +118,16 @@ export default class ComponentName extends Vue {
         this.animate = true;
     }
 
+    private addProduct(item: ShoppingCartItem) {
+        this.addProductAction(item);
+    }
+
+    private decreaseProduct(item: ShoppingCartItem) {
+        this.decreaseProductAction(item);
+    }
+
     private removeItem(item: ShoppingCartItem) {
-        this.removeProductAction(item);
+        this.deleteProductAction(item);
     }
 
     private get headers() {

@@ -7,7 +7,9 @@ import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
 ///////////////////////////////////////
 
 export interface ShoppingCartState {
-    shoppingCart: ShoppingCartItem[];
+    shoppingCart: {
+        [key: string]: ShoppingCartItem;
+    };
 }
 
 ///////////////////////////////////////
@@ -16,6 +18,8 @@ export interface ShoppingCartState {
 export enum ShoppingCartMutationTypes {
     ADD_PRODUCT = 'addProductMutation',
     REMOVE_PRODUCT = 'removeProductMutation',
+    RESET_STATE = 'resetStateMutation',
+    DELETE_PRODUCT = 'deleteProductMutation'
 }
 
 export const mutations: MutationTree<ShoppingCartState> = {
@@ -23,14 +27,31 @@ export const mutations: MutationTree<ShoppingCartState> = {
         state,
         payload: ShoppingCartItem
     ) => {
-        state.shoppingCart.push(payload);
+        // TODO: Später auf id ändern: payload.product.id
+        const key = payload.product.name + payload.productExtra ? payload.productExtra.name : '';
+        if (state.shoppingCart[payload.product.name + payload.productExtra.name]) {
+            payload.amount = state.shoppingCart[payload.product.name].amount + 1;
+        }
+        state.shoppingCart = {...state.shoppingCart, [payload.product.name] : payload};
     },
     [ShoppingCartMutationTypes.REMOVE_PRODUCT]: (
         state,
         payload: ShoppingCartItem
     ) => {
-        const index = state.shoppingCart.indexOf(payload);
-        state.shoppingCart.splice(index, 1);
+        if (state.shoppingCart[payload.product.name]) {
+            payload.amount = state.shoppingCart[payload.product.name].amount - 1;
+        }
+        payload.amount = payload.amount > 1 ? payload.amount : 1;
+        state.shoppingCart = {...state.shoppingCart, [payload.product.name] : payload};
+    },
+    [ShoppingCartMutationTypes.RESET_STATE]: (state: ShoppingCartState) => {
+        state.shoppingCart = {};
+    },
+    [ShoppingCartMutationTypes.DELETE_PRODUCT]: (state: ShoppingCartState, payload: ShoppingCartItem) => {
+        if (payload && payload.product) {
+            delete state.shoppingCart[payload.product.name];
+            state.shoppingCart = {...state.shoppingCart};
+        }
     },
 };
 
@@ -39,10 +60,13 @@ export const mutations: MutationTree<ShoppingCartState> = {
 ///////////////////////////////////////
 export type AddProductAction = (payload: ShoppingCartItem) => void;
 export type RemoveProductAction = (payload: ShoppingCartItem) => void;
+export type DeleteProductAction = (payload: ShoppingCartItem) => void;
 
 export enum ShoppingCartActionTypes {
     ADD_PRODUCT = 'addProductAction',
     REMOVE_PRODUCT = 'removeProductAction',
+    RESET_STATE = 'resetStateAction',
+    DELETE_PRODUCT = 'deleteProductAction'
 }
 
 export const actions: ActionTree<ShoppingCartState, any> = {
@@ -55,6 +79,12 @@ export const actions: ActionTree<ShoppingCartState, any> = {
     ) {
         context.commit(ShoppingCartMutationTypes.REMOVE_PRODUCT, payload);
     },
+    [ShoppingCartActionTypes.RESET_STATE](context) {
+        context.commit(ShoppingCartMutationTypes.RESET_STATE);
+    },
+    [ShoppingCartActionTypes.DELETE_PRODUCT](context, payload: ShoppingCartItem) {
+        context.commit(ShoppingCartMutationTypes.DELETE_PRODUCT, payload);
+    },
 };
 
 ///////////////////////////////////////
@@ -62,12 +92,22 @@ export const actions: ActionTree<ShoppingCartState, any> = {
 ///////////////////////////////////////
 
 export const getters: GetterTree<ShoppingCartState, any> = {
-    items: (state): ShoppingCartItem[] =>
-        state.shoppingCart ? state.shoppingCart : [],
+    items: (state): ShoppingCartItem[] => {
+        const result: ShoppingCartItem[] = [];
+
+        for (const key in state.shoppingCart) {
+            if (state.shoppingCart.hasOwnProperty(key)) {
+                result.push(state.shoppingCart[key]);
+            }
+        }
+        return result;
+    },
     sum: (state): number => {
         let sum: number = 0;
-        state.shoppingCart.forEach((item: ShoppingCartItem) => {
-            sum += item.product.price * item.amount;
+        Object.keys(state.shoppingCart).forEach((key: string) => {
+            sum +=
+                state.shoppingCart[key].product.price *
+                state.shoppingCart[key].amount;
         });
         return sum;
     },
@@ -77,7 +117,7 @@ export const getters: GetterTree<ShoppingCartState, any> = {
 // Module
 ///////////////////////////////////////
 const initialState: ShoppingCartState = {
-    shoppingCart: [],
+    shoppingCart: {},
 };
 
 export const shoppingCartModule: Module<ShoppingCartState, any> = {

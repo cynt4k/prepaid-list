@@ -23,14 +23,14 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { User } from '../interfaces/User';
 import { Getter, namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
-import { UserActionTypes, ChangeUserAction } from '../store/user-state';
+import { UserActionTypes, ResetUserAction } from '../store/user-state';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
 @Component({})
 export default class ToolbarLayout extends Vue {
-    @userModule.Action(UserActionTypes.CHANGE_USER)
-    private changeUserAction!: ChangeUserAction;
+    @userModule.Action(UserActionTypes.RESET_STATE)
+    private resetUserAction!: ResetUserAction;
 
     @userModule.Getter
     private user!: User;
@@ -42,10 +42,9 @@ export default class ToolbarLayout extends Vue {
     private showUserAndLogout!: boolean;
 
     private logout() {
-        //localStorage.user = null;
         setTimeout(() => {
             this.$router.push({ name: 'Home' });
-            this.changeUserAction(undefined);
+            this.resetUserAction(undefined);
         }, 100);
     }
 }
