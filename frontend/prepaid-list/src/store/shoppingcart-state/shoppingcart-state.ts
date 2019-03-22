@@ -19,7 +19,13 @@ export enum ShoppingCartMutationTypes {
     ADD_PRODUCT = 'addProductMutation',
     REMOVE_PRODUCT = 'removeProductMutation',
     RESET_STATE = 'resetStateMutation',
-    DELETE_PRODUCT = 'deleteProductMutation'
+    DELETE_PRODUCT = 'deleteProductMutation',
+}
+
+function keyFct(item: ShoppingCartItem) {
+    return (
+        item.product.name + (item.productExtra ? item.productExtra!.name : '')
+    );
 }
 
 export const mutations: MutationTree<ShoppingCartState> = {
@@ -28,30 +34,33 @@ export const mutations: MutationTree<ShoppingCartState> = {
         payload: ShoppingCartItem
     ) => {
         // TODO: Später auf id ändern: payload.product.id
-        const key = payload.product.name + payload.productExtra ? payload.productExtra.name : '';
-        if (state.shoppingCart[payload.product.name + payload.productExtra.name]) {
-            payload.amount = state.shoppingCart[payload.product.name].amount + 1;
+        const key = keyFct(payload);
+        if (state.shoppingCart[key]) {
+            payload.amount = state.shoppingCart[key].amount + 1;
         }
-        state.shoppingCart = {...state.shoppingCart, [payload.product.name] : payload};
+        state.shoppingCart = { ...state.shoppingCart, [key]: payload };
     },
     [ShoppingCartMutationTypes.REMOVE_PRODUCT]: (
         state,
         payload: ShoppingCartItem
     ) => {
-        if (state.shoppingCart[payload.product.name]) {
-            payload.amount = state.shoppingCart[payload.product.name].amount - 1;
+        const key = keyFct(payload);
+        if (state.shoppingCart[key]) {
+            payload.amount = state.shoppingCart[key].amount - 1;
         }
         payload.amount = payload.amount > 1 ? payload.amount : 1;
-        state.shoppingCart = {...state.shoppingCart, [payload.product.name] : payload};
+        state.shoppingCart = { ...state.shoppingCart, [key]: payload };
     },
     [ShoppingCartMutationTypes.RESET_STATE]: (state: ShoppingCartState) => {
         state.shoppingCart = {};
     },
-    [ShoppingCartMutationTypes.DELETE_PRODUCT]: (state: ShoppingCartState, payload: ShoppingCartItem) => {
-        if (payload && payload.product) {
-            delete state.shoppingCart[payload.product.name];
-            state.shoppingCart = {...state.shoppingCart};
-        }
+    [ShoppingCartMutationTypes.DELETE_PRODUCT]: (
+        state: ShoppingCartState,
+        payload: ShoppingCartItem
+    ) => {
+        const key = keyFct(payload);
+        delete state.shoppingCart[key];
+        state.shoppingCart = { ...state.shoppingCart };
     },
 };
 
@@ -66,7 +75,7 @@ export enum ShoppingCartActionTypes {
     ADD_PRODUCT = 'addProductAction',
     REMOVE_PRODUCT = 'removeProductAction',
     RESET_STATE = 'resetStateAction',
-    DELETE_PRODUCT = 'deleteProductAction'
+    DELETE_PRODUCT = 'deleteProductAction',
 }
 
 export const actions: ActionTree<ShoppingCartState, any> = {
@@ -82,7 +91,10 @@ export const actions: ActionTree<ShoppingCartState, any> = {
     [ShoppingCartActionTypes.RESET_STATE](context) {
         context.commit(ShoppingCartMutationTypes.RESET_STATE);
     },
-    [ShoppingCartActionTypes.DELETE_PRODUCT](context, payload: ShoppingCartItem) {
+    [ShoppingCartActionTypes.DELETE_PRODUCT](
+        context,
+        payload: ShoppingCartItem
+    ) {
         context.commit(ShoppingCartMutationTypes.DELETE_PRODUCT, payload);
     },
 };
@@ -105,9 +117,11 @@ export const getters: GetterTree<ShoppingCartState, any> = {
     sum: (state): number => {
         let sum: number = 0;
         Object.keys(state.shoppingCart).forEach((key: string) => {
-            sum +=
-                state.shoppingCart[key].product.price *
-                state.shoppingCart[key].amount;
+            const item: ShoppingCartItem = state.shoppingCart[key];
+            const price = item.productExtra
+                ? item.productExtra.price
+                : item.product.price;
+            sum += price * state.shoppingCart[key].amount;
         });
         return sum;
     },
