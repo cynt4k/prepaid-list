@@ -32,7 +32,6 @@ const userModule = namespace(StateNamespaces.USER_STATE);
 
 @Component({ components: { AlphabetList, ToolbarLayout } })
 export default class UserSelect extends Vue {
-
     @userModule.Action(UserActionTypes.CHANGE_USER)
     private changeUserAction!: ChangeUserAction;
 
@@ -41,19 +40,18 @@ export default class UserSelect extends Vue {
     constructor() {
         super();
         this.users = [];
-        this.users.push({ name: 'Andreas', nick: 'Undefined' });
-        this.users.push({ name: 'Fridtjof', nick: 'Euan' });
-        this.users.push({ name: 'Feruza', nick: 'Knute' });
-        this.users.push({ name: 'Apolônia', nick: 'Ural' });
-        this.users.push({ name: 'Sieghard', nick: 'Caecilia' });
-        this.users.push({ name: 'Margareta', nick: 'Ilsa' });
-        this.users.push({ name: 'Bert', nick: 'Stefan' });
-        this.users.push({ name: 'Alexa', nick: 'Stephanie' });
+        this.users.push({ name: 'Andreas', nick: 'Undefined', credit: 2.5 });
+        this.users.push({ name: 'Fridtjof', nick: 'Euan', credit: 1.25 });
+        this.users.push({ name: 'Feruza', nick: 'Knute', credit: 0.75 });
+        this.users.push({ name: 'Apolônia', nick: 'Ural', credit: 21.5 });
+        this.users.push({ name: 'Sieghard', nick: 'Caecilia', credit: 10.5 });
+        this.users.push({ name: 'Margareta', nick: 'Ilsa', credit: 1.7 });
+        this.users.push({ name: 'Bert', nick: 'Stefan', credit: 2.3 });
+        this.users.push({ name: 'Alexa', nick: 'Stephanie', credit: 3.5 });
     }
-  
-   
+
     private openDashboard(user: User) {
-		this.changeUserAction(user);
+        this.changeUserAction(user);
         //localStorage.user = JSON.stringify(user);
         setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
     }

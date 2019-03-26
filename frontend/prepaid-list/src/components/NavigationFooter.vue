@@ -93,7 +93,7 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
         },
     },
 })
-export default class ComponentName extends Vue {
+export default class NavigationFooter extends Vue {
     private menu: boolean = false;
     // private cart: ShoppingCartItem[] = [];
     @shoppingCartModule.Getter
@@ -153,6 +153,8 @@ footer {
     height: 50px !important;
 }
 .cart-chip > span {
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer !important;
 }
 
