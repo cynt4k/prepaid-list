@@ -1,9 +1,5 @@
 <template>
-  <navigation-toolbar-layout
-    titleFirst="Produkt"
-    titleSecond="kaufen"
-    style="display:flex; flex-layout:column"
-  >
+  <navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
     <v-container class="home" fluid fill-height>
       <v-layout
         align-center
@@ -22,7 +18,8 @@
         </template>
       </v-layout>
     </v-container>
-    <navigation-footer />
+    <shopping-cart-dialog v-model="isShoppingCartDialogShown"/>
+    <buy-product-navigation-footer @show-shopping-cart-dialog="isShoppingCartDialogShown = true"/>
   </navigation-toolbar-layout>
 </template>
 
@@ -31,11 +28,20 @@ import { Component, Vue } from 'vue-property-decorator';
 import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import { Category } from '@/interfaces/Category';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
-import NavigationFooter from '@/components/NavigationFooter.vue';
+import BuyProductNavigationFooter from '@/components/BuyProductNavigationFooter.vue';
+import ShoppingCartDialog from '@/components/ShoppingCartDialog.vue';
 
-@Component({ components: { NavigationToolbarLayout, BigButtonFlex, NavigationFooter } })
+@Component({
+    components: {
+        NavigationToolbarLayout,
+        BigButtonFlex,
+        BuyProductNavigationFooter,
+        ShoppingCartDialog,
+    },
+})
 export default class BuyProduct extends Vue {
     private categories: Category[] = [];
+    private isShoppingCartDialogShown: boolean = false;
 
     constructor() {
         super();
@@ -57,7 +63,13 @@ export default class BuyProduct extends Vue {
             id: 5,
         });
         this.categories.push({ name: 'Divers', icon: 'mdi-fish', id: 6 });
-    }
+	}
+	
+	// private showShoppingCartDialog() {
+	// 	this.showShoppingCartDialog = true;
+	// 	console.log('flag set');
+	// }
+
 }
 </script>
 <style lang="scss" scoped>

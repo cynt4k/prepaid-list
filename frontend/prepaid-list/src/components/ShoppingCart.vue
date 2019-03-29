@@ -1,5 +1,10 @@
 <template>
-  <v-data-table :hide-actions="true" :headers="headers" :items="shoppingCartItems" class="elevation-1">
+  <v-data-table
+    :hide-actions="true"
+    :headers="headers"
+    :items="shoppingCartItems"
+    class="elevation-1"
+  >
     <template slot="items" slot-scope="props">
       <td>{{ props.item.product.name }} {{ props.item.productExtra ? `(${props.item.productExtra.name})` : ''}}</td>
       <td>
@@ -62,19 +67,18 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
     },
 })
 export default class ShoppingCart extends Vue {
- 
- 	@shoppingCartModule.Getter
-	private shoppingCartItems!: ShoppingCartItem[];
-	
     @shoppingCartModule.Getter
-	private shoppingCartSum!: number;
-	
+    private shoppingCartItems!: ShoppingCartItem[];
+
+    @shoppingCartModule.Getter
+    private shoppingCartSum!: number;
+
     @shoppingCartModule.Action(ShoppingCartActionTypes.DELETE_PRODUCT)
     private deleteProductAction!: DeleteProductAction;
 
     @shoppingCartModule.Action(ShoppingCartActionTypes.REMOVE_PRODUCT)
     private decreaseProductAction!: RemoveProductAction;
-    
+
     @shoppingCartModule.Action(ShoppingCartActionTypes.ADD_PRODUCT)
     private addProductAction!: AddProductAction;
 

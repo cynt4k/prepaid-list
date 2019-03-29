@@ -5,7 +5,6 @@ import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
 ///////////////////////////////////////
 // State
 ///////////////////////////////////////
-
 export interface ShoppingCartState {
     shoppingCart: {
         [key: string]: ShoppingCartItem;
@@ -102,7 +101,6 @@ export const actions: ActionTree<ShoppingCartState, any> = {
 ///////////////////////////////////////
 // Getters
 ///////////////////////////////////////
-
 export const getters: GetterTree<ShoppingCartState, any> = {
     shoppingCartItems: (state): ShoppingCartItem[] => {
         const result: ShoppingCartItem[] = [];
@@ -124,6 +122,9 @@ export const getters: GetterTree<ShoppingCartState, any> = {
             sum += price * state.shoppingCart[key].amount;
         });
         return sum;
+    },
+    shoppingCartIsEmpty: (state, getters): boolean => {
+        return getters.shoppingCartItems.length === 0;
     },
 };
 

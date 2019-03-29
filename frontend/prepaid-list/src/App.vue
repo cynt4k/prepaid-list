@@ -1,7 +1,7 @@
 <template>
   <v-app dark style="height: 100vh;">
-    <v-snackbar top v-model="snackbar" :color="snackbarType">
-      <v-alert :value="true" :type="snackbarType" class="panel" style="width:100%">
+    <v-snackbar top v-model="snackbar" :color="snackbarType" :timeout="duration">
+      <v-alert :value="true" :type="snackbarType" class="panel">
         <h3>{{text}}</h3>
       </v-alert>
     </v-snackbar>
@@ -17,9 +17,10 @@ export default class App extends Vue {
     private text: string = '';
     private snackbar: boolean = false;
     private snackbarType: string = '';
+    private duration: number = 3000;
     private mounted() {
         EventBus.$on('message', (options: any) => {
-            const duration = options.duration ? options.duration : 3000;
+            this.duration = options.duration ? options.duration : 3000;
             this.snackbar = true;
             this.text = options.message;
             this.snackbarType = options.snackbarType;
