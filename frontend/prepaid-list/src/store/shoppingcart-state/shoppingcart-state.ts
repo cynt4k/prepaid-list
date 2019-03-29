@@ -104,7 +104,7 @@ export const actions: ActionTree<ShoppingCartState, any> = {
 ///////////////////////////////////////
 
 export const getters: GetterTree<ShoppingCartState, any> = {
-    items: (state): ShoppingCartItem[] => {
+    shoppingCartItems: (state): ShoppingCartItem[] => {
         const result: ShoppingCartItem[] = [];
 
         for (const key in state.shoppingCart) {
@@ -114,7 +114,7 @@ export const getters: GetterTree<ShoppingCartState, any> = {
         }
         return result;
     },
-    sum: (state): number => {
+    shoppingCartSum: (state): number => {
         let sum: number = 0;
         Object.keys(state.shoppingCart).forEach((key: string) => {
             const item: ShoppingCartItem = state.shoppingCart[key];
