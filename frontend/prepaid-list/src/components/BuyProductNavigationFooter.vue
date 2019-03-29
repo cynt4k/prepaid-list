@@ -93,7 +93,7 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
         },
     },
 })
-export default class NavigationFooter extends Vue {
+export default class BuyProductNavigationFooter extends Vue {
     private menu: boolean = false;
     // private cart: ShoppingCartItem[] = [];
     @shoppingCartModule.Getter

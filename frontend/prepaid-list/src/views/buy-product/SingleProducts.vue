@@ -39,7 +39,7 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <navigation-footer ref="footer"/>
+    <buy-product-navigation-footer ref="footer"/>
   </navigation-toolbar-layout>
 </template>
 <script lang="ts">
@@ -48,7 +48,7 @@ import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import { Product } from '@/interfaces/Product';
 import { ProductExtra } from '@/interfaces/ProductExtra';
 import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
-import NavigationFooter from '@/components/NavigationFooter.vue';
+import BuyProductNavigationFooter from '@/components/BuyProductNavigationFooter.vue';
 import { Getter, namespace } from 'vuex-class';
 import {
     ShoppingCartActionTypes,
@@ -61,7 +61,7 @@ import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
 @Component({
-    components: { BigButtonFlex, NavigationToolbarLayout, NavigationFooter },
+    components: { BigButtonFlex, NavigationToolbarLayout, BuyProductNavigationFooter },
     filters: {
         extras(product: Product): number {
             if (product.extras) {
