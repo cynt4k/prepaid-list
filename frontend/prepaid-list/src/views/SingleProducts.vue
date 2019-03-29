@@ -47,6 +47,9 @@ import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import { Product } from '@/interfaces/Product';
 import { ProductExtra } from '@/interfaces/ProductExtra';
 import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
+import { IProductService } from '@/types';
+import { container } from '@/inversify.config';
+import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
 
 @Component({
     components: { BigButtonFlex, NavigationToolbarLayout },
@@ -74,8 +77,11 @@ export default class SingleProducts extends Vue {
     private dialog2: boolean = false;
     private selectedProduct: Product | null = null;
 
+    private _productService: IProductService;
+
     constructor() {
         super();
+        this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
         this.products.push({
             name: 'Café Crema',
             icon: 'mdi-coffee',
@@ -105,6 +111,10 @@ export default class SingleProducts extends Vue {
             id: 4,
             price: 0.4,
         });
+    }
+
+    private mounted() {
+      this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
     }
 
     private showDialog(p: Product) {

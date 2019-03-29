@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import axios, { AxiosPromise } from 'axios';
+import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 import { Observable, from, observable } from 'rxjs';
 import { IApiService, IJwtService } from '@/types';
 import { IResponse, IResponseToken } from '@/interfaces/services';
@@ -18,10 +18,13 @@ export class ApiService implements IApiService {
         this.interceptor();
     }
 
-    public get<T>(path: string): Observable<IResponse<T>> {
+    public get<T>(path: string, requireAuth?: boolean): Observable<IResponse<T>> {
         const url = `${this.api}/${path}`;
+        const config: AxiosRequestConfig = {
+            params: { authRequired: (requireAuth) ? true : false }
+        };
         return Observable.create((observer: any) => {
-            axios.get(url).then((response) => {
+            axios.get(url, config).then((response) => {
                 observer.next(response.data);
                 observer.complete();
             }).catch((e) => {
@@ -30,10 +33,13 @@ export class ApiService implements IApiService {
         });
     }
 
-    public post<T>(path: string, data: any): Observable<IResponse<T>> {
+    public post<T>(path: string, data: any, requireAuth?: boolean): Observable<IResponse<T>> {
         const url = `${this.api}/${path}`;
+        const config: AxiosRequestConfig = {
+            params: { authRequired: (requireAuth) ? true : false }
+        };
         return Observable.create((observable: any) => {
-            axios.post(url, data).then((response) => {
+            axios.post(url, data, config).then((response) => {
                 observable.next(response.data);
                 observable.complete();
             }).catch((e) => {
@@ -50,11 +56,22 @@ export class ApiService implements IApiService {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             };
-            if (token) {
-                headersConfig[`Authorization`] = `${token}`;
 
+
+            if (config.url!.includes('auth/refresh')) {
+                return Promise.resolve(config);
+            }
+
+            if (!config.params.authRequired) {
+                config.params.authRequired = undefined;
+                return Promise.resolve(config);
+            }
+            config.params.authRequired = undefined;
+
+            if (token) {
                 try {
-                    const newToken = await this.get<IResponseToken>(`auth/refreshToken`).toPromise();
+                    headersConfig[`Authorization`] = `${token}`;
+                    const newToken = await this.post<IResponseToken>(`auth/refresh`, { refreshToken }).toPromise();
                     this._jwt.saveToken(newToken.data.token);
                     return Promise.resolve(config);
                 } catch (e) {

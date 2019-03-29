@@ -28,39 +28,50 @@ import ToolbarLayout from '@/layout/ToolbarLayout.vue';
 import { SERVICE_IDENTIFIER } from '../models/Identifiers';
 import { ApiService } from '../services/api';
 import { container } from '../inversify.config';
-import { IApiService } from '@/types';
+import { IApiService, IUserService, IJwtService } from '@/types';
 
 @Component({ components: { AlphabetList, ToolbarLayout } })
 export default class UserSelect extends Vue {
     private users: User[];
     private _api: IApiService;
+    private _userService: IUserService;
+    private _jwt: IJwtService;
 
     constructor() {
         super();
         this.users = [];
         this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
+        this._userService = container.get<IUserService>(SERVICE_IDENTIFIER.USER_SERVICE);
+        this._jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
     }
 
     private mounted() {
         this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
-        this._api
-            .get('user')
-            .pipe(map(data => data.data))
-            .subscribe(
-                data => {
-                    this.users = data;
-                },
-                err => console.error(err)
-            );
+        this._userService = container.get<IUserService>(SERVICE_IDENTIFIER.USER_SERVICE);
+        this._jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+        this._userService.getAllUser().subscribe((data) => {
+          this.users = <User[]> data;
+        }, (err) => console.error(err));
+        // this._api
+        //     .get('user')
+        //     .pipe(map(data => data.data))
+        //     .subscribe(
+        //         data => {
+        //             this.users = data;
+        //         },
+        //         err => console.error(err)
+        //     );
     }
 
     private openDashboard(user: User) {
-      this._api.post('auth/login/user', { username: user.nickname }).pipe(
-        map(response => response.data)
-      ).subscribe((data) => console.log(data), (e) => console.error(e));
-      debugger;
-        localStorage.user = JSON.stringify(user);
-        setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
+      this._userService.loginUserByUsername(user.nickname).subscribe((data) => {
+        console.log(data);
+        this._jwt.saveToken(data.token);
+        this._jwt.saveRefreshToken(data.refreshToken);
+      }, (e) => {
+        console.error(e);
+      });
+      setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
     }
 }
 </script>

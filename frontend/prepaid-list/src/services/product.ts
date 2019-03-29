@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import { IProductService, IApiService } from '@/types';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
-import { IProductModel } from './api';
+import { IProductModel } from '@/interfaces/services';
 import { Observable } from 'rxjs';
 
 @injectable()

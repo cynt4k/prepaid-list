@@ -86,11 +86,8 @@ export interface IUserModel {
 }
 
 export interface IUser {
-    username: string;
-    name: {
-        firstname: string;
-        lastname: string;
-    };
+    nickname: string;
+    name?: string;
 }
 
 export interface ICategoryModel {
