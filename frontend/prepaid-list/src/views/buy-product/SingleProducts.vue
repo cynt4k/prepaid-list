@@ -55,7 +55,7 @@ import {
     AddProductAction,
 } from '@/store/shoppingcart-state/shoppingcart-state';
 
-import { StateNamespaces } from '../store/namespaces';
+import { StateNamespaces } from '@/store/namespaces';
 import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
 
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);

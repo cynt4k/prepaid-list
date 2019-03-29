@@ -58,7 +58,7 @@
       </v-card>
     </v-dialog>
 
-    <v-btn color="success" class="next-btn">
+    <v-btn color="success" class="next-btn" :to="{name: 'Confirmation'}">
       Bestätigen
       <v-icon right>mdi-chevron-right-circle</v-icon>
     </v-btn>
