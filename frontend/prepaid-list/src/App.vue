@@ -12,6 +12,12 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { EventBus } from '@/assets/EventBus';
+
+import axios from 'axios';
+import VueRx from 'vue-rx';
+
+Vue.use(VueRx);
+
 @Component({})
 export default class App extends Vue {
     private text: string = '';

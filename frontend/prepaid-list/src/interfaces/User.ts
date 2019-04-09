@@ -1,5 +1,5 @@
 export interface User {
     name: string;
-    nick: string;
+    nickname: string;
     credit: number;
 }

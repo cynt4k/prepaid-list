@@ -20,13 +20,20 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { inject } from 'inversify';
 import AlphabetList from '@/components/AlphabetList.vue';
-import { User } from '../interfaces/User';
+import { User } from '@/interfaces/User';
+import { map } from 'rxjs/operators';
 import ToolbarLayout from '@/layout/ToolbarLayout.vue';
+import { SERVICE_IDENTIFIER } from '../models/Identifiers';
+import { ApiService } from '../services/api';
+import { container } from '../inversify.config';
+import { IApiService, IUserService, IJwtService } from '@/types';
 
 import { UserActionTypes, ChangeUserAction } from '../store/user-state';
 import { Action, namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
+import { IResponseToken } from '../interfaces/services';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
@@ -36,24 +43,37 @@ export default class UserSelect extends Vue {
     private changeUserAction!: ChangeUserAction;
 
     private users: User[];
+    private _api: IApiService;
+    private _userService: IUserService;
+    private _jwt: IJwtService;
 
     constructor() {
         super();
         this.users = [];
-        this.users.push({ name: 'Andreas', nick: 'Undefined', credit: 2.5 });
-        this.users.push({ name: 'Fridtjof', nick: 'Euan', credit: 1.25 });
-        this.users.push({ name: 'Feruza', nick: 'Knute', credit: 0.75 });
-        this.users.push({ name: 'Apolônia', nick: 'Ural', credit: 21.5 });
-        this.users.push({ name: 'Sieghard', nick: 'Caecilia', credit: 10.5 });
-        this.users.push({ name: 'Margareta', nick: 'Ilsa', credit: 1.7 });
-        this.users.push({ name: 'Bert', nick: 'Stefan', credit: 2.3 });
-        this.users.push({ name: 'Alexa', nick: 'Stephanie', credit: 3.5 });
+        this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
+        this._userService = container.get<IUserService>(SERVICE_IDENTIFIER.USER_SERVICE);
+        this._jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+    }
+
+    private mounted() {
+        this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
+        this._userService = container.get<IUserService>(SERVICE_IDENTIFIER.USER_SERVICE);
+        this._jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+        this._userService.getAllUser().subscribe((data: any) => {
+          this.users = <User[]> data;
+        }, (err: any) => console.error(err));
     }
 
     private openDashboard(user: User) {
-        this.changeUserAction(user);
-        //localStorage.user = JSON.stringify(user);
-        setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
+      this.changeUserAction(user);
+      this._userService.loginUserByUsername(user.nickname).subscribe((data: IResponseToken) => {
+        this._jwt.saveToken(data.token);
+        this._jwt.saveRefreshToken(data.refreshToken);
+        this._jwt.saveUsername(data.user);
+      }, (e: any) => {
+        console.error(e);
+      });
+      setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
     }
 }
 </script>
