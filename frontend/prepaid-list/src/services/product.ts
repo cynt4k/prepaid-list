@@ -14,8 +14,8 @@ export class ProductService implements IProductService {
         this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
     }
 
-    public getProducts(): Observable<IProductModel> {
-        return this._api.get<IProductModel>(`info/products`).pipe(
+    public getProducts(): Observable<IProductModel[]> {
+        return this._api.get<IProductModel[]>(`info/products`, true).pipe(
             map((res) => res.data)
         );
     }

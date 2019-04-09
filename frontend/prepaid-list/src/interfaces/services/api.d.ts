@@ -119,6 +119,7 @@ export interface INewOrder {
 }
 
 export interface IProductModel {
+    id: string;
     name: ITranslationModel;
     barcode: string;
     icon: string;

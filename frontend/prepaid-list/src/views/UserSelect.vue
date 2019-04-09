@@ -52,22 +52,13 @@ export default class UserSelect extends Vue {
         this._userService.getAllUser().subscribe((data) => {
           this.users = <User[]> data;
         }, (err) => console.error(err));
-        // this._api
-        //     .get('user')
-        //     .pipe(map(data => data.data))
-        //     .subscribe(
-        //         data => {
-        //             this.users = data;
-        //         },
-        //         err => console.error(err)
-        //     );
     }
 
     private openDashboard(user: User) {
       this._userService.loginUserByUsername(user.nickname).subscribe((data) => {
-        console.log(data);
         this._jwt.saveToken(data.token);
         this._jwt.saveRefreshToken(data.refreshToken);
+        this._jwt.saveUsername(data.user);
       }, (e) => {
         console.error(e);
       });

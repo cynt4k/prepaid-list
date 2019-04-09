@@ -50,6 +50,7 @@ import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import { IProductService } from '@/types';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
+import { LanguageCode } from '@/interfaces/services';
 
 @Component({
     components: { BigButtonFlex, NavigationToolbarLayout },
@@ -115,6 +116,20 @@ export default class SingleProducts extends Vue {
 
     private mounted() {
       this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
+      // this._productService.getProducts().subscribe((data) => {
+      //   data.forEach((entry) => {
+      //     let translation = entry.name.translations.find((i18) => i18.languageCode === LanguageCode.DE);
+      //     if (!translation) {
+      //       translation = { name: 'test', languageCode: LanguageCode.DE, shortname: 'test' };
+      //     }
+      //     this.products.push({
+      //       name: translation.name,
+      //       icon: 'mdi-coffee',
+      //       id: Number(entry.id),
+      //       price: entry.price
+      //     })
+      //   });
+      // });
     }
 
     private showDialog(p: Product) {

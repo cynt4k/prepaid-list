@@ -26,9 +26,22 @@ import BigButton from '@/components/BigButton.vue';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import ToolbarLayout from '@/layout/ToolbarLayout.vue';
 import { EventBus } from '@/assets/EventBus';
+import { IUserService, IJwtService } from '../types';
+import { container } from '../inversify.config';
+import { SERVICE_IDENTIFIER } from '../models/Identifiers';
 
 @Component({ components: { BigButton, BigButtonFlex, ToolbarLayout } })
 export default class Dashboard extends Vue {
+    private _userService: IUserService;
+    private _jwtService: IJwtService
+
+    constructor() {
+        super();
+        this._userService = container.get<IUserService>(
+            SERVICE_IDENTIFIER.USER_SERVICE
+        );
+        this._jwtService = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+    }
     private get user() {
         return JSON.parse(localStorage.user).nick;
     }
@@ -38,13 +51,19 @@ export default class Dashboard extends Vue {
     }
 
     private logout() {
-        localStorage.user = null;
+        this._jwtService.destoryToken();
+        this._jwtService.destoryRefreshToken();
         setTimeout(() => this.$router.push({ name: 'Home' }), 100);
     }
 
     private mounted() {
-      const message = {message: `Servus, ${this.user}`, snackbarType: 'info'};
-      EventBus.$emit('message', message);
+        const message = {
+            message: `Servus, ${this.user}`,
+            snackbarType: 'info',
+        };
+        this._userService = container.get<IUserService>(SERVICE_IDENTIFIER.USER_SERVICE);
+        this._jwtService = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+        EventBus.$emit('message', message);
     }
 }
 </script>

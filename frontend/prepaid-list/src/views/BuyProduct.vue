@@ -34,13 +34,18 @@ import { Component, Vue } from 'vue-property-decorator';
 import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import { Category } from '@/interfaces/Category';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
+import { IProductService } from '@/types';
+import { container } from '@/inversify.config';
+import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
 
 @Component({ components: { NavigationToolbarLayout, BigButtonFlex } })
 export default class BuyProduct extends Vue {
     private categories: Category[] = [];
+    private _productService: IProductService;
 
     constructor() {
         super();
+        this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
         this.categories.push({ name: 'Kaffee', icon: 'mdi-coffee', id: 1 });
         this.categories.push({ name: 'Bier', icon: 'mdi-bottle-wine,', id: 2 });
         this.categories.push({
@@ -59,6 +64,11 @@ export default class BuyProduct extends Vue {
             id: 5,
         });
         this.categories.push({ name: 'Divers', icon: 'mdi-fish', id: 6 });
+    }
+
+    private mounted() {
+      this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
+      this._productService.getProducts().subscribe((data) => console.log(data));
     }
 }
 </script>

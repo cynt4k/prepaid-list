@@ -1,4 +1,5 @@
 import { injectable } from 'inversify';
+import router from 'vue-router';
 import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 import { Observable, from, observable } from 'rxjs';
 import { IApiService, IJwtService } from '@/types';
@@ -21,7 +22,7 @@ export class ApiService implements IApiService {
     public get<T>(path: string, requireAuth?: boolean): Observable<IResponse<T>> {
         const url = `${this.api}/${path}`;
         const config: AxiosRequestConfig = {
-            params: { authRequired: (requireAuth) ? true : false }
+            params: { authRequired: (requireAuth) ? true : false },
         };
         return Observable.create((observer: any) => {
             axios.get(url, config).then((response) => {
@@ -59,6 +60,8 @@ export class ApiService implements IApiService {
 
 
             if (config.url!.includes('auth/refresh')) {
+                config.headers.Authorization = token;
+                config.params.authRequired = undefined;
                 return Promise.resolve(config);
             }
 
@@ -67,14 +70,18 @@ export class ApiService implements IApiService {
                 return Promise.resolve(config);
             }
             config.params.authRequired = undefined;
+            config.headers = {
+                'Authorization': token
+            };
 
             if (token) {
                 try {
-                    headersConfig[`Authorization`] = `${token}`;
                     const newToken = await this.post<IResponseToken>(`auth/refresh`, { refreshToken }).toPromise();
                     this._jwt.saveToken(newToken.data.token);
                     return Promise.resolve(config);
                 } catch (e) {
+                    this._jwt.destoryToken();
+                    this._jwt.destoryRefreshToken();
                     return Promise.reject(e);
                 }
             }
