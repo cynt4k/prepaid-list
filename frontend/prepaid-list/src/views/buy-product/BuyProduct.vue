@@ -68,7 +68,8 @@ export default class BuyProduct extends Vue {
 
     private mounted() {
       this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
-      this._productService.getProducts().subscribe((data: any) => console.log(data));
+      // this._productService.getProducts().subscribe((data: any) => console.log(data));
+      this._productService.getCategories().subscribe((data) => console.log(data));
     }
 }
 </script>

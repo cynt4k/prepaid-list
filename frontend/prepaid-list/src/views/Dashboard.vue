@@ -45,7 +45,7 @@ export default class Dashboard extends Vue {
     @userModule.Getter
     private user!: User;
     private _userService: IUserService;
-    private _jwtService: IJwtService
+    private _jwtService: IJwtService;
 
     constructor() {
         super();
@@ -67,10 +67,12 @@ export default class Dashboard extends Vue {
 
     private mounted() {
         const message = {
-            message: `Servus, ${this.user}`,
+            message: `Servus, ${this.user.nickname}`,
             snackbarType: 'info',
         };
-        this._userService = container.get<IUserService>(SERVICE_IDENTIFIER.USER_SERVICE);
+        this._userService = container.get<IUserService>(
+            SERVICE_IDENTIFIER.USER_SERVICE
+        );
         this._jwtService = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
         EventBus.$emit('message', message);
     }

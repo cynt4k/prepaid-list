@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import { IProductService, IApiService } from '@/types';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
-import { IProductModel } from '@/interfaces/services';
+import { IProductModel, ICategoryModel } from '@/interfaces/services';
 import { Observable } from 'rxjs';
 
 @injectable()
@@ -16,6 +16,12 @@ export class ProductService implements IProductService {
 
     public getProducts(): Observable<IProductModel[]> {
         return this._api.get<IProductModel[]>(`info/products`, true).pipe(
+            map((res) => res.data)
+        );
+    }
+
+    public getCategories(): Observable<ICategoryModel[]> {
+        return this._api.get<ICategoryModel[]>(`info/categories/all`, true).pipe(
             map((res) => res.data)
         );
     }
