@@ -68,11 +68,13 @@ export enum AclRight {
 
 
 export interface IAclModel {
+    id: string;
     name: string;
     rights: AclRight[];
 }
 
 export interface IUserModel {
+    id: string;
     username: string;
     tokenUid: string;
     email: string;
@@ -86,17 +88,20 @@ export interface IUserModel {
 }
 
 export interface IUser {
+    id: string;
     nickname: string;
     name?: string;
 }
 
 export interface ICategoryModel {
+    id: string;
     name: ITranslationModel;
     products: IProductModel[];
     icon: string;
 }
 
 export interface IProductOrder {
+    id: string;
     productId: string;
     price: number;
     totalPrice: number;
@@ -104,6 +109,7 @@ export interface IProductOrder {
 }
 
 export interface IOrder {
+    id: string;
     user: string;
     totalPrice: number;
     products: IProductOrder[];
@@ -148,10 +154,11 @@ export enum LanguageType {
 export interface ILanguageTranslation {
     languageCode: LanguageCode;
     name: string;
-    shortname: string;
+    shortname?: string;
 }
 
 export interface ITranslationModel {
+    id: string;
     translations: ILanguageTranslation[];
     type: LanguageType;
 }
