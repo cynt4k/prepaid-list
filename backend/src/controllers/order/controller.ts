@@ -53,7 +53,7 @@ export namespace OrderController {
     export const getOrdersForUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const result = await Order.find({ user: req.user!.id });
-            if (result) {
+            if (result.length !== 0) {
                 return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, result);
             }
             return response(res, HttpCodes.NotFound, I18n.WARN_NO_ORDERS_FOUND);

@@ -10,5 +10,5 @@ const router: Router = Router();
 
 router.post('/', CheckAuth.isAuth, CheckAcl.middlewareIsAllowed(AclRight.PREPAID_ALLOW),
     OrderValidator.newOrder(), OrderController.submitNewOrder);
-router.get('/ordersForUser', OrderController.getOrdersForUser);
+router.get('/ordersForUser', CheckAuth.isAuth, OrderController.getOrdersForUser);
 export const OrderRouter: Router = router;

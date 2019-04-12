@@ -238,6 +238,14 @@ export class Info {
     getProductByBarcode(@PathParam('id') @IsLong id: number) { }
 
     @Security('token')
+    @Path('categories')
+    @GET
+    @Tags('product')
+    @Response<IResponse<ICategoryModel[]>>(200, 'Get all categories')
+    // @ts-ignore
+    getCategories() { }
+
+    @Security('token')
     @Path('categories/all')
     @GET
     @Tags('product')
