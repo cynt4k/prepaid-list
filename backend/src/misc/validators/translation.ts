@@ -17,9 +17,9 @@ export namespace TranslationValidator {
                 });
 
                 if (missingAttribute.length !== 0) {
-                    return false;
+                    return true;
                 }
-                return true;
+                return false;
             }),
             check('type', I18n.VAL_TRANSLATION_TYPE_MISSING).isString(),
             ErrorHandler.validateBody
