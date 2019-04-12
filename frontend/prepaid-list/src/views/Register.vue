@@ -1,12 +1,22 @@
 <template>
   <toolbar-layout>
-    <v-snackbar v-model="snackbar" absolute top center color="success">
+    <template v-slot:toolbar>
+      <v-toolbar-title class="headline text-uppercase">
+        <span>Registrierung&nbsp;</span>
+      </v-toolbar-title>
+    </template>
+    <v-snackbar  v-model="snackbar" absolute top center color="success">
       <span>Registrierung erfolgreich!</span>
       <v-icon dark>checkbox-marked-circle</v-icon>
     </v-snackbar>
-    <v-container class="register" fluid fill-height>
+    <v-container  class="register" align-center justify-center fluid fill-height>
       <v-card flat>
-        <v-form ref="form" @submit.prevent="submit">
+        <v-container justify-center="" v-if="registering">
+          <!-- <v-layout align-center justify-center text-xs-center wrap class="btn-list-layout"> -->
+          <v-progress-circular :size="200" color="primary" indeterminate></v-progress-circular>
+          <h4>Registering</h4>
+        </v-container>
+        <v-form v-if="!registering" ref="form" @submit.prevent="submit">
           <v-container grid-list-xl fluid>
             <v-layout wrap>
               <!-- Vorname -->
@@ -63,7 +73,7 @@
             </v-layout>
           </v-container>
           <v-card-actions>
-            <v-btn flat @click="resetForm">Abbrechen</v-btn>
+            <v-btn flat @click="resetForm" :to="{name: 'Home'}">Abbrechen</v-btn>
             <v-spacer></v-spacer>
             <v-btn :disabled="!formIsValid" flat color="primary" type="submit">Registrieren</v-btn>
           </v-card-actions>
@@ -99,9 +109,10 @@ export default class Register extends Vue {
     private snackbar: boolean = false;
     private terms: boolean = false;
 
+    private registering: boolean = false;
+
     private nameRules = [
         (val: any) => (val || '').length > 0 || 'Dieses Feld muss gefüllt sein',
-        (val: any) => /[0-9]/.test(val) || 'Das Feld enthält ungültige Zeichen',
     ];
 
     private emailRules = [
@@ -119,7 +130,11 @@ export default class Register extends Vue {
 
     private submit() {
         this.snackbar = true;
+        this.registering = true;
         this.resetForm();
+        setTimeout(() => {
+          this.registering = false;
+        }, 3000);
     }
 
     get formIsValid() {
@@ -128,4 +143,9 @@ export default class Register extends Vue {
 }
 </script>
 <style lang="scss">
+h4 {
+  text-align: center;
+  padding: 0;
+  margin: 15px 0 0 0;
+}
 </style>
