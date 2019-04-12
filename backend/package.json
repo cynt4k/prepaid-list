@@ -9,7 +9,7 @@
     "swagger": "swaggerGen -c ./swaggerConfig.json && npm run copyFiles",
     "copyFiles": "copyfiles -f src/doc/swagger* dist/doc",
     "transpile": "tsc",
-    "start": "tsc && cross-env NODE_ENV=prd node ./dist/index.js",
+    "start": "node ./dist/index.js",
     "debug": "tsc && set NODE_ENV=dev && node ./dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -37,8 +37,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "string-template": "^1.0.0",
-    "swagger-ui-express": "^4.0.2",
-    "tsc": "^1.20150623.0"
+    "swagger-ui-express": "^4.0.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
