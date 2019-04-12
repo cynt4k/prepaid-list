@@ -8,7 +8,7 @@ import { body, check } from 'express-validator/check';
 
 const router: Router = Router();
 
-router.post('/', CheckAuth.isAuth, CheckAcl.middlewareIsAllowed(AclRight.PREPAID_ALLOW),
+router.post('/', CheckAuth.isAuth, CheckAcl.middlewareIsAllowed(AclRight.ORDER_ADD),
     OrderValidator.newOrder(), OrderController.submitNewOrder);
 router.get('/ordersForUser', CheckAuth.isAuth, OrderController.getOrdersForUser);
 export const OrderRouter: Router = router;
