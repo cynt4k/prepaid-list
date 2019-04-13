@@ -35,41 +35,43 @@ import BuyProductNavigationFooter from '@/components/BuyProductNavigationFooter.
 import { IProductService } from '@/types';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
+import { ILanguageTranslation } from '../../interfaces/services';
 
 @Component({
     components: { NavigationToolbarLayout, BigButtonFlex, BuyProductNavigationFooter },
 })
 export default class BuyProduct extends Vue {
     private categories: Category[] = [];
-    private _productService: IProductService;
+    private _productService!: IProductService;
 
     constructor() {
         super();
-        this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
-        this.categories.push({ name: 'Kaffee', icon: 'mdi-coffee', id: 1 });
-        this.categories.push({ name: 'Bier', icon: 'mdi-bottle-wine,', id: 2 });
-        this.categories.push({
-            name: 'Softgetränke',
-            icon: 'mdi-cup-water',
-            id: 3,
-        });
-        this.categories.push({
-            name: 'TK-Produkte',
-            icon: 'mdi-pizza,',
-            id: 4,
-        });
-        this.categories.push({
-            name: 'Snacks',
-            icon: 'mdi-food-croissant',
-            id: 5,
-        });
-        this.categories.push({ name: 'Divers', icon: 'mdi-fish', id: 6 });
     }
 
     private mounted() {
       this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
       // this._productService.getProducts().subscribe((data: any) => console.log(data));
-      this._productService.getCategories().subscribe((data) => console.log(data));
+      this._productService.getCategories().subscribe((data) => {
+        this.categories = data.map((category) => {
+          const translation = ((): ILanguageTranslation => {
+            const data = category.name.translations.filter((elem) => elem.languageCode === 'DE');
+            if (data.length === 1) {
+              return data[0];
+            } else {
+              return <ILanguageTranslation>{
+                languageCode: 'DE',
+                name: 'Unbekannt',
+                shortname: 'Unbek.'
+              };
+            }
+          })();
+          return <Category> {
+            name: translation.name,
+            icon: 'mdi-pizza',
+            id: category.id
+          };
+        })
+      });
     }
 }
 </script>

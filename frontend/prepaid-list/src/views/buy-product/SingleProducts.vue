@@ -43,7 +43,7 @@
   </navigation-toolbar-layout>
 </template>
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import { Product } from '@/interfaces/Product';
 import { ProductExtra } from '@/interfaces/ProductExtra';
@@ -57,6 +57,9 @@ import {
 
 import { StateNamespaces } from '@/store/namespaces';
 import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
+import { IProductService } from '../../types';
+import { container } from '../../inversify.config';
+import { SERVICE_IDENTIFIER } from '../../models/Identifiers';
 
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
@@ -85,6 +88,10 @@ export default class SingleProducts extends Vue {
     private products: Product[] = [];
     private dialogExtraProduct: boolean = false;
     private selectedProduct: Product | null = null;
+
+    private _productService!: IProductService;
+    @Prop()
+    private category!: string;
 
     @shoppingCartModule.Action(ShoppingCartActionTypes.ADD_PRODUCT)
     private addProductAction!: AddProductAction;
@@ -120,6 +127,11 @@ export default class SingleProducts extends Vue {
             id: 4,
             price: 0.4,
         });
+    }
+
+    private mounted() {
+      this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
+      this._productService.getProductsByCategory(this.category).subscribe();
     }
 
     private showDialog(p: Product) {

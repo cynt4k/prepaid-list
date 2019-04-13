@@ -45,6 +45,7 @@ export default new Router({
             path: '/user/buyProducts/products/:category',
             name: 'SingleProducts',
             component: SingleProducts,
+            props: true
         },
         {
             path: '/user/buyProducts/confirmation',

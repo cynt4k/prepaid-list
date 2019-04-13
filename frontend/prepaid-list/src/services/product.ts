@@ -20,8 +20,14 @@ export class ProductService implements IProductService {
         );
     }
 
+    public getProductsByCategory(category: string): Observable<IProductModel[]> {
+        return this._api.get<IProductModel[]>(`info/categories/${category}`, true).pipe(
+            map((res) => res.data)
+        );
+    }
+
     public getCategories(): Observable<ICategoryModel[]> {
-        return this._api.get<ICategoryModel[]>(`info/categories/all`, true).pipe(
+        return this._api.get<ICategoryModel[]>(`info/categories`, true).pipe(
             map((res) => res.data)
         );
     }
