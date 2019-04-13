@@ -164,11 +164,6 @@ export default class SingleProducts extends Vue {
             .subscribe(products => {
                 this.products = products.map(product => {
                     const translation = this.getTranslation(product.name, 'DE');
-                    // const extras = (): ProductExtra[] => {
-                    //     return product.extras.map(extra => {
-                    //         return <ProductExtra>{};
-                    //     });
-                    // };
                     const extras = ((): ProductExtra[] | undefined => {
                       if (product.extras.length === 0 || !product.extras) {
                         return undefined;
@@ -177,7 +172,7 @@ export default class SingleProducts extends Vue {
                         const extraTranslation = this.getTranslation(extra.name, 'DE');
                         return <ProductExtra> {
                           name: extraTranslation.name,
-                          price: extraTranslation.price
+                          price: extra.price
                         };
                       });
                     })();
