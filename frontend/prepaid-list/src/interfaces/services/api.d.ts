@@ -155,6 +155,7 @@ export interface ILanguageTranslation {
     languageCode: LanguageCode;
     name: string;
     shortname?: string;
+    price: number;
 }
 
 export interface ITranslationModel {

@@ -60,17 +60,26 @@ import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
 import { IProductService } from '../../types';
 import { container } from '../../inversify.config';
 import { SERVICE_IDENTIFIER } from '../../models/Identifiers';
+import {
+    ILanguageTranslation,
+    IProductExtra,
+    ITranslationModel,
+} from '../../interfaces/services';
 
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
 @Component({
-    components: { BigButtonFlex, NavigationToolbarLayout, BuyProductNavigationFooter },
+    components: {
+        BigButtonFlex,
+        NavigationToolbarLayout,
+        BuyProductNavigationFooter,
+    },
     filters: {
         extras(product: Product): number {
-            if (product.extras) {
-                return product.extras.reduce((acc, val) =>
+            if ((product.extras || []).length !== 0) {
+                return product.extras!.reduce((acc, val) =>
                     acc.price < val.price ? acc : val
-                ).price;
+                , <ProductExtra> {}).price;
             }
             return product.price;
         },
@@ -98,40 +107,89 @@ export default class SingleProducts extends Vue {
 
     constructor() {
         super();
-        this.products.push({
-            name: 'Café Crema',
-            icon: 'mdi-coffee',
-            id: 1,
-            price: 0.3,
-            extras: [
-                { name: 'double-shot', price: 0.35 },
-                { name: 'double-shot+', price: 0.5 },
-                { name: 'normal', price: 0.3 },
-            ],
-        });
-        this.products.push({
-            name: 'Latte Macchiato',
-            icon: 'mdi-bottle-wine,',
-            id: 2,
-            price: 0.5,
-        });
-        this.products.push({
-            name: 'Heiße Milch',
-            icon: 'mdi-cup-water',
-            id: 3,
-            price: 0.3,
-        });
-        this.products.push({
-            name: 'Cappuccino',
-            icon: 'mdi-pizza,',
-            id: 4,
-            price: 0.4,
-        });
+        // this.products.push({
+        //     name: 'Café Crema',
+        //     icon: 'mdi-coffee',
+        //     id: 1,
+        //     price: 0.3,
+        //     extras: [
+        //         { name: 'double-shot', price: 0.35 },
+        //         { name: 'double-shot+', price: 0.5 },
+        //         { name: 'normal', price: 0.3 },
+        //     ],
+        // });
+        // this.products.push({
+        //     name: 'Latte Macchiato',
+        //     icon: 'mdi-bottle-wine,',
+        //     id: 2,
+        //     price: 0.5,
+        // });
+        // this.products.push({
+        //     name: 'Heiße Milch',
+        //     icon: 'mdi-cup-water',
+        //     id: 3,
+        //     price: 0.3,
+        // });
+        // this.products.push({
+        //     name: 'Cappuccino',
+        //     icon: 'mdi-pizza,',
+        //     id: 4,
+        //     price: 0.4,
+        // });
+    }
+
+    private getTranslation(
+        translation: ITranslationModel,
+        languageCode: string
+    ): ILanguageTranslation {
+        const data = translation.translations.filter(
+            elem => elem.languageCode === languageCode
+        );
+        if (data.length === 1) {
+            return data[0];
+        }
+        return <ILanguageTranslation>{
+            languageCode: languageCode,
+            name: 'Unbekannt',
+            shortname: 'Unbek.',
+        };
     }
 
     private mounted() {
-      this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
-      this._productService.getProductsByCategory(this.category).subscribe();
+        this._productService = container.get<IProductService>(
+            SERVICE_IDENTIFIER.PRODUCT_SERVICE
+        );
+        this._productService
+            .getProductsByCategory(this.category)
+            .subscribe(products => {
+                this.products = products.map(product => {
+                    const translation = this.getTranslation(product.name, 'DE');
+                    // const extras = (): ProductExtra[] => {
+                    //     return product.extras.map(extra => {
+                    //         return <ProductExtra>{};
+                    //     });
+                    // };
+                    const extras = ((): ProductExtra[] | undefined => {
+                      if (product.extras.length === 0 || !product.extras) {
+                        return undefined;
+                      }
+                      return product.extras.map((extra) => {
+                        const extraTranslation = this.getTranslation(extra.name, 'DE');
+                        return <ProductExtra> {
+                          name: extraTranslation.name,
+                          price: extraTranslation.price
+                        };
+                      });
+                    })();
+                    return <Product>{
+                        name: translation.name,
+                        id: product.id,
+                        price: product.price,
+                        icon: 'mdi-pizza',
+                        extras: extras
+                    };
+                });
+            });
     }
 
     private showDialog(p: Product) {
@@ -146,7 +204,11 @@ export default class SingleProducts extends Vue {
     }
 
     private addExtraToCart(product: Product, extra: ProductExtra) {
-        const item: ShoppingCartItem = { product, amount: 1, productExtra: extra };
+        const item: ShoppingCartItem = {
+            product,
+            amount: 1,
+            productExtra: extra,
+        };
         this.addProductAction(item);
         this.$refs['footer'].update();
         this.dialogExtraProduct = false;
