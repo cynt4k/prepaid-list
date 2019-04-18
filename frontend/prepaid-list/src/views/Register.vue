@@ -9,12 +9,13 @@
       <span>Registrierung erfolgreich!</span>
       <v-icon dark>checkbox-marked-circle</v-icon>
     </v-snackbar>
-    <v-container  class="register" align-center justify-center fluid fill-height>
+    <v-container  class="register" align-center justify-center text-xs-center fluid fill-height>
       <v-card flat>
-        <v-container justify-center="" v-if="registering">
+        <v-container justify-center align-center v-if="registering">
           <!-- <v-layout align-center justify-center text-xs-center wrap class="btn-list-layout"> -->
           <v-progress-circular :size="200" color="primary" indeterminate></v-progress-circular>
           <h4>Registering</h4>
+          <v-btn class="back-to-home-btn" flat color="red">Abbrechen</v-btn>
         </v-container>
         <v-form v-if="!registering" ref="form" @submit.prevent="submit">
           <v-container grid-list-xl fluid>
@@ -98,7 +99,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import ToolbarLayout from '@/layout/ToolbarLayout.vue';
-
+import { IApiService, IUserService, IJwtService } from '@/types';
+import { container } from '../inversify.config';
+import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
+import { IUserRegister } from '../interfaces/services';
+import { tap, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 @Component({ components: { ToolbarLayout } })
 export default class Register extends Vue {
     private firstName: string = '';
@@ -110,6 +116,17 @@ export default class Register extends Vue {
     private terms: boolean = false;
 
     private registering: boolean = false;
+    private _api!: IApiService;
+    private _userService!: IUserService;
+    private _jwt!: IJwtService;
+    constructor() {
+      super();
+    }
+    private mounted() {
+      this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
+      this._userService = container.get<IUserService>(SERVICE_IDENTIFIER.USER_SERVICE);
+      this._jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+    }
 
     private nameRules = [
         (val: any) => (val || '').length > 0 || 'Dieses Feld muss gefüllt sein',
@@ -131,10 +148,20 @@ export default class Register extends Vue {
     private submit() {
         this.snackbar = true;
         this.registering = true;
+        const user: IUserRegister = {
+          username: this.nick,
+          email: this.email,
+          name: {
+            firstname: this.firstName,
+            lastname: this.lastName
+          }
+        };
+        console.log('Registring user');
+        this._userService.registerUser(user).subscribe();
         this.resetForm();
-        setTimeout(() => {
-          this.registering = false;
-        }, 3000);
+        // setTimeout(() => {
+        //   this.registering = false;
+        // }, 3000);
     }
 
     get formIsValid() {
@@ -147,5 +174,8 @@ h4 {
   text-align: center;
   padding: 0;
   margin: 15px 0 0 0;
+}
+.back-to-home-btn {
+  margin: 15px 0 -20px 0;
 }
 </style>

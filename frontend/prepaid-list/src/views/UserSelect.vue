@@ -43,17 +43,13 @@ export default class UserSelect extends Vue {
     private changeUserAction!: ChangeUserAction;
 
     private users: User[];
-    private _api: IApiService;
-    private _userService: IUserService;
-    private _jwt: IJwtService;
+    private _api!: IApiService;
+    private _userService!: IUserService;
+    private _jwt!: IJwtService;
 
     constructor() {
         super();
-        this.users = [];
-        this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
-        this._userService = container.get<IUserService>(SERVICE_IDENTIFIER.USER_SERVICE);
-        this._jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
-    }
+        this.users = [];    }
 
     private mounted() {
         this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
