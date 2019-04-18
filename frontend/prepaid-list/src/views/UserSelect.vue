@@ -65,15 +65,21 @@ export default class UserSelect extends Vue {
     }
 
     private openDashboard(user: User) {
-      this.changeUserAction(user);
       this._userService.loginUserByUsername(user.nickname).subscribe((data: IResponseToken) => {
         this._jwt.saveToken(data.token);
         this._jwt.saveRefreshToken(data.refreshToken);
         this._jwt.saveUsername(data.user);
+        this._userService.getUserInfos().subscribe((infos) => {
+          this.changeUserAction(<User>{
+            name: infos.username,
+            credit: infos.balance,
+            nickname: infos.username
+          });
+          setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
+        });
       }, (e: any) => {
         console.error(e);
       });
-      setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
     }
 }
 </script>

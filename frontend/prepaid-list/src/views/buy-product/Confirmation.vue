@@ -13,7 +13,7 @@
         </v-flex>
         <v-flex xs6>
           <v-card color="primary">
-            <v-card-text class="px-0">{{user ? user.nick : ''}}</v-card-text>
+            <v-card-text class="px-0">{{user ? user.nickname : ''}}</v-card-text>
           </v-card>
         </v-flex>
 

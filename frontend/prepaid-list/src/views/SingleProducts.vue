@@ -83,35 +83,6 @@ export default class SingleProducts extends Vue {
     constructor() {
         super();
         this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
-        this.products.push({
-            name: 'Café Crema',
-            icon: 'mdi-coffee',
-            id: 1,
-            price: 0.3,
-            extras: [
-                { name: 'double-shot', price: 0.35 },
-                { name: 'double-shot+', price: 0.5 },
-                { name: 'normal', price: 0.3 },
-            ],
-        });
-        this.products.push({
-            name: 'Latte Macchiato',
-            icon: 'mdi-bottle-wine,',
-            id: 2,
-            price: 0.5,
-        });
-        this.products.push({
-            name: 'Heiße Milch',
-            icon: 'mdi-cup-water',
-            id: 3,
-            price: 0.3,
-        });
-        this.products.push({
-            name: 'Cappuccino',
-            icon: 'mdi-pizza,',
-            id: 4,
-            price: 0.4,
-        });
     }
 
     private mounted() {

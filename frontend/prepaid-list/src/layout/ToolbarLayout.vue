@@ -19,7 +19,7 @@
           <v-avatar class="blue darken-4">
             <v-icon style="font-size: 22px">mdi-account</v-icon>
           </v-avatar>
-          {{user ? user.nick : ''}}
+          {{user ? user.nickname : ''}}
         </v-chip>
       </span>
       <!-- <span v-if="showUserAndLogout" class="user-display">{{user ? user.nick : ''}}</span> -->
