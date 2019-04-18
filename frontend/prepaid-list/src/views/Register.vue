@@ -105,8 +105,18 @@ import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
 import { IUserRegister } from '../interfaces/services';
 import { tap, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { namespace } from 'vuex-class';
+import { StateNamespaces } from '../store/namespaces';
+import { UserActionTypes, ChangeUserAction } from '../store/user-state';
+import { User } from '../interfaces/User';
+
+const userModule = namespace(StateNamespaces.USER_STATE);
+
 @Component({ components: { ToolbarLayout } })
 export default class Register extends Vue {
+
+    @userModule.Action(UserActionTypes.CHANGE_USER)
+    private changeUserAction!: ChangeUserAction;
     private firstName: string = '';
     private lastName: string = '';
     private nick: string = '';
@@ -146,8 +156,6 @@ export default class Register extends Vue {
     }
 
     private submit() {
-        this.snackbar = true;
-        this.registering = true;
         const user: IUserRegister = {
           username: this.nick,
           email: this.email,
@@ -156,9 +164,22 @@ export default class Register extends Vue {
             lastname: this.lastName
           }
         };
-        console.log('Registring user');
-        this._userService.registerUser(user).subscribe();
-        this.resetForm();
+        this._userService.registerUser(user).subscribe((data) => {
+          this.registering = false;
+          this.snackbar = true;
+          this._jwt.saveToken(data.token);
+          this._jwt.saveRefreshToken(data.refreshToken);
+          this.changeUserAction(<User>{
+            name: this.firstName,
+            credit: 0.0,
+            nickname: this.nick
+          });
+          this.resetForm();
+          setTimeout(() => this.$router.push({ name: 'Dashboard' }), 1000);
+        this.registering = true;
+        }, (e) => {
+          this.registering = false;
+        });
         // setTimeout(() => {
         //   this.registering = false;
         // }, 3000);
