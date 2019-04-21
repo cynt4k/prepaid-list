@@ -180,9 +180,6 @@ export default class Register extends Vue {
         }, (e) => {
           this.registering = false;
         });
-        // setTimeout(() => {
-        //   this.registering = false;
-        // }, 3000);
     }
 
     get formIsValid() {
