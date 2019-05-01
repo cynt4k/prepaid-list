@@ -1,0 +1,56 @@
+{
+  "name": "prepaid-list",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0-rc.1",
+    "@scandltd/vue-injector": "^2.1.3",
+    "axios": "^0.18.0",
+    "inversify": "^5.0.1",
+    "reflect-metadata": "^0.1.13",
+    "roboto-fontface": "*",
+    "rxjs": "^6.4.0",
+    "vue": "^2.6.3",
+    "vue-class-component": "^6.0.0",
+    "vue-property-decorator": "^7.0.0",
+    "vue-router": "^3.0.1",
+    "vue-rx": "^6.1.0",
+    "vue-scrollto": "^2.13.0",
+    "vue2-touch-events": "^1.1.2",
+    "vuetify": "^1.5.2",
+    "vuex": "^3.1.0",
+    "vuex-class": "^0.3.1"
+  },
+  "devDependencies": {
+    "@mdi/font": "^2.8.94",
+    "@vue/cli-plugin-babel": "^3.4.0",
+    "@vue/cli-plugin-typescript": "^3.4.0",
+    "@vue/cli-service": "^3.4.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.1.0",
+    "typescript": "^3.0.0",
+    "vue-cli-plugin-vuetify": "^0.4.6",
+    "vue-template-compiler": "^2.6.3"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": true,
+    "singleQuote": true
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 10"
+  ]
+}

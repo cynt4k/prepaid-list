@@ -1,3 +1,0 @@
-<div *ngFor="let user of users; let i = index" class="user">
-  <button class="btn btn-primary user-listed"  (click)="selectUser($event, user)" [class.negative]="isNegative(user)" [disabled]="isDeactivated(user)">{{user.name}}<span class="credit">{{user.credit}}</span></button>
-</div>
