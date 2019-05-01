@@ -49,5 +49,5 @@ export enum HttpCodes {
     LoopDetected,
     BandwidthLimitExceeded,
     NotExtended,
-    NetworkAuthenticationRequired,
+    NetworkAuthenticationRequired
 }
