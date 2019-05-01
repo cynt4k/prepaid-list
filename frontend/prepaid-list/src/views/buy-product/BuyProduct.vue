@@ -1,9 +1,5 @@
 <template>
-  <navigation-toolbar-layout
-    titleFirst="Produkt"
-    titleSecond="kaufen"
-    style="display:flex; flex-layout:column"
-  >
+  <navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
     <v-container class="home" fluid fill-height>
       <v-layout
         align-center
@@ -22,7 +18,8 @@
         </template>
       </v-layout>
     </v-container>
-    <buy-product-navigation-footer />
+    <shopping-cart-dialog v-model="isShoppingCartDialogShown"/>
+    <buy-product-navigation-footer @show-shopping-cart-dialog="isShoppingCartDialogShown = true"/>
   </navigation-toolbar-layout>
 </template>
 
@@ -32,16 +29,23 @@ import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import { Category } from '@/interfaces/Category';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import BuyProductNavigationFooter from '@/components/BuyProductNavigationFooter.vue';
+import ShoppingCartDialog from '@/components/ShoppingCartDialog.vue';
 import { IProductService } from '@/types';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
 import { ILanguageTranslation } from '../../interfaces/services';
 
 @Component({
-    components: { NavigationToolbarLayout, BigButtonFlex, BuyProductNavigationFooter },
+    components: {
+        NavigationToolbarLayout,
+        BigButtonFlex,
+        BuyProductNavigationFooter,
+        ShoppingCartDialog,
+    },
 })
 export default class BuyProduct extends Vue {
     private categories: Category[] = [];
+    private isShoppingCartDialogShown: boolean = false;
     private _productService!: IProductService;
 
     constructor() {

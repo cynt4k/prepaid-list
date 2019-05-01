@@ -39,7 +39,11 @@
         </v-card>
       </v-dialog>
     </v-container>
-    <buy-product-navigation-footer ref="footer"/>
+    <shopping-cart-dialog v-model="isShoppingCartDialogShown"/>
+    <buy-product-navigation-footer
+      ref="footer"
+      @show-shopping-cart-dialog="isShoppingCartDialogShown = true"
+    />
   </navigation-toolbar-layout>
 </template>
 <script lang="ts">
@@ -54,6 +58,8 @@ import {
     ShoppingCartActionTypes,
     AddProductAction,
 } from '@/store/shoppingcart-state/shoppingcart-state';
+
+import ShoppingCartDialog from '@/components/ShoppingCartDialog.vue';
 
 import { StateNamespaces } from '@/store/namespaces';
 import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
@@ -73,6 +79,7 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
         BigButtonFlex,
         NavigationToolbarLayout,
         BuyProductNavigationFooter,
+	ShoppingCartDialog,
     },
     filters: {
         extras(product: Product): number {
@@ -97,6 +104,7 @@ export default class SingleProducts extends Vue {
     private products: Product[] = [];
     private dialogExtraProduct: boolean = false;
     private selectedProduct: Product | null = null;
+    private isShoppingCartDialogShown: boolean = false;
 
     private _productService!: IProductService;
     @Prop()

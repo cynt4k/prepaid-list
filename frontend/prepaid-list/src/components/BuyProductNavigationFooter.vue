@@ -1,65 +1,26 @@
 <template>
   <v-footer>
-    <v-dialog v-model="menu" origin="left" transition="slide-y-reverse-transition">
-      <v-chip
-        slot="activator"
-        color="orange"
-        text-color="white"
-        class="cart-chip"
-        :class="{'scaleInAndOut animated': animate}"
-        @animationend="animate = false"
-      >
-        <v-avatar class="orange darken-4">
-          <v-icon style="font-size: 21px">mdi-cart</v-icon>
-        </v-avatar>
-        {{sum | currency}}
-      </v-chip>
-      <v-card>
-        <v-card-title>
-          <v-icon style="font-size: 21px; margin-right: 10px">mdi-cart</v-icon>
+    <v-chip
+      color="orange"
+      text-color="white"
+      class="cart-chip"
+      :class="{'scaleInAndOut animated': animate}"
+      @click="$emit('show-shopping-cart-dialog')"
+      @animationend="animate = false"
+    >
+      <v-avatar class="orange darken-4">
+        <v-icon style="font-size: 21px">mdi-cart</v-icon>
+      </v-avatar>
+      {{shoppingCartSum | currency}}
+    </v-chip>
 
-          <h2>Warenkorb</h2>
-          <v-btn icon flat style="margin-left: auto" @click="menu = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-divider></v-divider>
-        <div>
-          <v-data-table :hide-actions="true" :headers="headers" :items="items" class="elevation-1">
-            <template slot="items" slot-scope="props">
-              <td>{{ props.item.product.name }} {{ props.item.productExtra ? `(${props.item.productExtra.name})` : ''}}</td>
-              <td>
-                <v-btn icon flat @click="decreaseProduct(props.item)">
-                  <v-icon>mdi-minus-circle</v-icon>
-                </v-btn>
-                {{ props.item.amount }}
-                <v-btn icon flat @click="addProduct(props.item)">
-                  <v-icon>mdi-plus-circle</v-icon>
-                </v-btn>
-              </td>
-              <td>{{ props.item.productExtra ? props.item.productExtra.price : props.item.product.price | currency}}</td>
-              <td>{{ (props.item.amount * (props.item.productExtra ? props.item.productExtra.price : props.item.product.price)) | currency }}</td>
-              <td class="text-xs-right">
-                <v-btn icon color="error" flat @click="removeItem(props.item)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </td>
-            </template>
-            <template slot="footer">
-              <td :colspan="3" class="text-xs-right">
-                <strong>Summe:</strong>
-              </td>
-              <td :colspan="2">
-                <strong>{{sum | currency}}</strong>
-              </td>
-            </template>
-          </v-data-table>
-        </div>
-      </v-card>
-    </v-dialog>
-
-    <v-btn color="success" class="next-btn" :to="{name: 'Confirmation'}">
-      Bestätigen
+    <v-btn
+      :disabled="shoppingCartIsEmpty"
+      color="success"
+      class="next-btn"
+      :to="{name: 'Confirmation'}"
+    >
+      Weiter
       <v-icon right>mdi-chevron-right-circle</v-icon>
     </v-btn>
   </v-footer>
@@ -67,18 +28,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Product } from '@/interfaces/Product';
-import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
-
 import { Getter, namespace } from 'vuex-class';
-import { StateNamespaces } from '../store/namespaces';
+import { StateNamespaces } from '@/store/namespaces';
 
-import {
-    ShoppingCartActionTypes,
-    RemoveProductAction,
-    AddProductAction,
-    DeleteProductAction,
-} from '@/store/shoppingcart-state/shoppingcart-state';
+import ShoppingCart from '@/components/ShoppingCart.vue';
 
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
@@ -92,23 +45,16 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
             return formatter.format(s);
         },
     },
+    components: { ShoppingCart },
 })
 export default class BuyProductNavigationFooter extends Vue {
-    private menu: boolean = false;
-    // private cart: ShoppingCartItem[] = [];
-    @shoppingCartModule.Getter
-    private items!: ShoppingCartItem[];
-    @shoppingCartModule.Getter
-    private sum!: number;
-
     private animate: boolean = false;
 
-    @shoppingCartModule.Action(ShoppingCartActionTypes.DELETE_PRODUCT)
-    private deleteProductAction!: DeleteProductAction;
-    @shoppingCartModule.Action(ShoppingCartActionTypes.REMOVE_PRODUCT)
-    private decreaseProductAction!: RemoveProductAction;
-    @shoppingCartModule.Action(ShoppingCartActionTypes.ADD_PRODUCT)
-    private addProductAction!: AddProductAction;
+    @shoppingCartModule.Getter
+    private shoppingCartSum!: number;
+
+    @shoppingCartModule.Getter
+    private shoppingCartIsEmpty!: boolean;
 
     constructor() {
         super();
@@ -116,28 +62,6 @@ export default class BuyProductNavigationFooter extends Vue {
 
     public update() {
         this.animate = true;
-    }
-
-    private addProduct(item: ShoppingCartItem) {
-        this.addProductAction(item);
-    }
-
-    private decreaseProduct(item: ShoppingCartItem) {
-        this.decreaseProductAction(item);
-    }
-
-    private removeItem(item: ShoppingCartItem) {
-        this.deleteProductAction(item);
-    }
-
-    private get headers() {
-        return [
-            { text: 'Name', sortable: false },
-            { text: 'Anzahl', sortable: false },
-            { text: 'Einzelpreis', sortable: false },
-            { text: 'Gesamtpreis', sortable: false },
-            { text: 'Entfernen', sortable: false, align: 'right' },
-        ];
     }
 }
 </script>

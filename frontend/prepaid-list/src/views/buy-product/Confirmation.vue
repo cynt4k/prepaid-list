@@ -1,10 +1,27 @@
 <template>
-  <navigation-toolbar-layout
-    titleFirst="Produkt"
-    titleSecond="kaufen"
-    style="display:flex; flex-layout:column"
-  >
-    <v-container grid-list-md text-xs-center>
+  <navigation-toolbar-layout titleFirst="Einkauf" titleSecond="bestätigen">
+    <v-container>
+      <v-card v-if="!show" class="shoppingCart">
+        <v-card-title>
+          <v-icon style="font-size: 21px; margin-right: 10px">mdi-cart</v-icon>
+          <h2>Warenkorb</h2>
+        </v-card-title>
+        <v-divider></v-divider>
+        <div>
+          <shopping-cart/>
+        </div>
+      </v-card>
+
+      <v-card v-if="show" class="shoppingCart">
+        <div>
+          <img :src="require(`@/assets/img/confirmation.gif`)">
+        </div>
+        <div>
+          <h2>Kauf abgeschlossen!</h2>
+        </div>
+      </v-card>
+    </v-container>
+    <!-- <v-container grid-list-md text-xs-center>
       <v-layout row wrap>
         <v-flex xs6>
           <v-card>
@@ -48,7 +65,7 @@
           </v-card>
         </v-flex>
       </v-layout>
-    </v-container>
+    </v-container>-->
     <confirmation-navigation-footer/>
   </navigation-toolbar-layout>
 </template>
@@ -62,11 +79,17 @@ import { User } from '@/interfaces/User';
 import { Getter, namespace } from 'vuex-class';
 import { StateNamespaces } from '@/store/namespaces';
 
+import ShoppingCart from '@/components/ShoppingCart.vue';
+
 const userModule = namespace(StateNamespaces.USER_STATE);
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
 @Component({
-    components: { NavigationToolbarLayout, ConfirmationNavigationFooter },
+    components: {
+        NavigationToolbarLayout,
+        ConfirmationNavigationFooter,
+        ShoppingCart,
+    },
     filters: {
         currency(s: number) {
             const formatter: Intl.NumberFormat = new Intl.NumberFormat('de', {
@@ -78,13 +101,24 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
     },
 })
 export default class Confirmation extends Vue {
+    private show: boolean = false;
+
     @userModule.Getter
     private user!: User;
+
     @shoppingCartModule.Getter
-    private sum!: number;
+    private shoppingCartSum!: number;
+
+    public switchContent() {
+        this.show = !this.show;
+    }
 }
 </script>
 
 <style lang="scss">
+.shoppingCart {
+    width: 100%;
+    height: 100%;
+}
 </style>
  
