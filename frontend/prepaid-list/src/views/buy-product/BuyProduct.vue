@@ -1,5 +1,4 @@
 <template>
-  <navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
     <v-container class="home" fluid fill-height>
       <v-layout
         align-center
@@ -17,10 +16,9 @@
           ></big-button-flex>
         </template>
       </v-layout>
-    </v-container>
     <shopping-cart-dialog v-model="isShoppingCartDialogShown"/>
     <buy-product-navigation-footer @show-shopping-cart-dialog="isShoppingCartDialogShown = true"/>
-  </navigation-toolbar-layout>
+    </v-container>
 </template>
 
 <script lang="ts">

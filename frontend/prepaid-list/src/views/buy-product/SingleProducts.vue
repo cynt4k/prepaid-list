@@ -1,5 +1,4 @@
 <template>
-  <navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
     <v-container class="home" fluid fill-height>
       <v-layout
         align-center
@@ -38,13 +37,12 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-container>
     <shopping-cart-dialog v-model="isShoppingCartDialogShown"/>
     <buy-product-navigation-footer
       ref="footer"
       @show-shopping-cart-dialog="isShoppingCartDialogShown = true"
     />
-  </navigation-toolbar-layout>
+    </v-container>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
@@ -196,5 +194,8 @@ export default class SingleProducts extends Vue {
 .button-container {
     display: flex;
     flex-flow: wrap;
+}
+.home {
+  flex-flow: column;
 }
 </style>

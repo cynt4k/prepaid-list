@@ -1,11 +1,5 @@
 <template>
-  <toolbar-layout class="navigation-toolbar-layout" :showBackBtn="true" :showUserAndLogout="true">
-    <template v-slot:toolbar>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>{{titleFirst}}&nbsp;</span>
-        <span class="font-weight-light">{{titleSecond}}</span>
-      </v-toolbar-title>
-    </template>
+  <div>
     <v-navigation-drawer
       :mini-variant.sync="mini"
       absolute
@@ -41,9 +35,8 @@
         />
       </v-list>
     </v-navigation-drawer>
-    <!-- <router-view/> -->
-    <slot></slot>
-  </toolbar-layout>
+    <router-view/>
+  </div>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
