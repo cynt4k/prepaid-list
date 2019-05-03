@@ -80,6 +80,7 @@ export default class BuyProduct extends Vue {
 <style lang="scss" scoped>
 .content-container {
     overflow: auto;
+    padding: 10px;
 }
 .home {
     flex-flow: column;
