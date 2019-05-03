@@ -190,6 +190,8 @@ export default class SingleProducts extends Vue {
 <style lang="scss" scoped>
 .content-container {
     overflow: auto;
+    width: 100%;
+    padding: 10px;
 }
 .button-container {
     display: flex;

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid fill-height>
     <v-card v-if="!show" class="shoppingCart">
       <v-card-title>
         <v-icon style="font-size: 21px; margin-right: 10px">mdi-cart</v-icon>
@@ -117,6 +117,8 @@ export default class Confirmation extends Vue {
 .shoppingCart {
     width: 100%;
     height: 100%;
+    padding: 10px;
+    background-color: initial !important;
 }
 </style>
  

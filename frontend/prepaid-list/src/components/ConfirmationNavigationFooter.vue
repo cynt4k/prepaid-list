@@ -1,6 +1,6 @@
 <template>
   <v-footer>
-    <v-dialog v-model="showDialog" persistent width="auto">
+    <v-dialog v-model="showDialog" persistent width="fit-content">
       <v-layout align-center>
         <v-card>
           <v-card-title class="headline">

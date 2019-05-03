@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="navigation-toolbar-layout">
     <v-navigation-drawer
       :mini-variant.sync="mini"
       absolute
@@ -35,7 +35,9 @@
         />
       </v-list>
     </v-navigation-drawer>
+    <div class="page-content">
     <router-view/>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -71,6 +73,7 @@ export default class NavigationToolbarLayout extends Vue {
 </style>
 <style lang="scss">
 .navigation-toolbar-layout {
+  height: 100%;
     .navigation-button.hidden {
         a {
             justify-content: center;
@@ -79,8 +82,12 @@ export default class NavigationToolbarLayout extends Vue {
             display: none;
         }
     }
-    .page-content > div {
+    .page-content {
         padding-left: 60px;
+        height: 100%;
+        > div {
+          padding: 0;
+        }
     }
 }
 </style>
