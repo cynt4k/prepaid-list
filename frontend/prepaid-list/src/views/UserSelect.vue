@@ -1,11 +1,4 @@
 <template>
-  <toolbar-layout :showBackBtn="true">
-    <template v-slot:toolbar>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Benutzer&nbsp;</span>
-        <span class="font-weight-light">Auswahl</span>
-      </v-toolbar-title>
-    </template>
     <v-container fluid fill-height column>
       <v-layout align-center justify-center text-xs-center column>
         <v-alert :value="true" type="info" class="panel">
@@ -15,7 +8,6 @@
         <alphabet-list class="alphabet-list" @user-selected="openDashboard" :items="users"></alphabet-list>
       </v-layout>
     </v-container>
-  </toolbar-layout>
 </template>
 
 <script lang="ts">
