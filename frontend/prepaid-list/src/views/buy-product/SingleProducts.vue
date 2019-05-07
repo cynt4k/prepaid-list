@@ -37,9 +37,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    <shopping-cart-dialog v-model="isShoppingCartDialogShown"/>
+    <shopping-cart-dialog v-if="showFooter" v-model="isShoppingCartDialogShown"/>
     <buy-product-navigation-footer
-      ref="footer"
+      ref="footer" v-if="showFooter"
       @show-shopping-cart-dialog="isShoppingCartDialogShown = true"
     />
     </v-container>
@@ -107,6 +107,8 @@ export default class SingleProducts extends Vue {
     private _productService!: IProductService;
     @Prop()
     private category!: string;
+    @Prop()
+    private showFooter!: boolean;
 
     @shoppingCartModule.Action(ShoppingCartActionTypes.ADD_PRODUCT)
     private addProductAction!: AddProductAction;

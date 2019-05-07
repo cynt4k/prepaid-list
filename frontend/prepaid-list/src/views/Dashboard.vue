@@ -2,7 +2,7 @@
   <v-container fluid fill-height class="content-container">
     <v-layout align-center justify-center text-xs-center column class="btn-list-layout">
       <v-layout align-center wrap fill-height style="width: 100%">
-        <big-button-flex icon="mdi-information" title="Produktinfos"></big-button-flex>
+        <big-button-flex icon="mdi-information" title="Produktinfos" :to="{name: 'UserProductInfos'}"></big-button-flex>
         <big-button-flex icon="mdi-beer" title="Produkt kaufen" @click="buyProduct()"></big-button-flex>
         <big-button-flex icon="mdi-cash-multiple" title="Aufladen"></big-button-flex>
         <big-button-flex disabled icon="mdi-settings" title="Einstellungen"></big-button-flex>

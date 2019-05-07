@@ -31,6 +31,13 @@ function titleFct(route: Route): Title {
         return { firstPart: 'Produkt', secondPart: 'kaufen' };
     } else if (route.name === 'Confirmation') {
         return { firstPart: 'Einkauf', secondPart: 'bestätigen' };
+    } else if (
+        route.name === 'UserSingleProductInfos' ||
+        route.name === 'SingleProductInfos' ||
+        route.name === 'ProductInfos'||
+        route.name === 'UserProductInfos'
+    ) {
+        return { firstPart: 'Produkt', secondPart: 'Infos' };
     } else {
         return { firstPart: 'Digitale', secondPart: 'Prepaid Liste' };
     }
@@ -56,21 +63,36 @@ export default new Router({
                     component: UserSelect,
                 },
                 {
+                    name: 'ProductInfos',
+                    path: '/productInfos',
+                    component: BuyProduct,
+                    props: { showFooter: false },
+                },
+                {
+                    path: 'productInfos/singleProducts/:category',
+                    name: 'SingleProductInfos',
+                    component: SingleProducts,
+                    props: (route: Route) => ({
+                        category: route.params.category,
+                        showFooter: false,
+                    }),
+                },
+                {
                     path: '/user/dashboard',
                     name: 'Dashboard',
                     component: Dashboard,
                 },
                 {
-                    path: '/user/buyProducts',
+                    path: '/user/nav',
                     component: NavigationToolbarLayout,
                     children: [
                         {
-                            path: '/',
+                            path: 'buyProducts',
                             name: 'BuyProduct',
                             component: BuyProduct,
                         },
                         {
-                            path: 'products/:category',
+                            path: 'singleProducts/:category',
                             name: 'SingleProducts',
                             component: SingleProducts,
                             props: true,
@@ -79,6 +101,21 @@ export default new Router({
                             path: 'confirmation',
                             name: 'Confirmation',
                             component: Confirmation,
+                        },
+                        {
+                            name: 'UserProductInfos',
+                            path: 'productInfos',
+                            component: BuyProduct,
+                            props: { showFooter: false },
+                        },
+                        {
+                            path: 'productInfos/singleProducts/:category',
+                            name: 'UserSingleProductInfos',
+                            component: SingleProducts,
+                            props: (route: Route) => ({
+                                category: route.params.category,
+                                showFooter: false,
+                            }),
                         },
                     ],
                 },
