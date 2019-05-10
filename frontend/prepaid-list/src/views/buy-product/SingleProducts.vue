@@ -107,7 +107,7 @@ export default class SingleProducts extends Vue {
     private _productService!: IProductService;
     @Prop()
     private category!: string;
-    @Prop()
+    @Prop({default: true})
     private showFooter!: boolean;
 
     @shoppingCartModule.Action(ShoppingCartActionTypes.ADD_PRODUCT)

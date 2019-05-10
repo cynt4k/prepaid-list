@@ -92,7 +92,7 @@ export default new Router({
                             component: BuyProduct,
                         },
                         {
-                            path: 'singleProducts/:category',
+                            path: 'buyProducts/singleProducts/:category',
                             name: 'SingleProducts',
                             component: SingleProducts,
                             props: true,
