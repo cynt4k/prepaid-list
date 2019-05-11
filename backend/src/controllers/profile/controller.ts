@@ -43,9 +43,16 @@ export namespace ProfileController {
     export const putAddBalance = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const user = await User.findById(req.user.id).exec();
-            user!.balance += req.body.balance;
-            await user!.save();
-            return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, user);
+            if (!user) return response(res, HttpCodes.NotFound, I18n.WARN_USER_NOT_FOUND);
+            user!.balance += req.body.amount;
+            user.updateBalance(req.body.amount, (e) => {
+                if (e) return response(res, HttpCodes.InternalServerError, e);
+                user.save().then(() => {
+                    return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, user);
+                }).catch((err) => {
+                    return response(res, HttpCodes.InternalServerError, err);
+                });
+            });
         } catch (e) {
             return next(e);
         }
