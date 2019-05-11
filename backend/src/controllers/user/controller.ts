@@ -1,43 +1,34 @@
-import { Response, NextFunction } from "express";
-import { Request } from '../../types/express';
-import { HttpCodes, response } from '../../core/express';
-import { validationResult } from 'express-validator/check';
-import { User } from '../../models';
-import { IUserModel } from "../../types/models";
+import { response, HttpCodes } from '../../core/express';
+import express from 'express';
+import { Request, Response, NextFunction } from 'express';
+import { User } from '../../models/user';
+import { IUserModel } from '../../types/models/user';
+import { Template, I18n } from '../../misc';
 
 export namespace UserController {
-    export let getUser = async (req: Request, res: Response, next: NextFunction) => {
+
+    export const getAllUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const user = await User.findById(req.user!.id);
-            if (!user) return response(res, HttpCodes.NotFound, 'User not found');
-            return response(res, HttpCodes.OK, 'OK', user);
+            const users = await User.find().exec();
+            if (!users) return response(res, HttpCodes.NotFound, I18n.INFO_SUCCESS, []);
+            const prettyUser = users.map((user) => {
+                if (user.name.firstname && user.name.lastname) {
+                    const name = `${user.name.firstname} ${user.name.lastname}`;
+                    return {
+                        nickname: user.username,
+                        name: name
+                    };
+                }
+                return {
+                    nickname: user.username
+                };
+            }).reduce((acc: any, curr) => {
+                acc.push(curr);
+                return acc;
+            }, []);
+            return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, prettyUser);
         } catch (e) {
-            return next(e);
+            throw e;
         }
     };
-
-    export let putUpdateUser = async (req: Request, res: Response, next: NextFunction) => {
-        const updatedUser: IUserModel = req.body;
-        try {
-            const user = await User.findByIdAndUpdate(req.user!.id, updatedUser);
-            if (!user) return response(res, HttpCodes.NotFound, 'User not found');
-            return response(res, HttpCodes.OK, 'OK');
-        } catch (e) {
-            return next(e);
-        }
-    };
-
-    export let putUpdateToken = async (req: Request, res: Response, next: NextFunction) => {
-        const newToken = req.body.token;
-        try {
-            const user = await User.findById(req.user!.id);
-            if (!user) return response(res, HttpCodes.NotFound, 'User not found');
-            user.updateToken(newToken);
-            await user.save();
-            return response(res, HttpCodes.OK, 'OK');
-        } catch (e) {
-            return next(e);
-        }
-    };
-
 }

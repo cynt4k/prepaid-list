@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  prepaidlist-frontend: 
+    container_name: prepaidlist-frontend
+    build: 
+      context: ..
+      dockerfile: ./docker/dev.Dockerfile
+    volumes:
+      - ../prepaid-list:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 8080:8080
+#volumes:
+  #node_modules:
