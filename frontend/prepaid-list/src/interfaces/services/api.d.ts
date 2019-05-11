@@ -210,3 +210,7 @@ export enum II18nError {
     VAL_PRODUCT_PRICE_NOT_VALID = 'V_PRODUCT_PRICE_NOT_VALID',
     VAL_PRODUCT_EXTRAS_NOT_VALID = 'V_PRODUCT_EXTRAS_NOT_VALID'
 }
+
+export interface IBalanceUpdateModel {
+    amount: number;
+}

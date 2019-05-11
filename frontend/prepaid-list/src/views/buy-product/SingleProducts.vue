@@ -75,6 +75,8 @@ import {
     ILanguageTranslation,
     IProductExtra,
     ITranslationModel,
+    LanguageCode,
+    IProductModel,
 } from '../../interfaces/services';
 
 import { EventBus } from '@/assets/EventBus';
@@ -92,8 +94,8 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
         extras(product: Product): number {
             if ((product.extras || []).length !== 0) {
                 return product.extras!.reduce(
-                    (acc, val) => (acc.price < val.price ? acc : val),
-                    <ProductExtra>{}
+                    (acc: any, val) => (acc.price < val.price ? acc : val),
+                    {}
                 ).price;
             }
             return product.price;
@@ -115,7 +117,7 @@ export default class SingleProducts extends Vue {
     private isShoppingCartDialogShown: boolean = false;
     private isDataLoading: boolean = false;
 
-    private _productService!: IProductService;
+    private productService!: IProductService;
     @Prop()
     private category!: string;
     @Prop({ default: true })
@@ -133,54 +135,55 @@ export default class SingleProducts extends Vue {
         languageCode: string
     ): ILanguageTranslation {
         const data = translation.translations.filter(
-            elem => elem.languageCode === languageCode
+            (elem: ILanguageTranslation) => elem.languageCode === languageCode
         );
         if (data.length === 1) {
             return data[0];
         }
-        return <ILanguageTranslation>{
-            languageCode: languageCode,
+        const langCode = languageCode as LanguageCode;
+        return {
+            languageCode: langCode,
             name: 'Unbekannt',
             shortname: 'Unbek.',
         };
     }
 
     private mounted() {
-        this._productService = container.get<IProductService>(
+        this.productService = container.get<IProductService>(
             SERVICE_IDENTIFIER.PRODUCT_SERVICE
         );
         EventBus.$emit('loading', true);
         this.isDataLoading = true;
-        this._productService.getProductsByCategory(this.category).subscribe(
-            products => {
-                this.products = products.map(product => {
+        this.productService.getProductsByCategory(this.category).subscribe(
+            (products: IProductModel[]) => {
+                this.products = products.map((product: IProductModel) => {
                     const translation = this.getTranslation(product.name, 'DE');
                     const extras = ((): ProductExtra[] | undefined => {
                         if (product.extras.length === 0 || !product.extras) {
                             return undefined;
                         }
-                        return product.extras.map(extra => {
+                        return product.extras.map((extra: IProductExtra) => {
                             const extraTranslation = this.getTranslation(
                                 extra.name,
                                 'DE'
                             );
-                            return <ProductExtra>{
+                            return {
                                 name: extraTranslation.name,
                                 price: extra.price,
                             };
                         });
                     })();
-                    return <Product>{
+                    return {
                         name: translation.name,
                         id: product.id,
                         price: product.price,
                         icon: 'mdi-pizza',
-                        extras: extras,
+                        extras,
                     };
                 });
             },
-            data => {
-                console.log(data);
+            (data: any) => {
+                EventBus.$emit('message', { message: data });
             },
             () => {
                 EventBus.$emit('loading', false);
@@ -197,6 +200,8 @@ export default class SingleProducts extends Vue {
     private addToCart(p: Product) {
         const item: ShoppingCartItem = { product: p, amount: 1 };
         this.addProductAction(item);
+        // @ts-ignore
+        // tslint:disable
         this.$refs['footer'].update();
     }
 
@@ -207,6 +212,7 @@ export default class SingleProducts extends Vue {
             productExtra: extra,
         };
         this.addProductAction(item);
+        //@ts-ignore
         this.$refs['footer'].update();
         this.dialogExtraProduct = false;
     }

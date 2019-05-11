@@ -1,13 +1,13 @@
 <template>
-    <v-container fluid fill-height column>
-      <v-layout align-center justify-center text-xs-center column>
-        <v-alert :value="true" type="info" class="panel">
-          <h2>OTH-Karte scannen (RFID-Reader) oder Benutzer auswählen</h2>
-        </v-alert>
+  <v-container fluid fill-height column>
+    <v-layout align-center justify-center text-xs-center column>
+      <v-alert :value="true" type="info" class="panel">
+        <h2>OTH-Karte scannen (RFID-Reader) oder Benutzer auswählen</h2>
+      </v-alert>
 
-        <alphabet-list class="alphabet-list" @user-selected="openDashboard" :items="users"></alphabet-list>
-      </v-layout>
-    </v-container>
+      <alphabet-list class="alphabet-list" @user-selected="openDashboard" :items="users"></alphabet-list>
+    </v-layout>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -25,7 +25,8 @@ import { IApiService, IUserService, IJwtService } from '@/types';
 import { UserActionTypes, ChangeUserAction } from '../store/user-state';
 import { Action, namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
-import { IResponseToken } from '../interfaces/services';
+import { IResponseToken, IUserModel, IUser } from '../interfaces/services';
+import { EventBus } from '@/assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
@@ -34,40 +35,54 @@ export default class UserSelect extends Vue {
     @userModule.Action(UserActionTypes.CHANGE_USER)
     private changeUserAction!: ChangeUserAction;
 
-    private users: User[];
-    private _api!: IApiService;
-    private _userService!: IUserService;
-    private _jwt!: IJwtService;
+    private users: IUser[];
+    private api!: IApiService;
+    private userService!: IUserService;
+    private jwt!: IJwtService;
 
     constructor() {
         super();
-        this.users = [];    }
+        this.users = [];
+    }
 
     private mounted() {
-        this._api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
-        this._userService = container.get<IUserService>(SERVICE_IDENTIFIER.USER_SERVICE);
-        this._jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
-        this._userService.getAllUser().subscribe((data: any) => {
-          this.users = <User[]> data;
-        }, (err: any) => console.error(err));
+        this.api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
+        this.userService = container.get<IUserService>(
+            SERVICE_IDENTIFIER.USER_SERVICE
+        );
+        this.jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+        this.userService.getAllUser().subscribe(
+            (data: IUser[]) => {
+                this.users =  data;
+            },
+            (err: any) => EventBus.$emit('message', { message: err })
+        );
     }
 
     private openDashboard(user: User) {
-      this._userService.loginUserByUsername(user.nickname).subscribe((data: IResponseToken) => {
-        this._jwt.saveToken(data.token);
-        this._jwt.saveRefreshToken(data.refreshToken);
-        this._jwt.saveUsername(data.user);
-        this._userService.getUserInfos().subscribe((infos) => {
-          this.changeUserAction(<User>{
-            name: infos.username,
-            credit: infos.balance,
-            nickname: infos.username
-          });
-          setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
-        });
-      }, (e: any) => {
-        console.error(e);
-      });
+        this.userService.loginUserByUsername(user.nickname).subscribe(
+            (data: IResponseToken) => {
+                this.jwt.saveToken(data.token);
+                this.jwt.saveRefreshToken(data.refreshToken);
+                this.jwt.saveUsername(data.user);
+                this.userService
+                    .getUserInfos()
+                    .subscribe((infos: IUserModel) => {
+                        this.changeUserAction({
+                            name: infos.username,
+                            credit: infos.balance,
+                            nickname: infos.username,
+                        });
+                        setTimeout(
+                            () => this.$router.push({ name: 'Dashboard' }),
+                            10
+                        );
+                    });
+            },
+            (err: any) => {
+                EventBus.$emit('message', { message: err });
+            }
+        );
     }
 }
 </script>

@@ -1,8 +1,9 @@
 import { Model, Schema } from 'mongoose';
 import mongoose from 'mongoose';
-import { IUserModel } from '../types/models';
+import { IUserModel, IBalanceModel } from '../types/models';
 import bcrypt from 'bcrypt';
 import { AclGroup } from './acl-group';
+import { Balance } from './balance';
 import { PrepaidListError } from '../errors';
 import mongooseHistory from 'mongoose-history';
 import mongooseTimestamp from 'mongoose-timestamp';
@@ -12,6 +13,7 @@ import { ErrorCode } from '../types/error';
 export const userSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     tokenUid: { type: String, unique: true, select: false },
+    password: { type: String },
     email: { type: String, unique: true },
     name: {
         firstname: { type: String },
@@ -24,6 +26,7 @@ export const userSchema = new mongoose.Schema({
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
+    delete ret.password;
     delete ret.tokenUid;
     return ret;
 }}});
@@ -36,6 +39,36 @@ userSchema.methods.compareToken = function(checkingToken: string, cb: (e: any, i
 
 userSchema.methods.updateToken = function(newToken: string) {
     this.token = bcrypt.hashSync(newToken, bcrypt.genSaltSync(10));
+};
+
+userSchema.methods.comparePassword = function(checkingPassword: string, cb: (e: any, isMatch: any) => {}) {
+    if (!this.password) {
+        cb(new Error('No password set'), undefined);
+    }
+
+    bcrypt.compare(checkingPassword, this.password, (e: mongoose.Error, isMatch: boolean) => {
+        if (!this.password) {
+            cb(new Error('No password set'), undefined);
+        }
+        cb(e, isMatch);
+    });
+};
+
+userSchema.methods.updatePassword = function(newPassword: string) {
+    this.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(10));
+};
+
+userSchema.methods.updateBalance = function(amount: number, cb: (e: any) => {}) {
+    const newBalance: IBalanceModel = <IBalanceModel> {
+        user: this.id,
+        amount: amount,
+        balance: this.balance
+    };
+    new Balance(newBalance).save().then(() => {
+        return cb(undefined);
+    }).catch((err) => {
+        return cb(err);
+    });
 };
 
 userSchema.pre('validate', async function (): Promise<void> {
