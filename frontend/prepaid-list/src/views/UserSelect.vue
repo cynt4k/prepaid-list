@@ -25,7 +25,7 @@ import { IApiService, IUserService, IJwtService } from '@/types';
 import { UserActionTypes, ChangeUserAction } from '../store/user-state';
 import { Action, namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
-import { IResponseToken } from '../interfaces/services';
+import { IResponseToken, IUserModel } from '../interfaces/services';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
@@ -57,7 +57,7 @@ export default class UserSelect extends Vue {
         this._jwt.saveToken(data.token);
         this._jwt.saveRefreshToken(data.refreshToken);
         this._jwt.saveUsername(data.user);
-        this._userService.getUserInfos().subscribe((infos) => {
+        this._userService.getUserInfos().subscribe((infos: IUserModel) => {
           this.changeUserAction(<User>{
             name: infos.username,
             credit: infos.balance,

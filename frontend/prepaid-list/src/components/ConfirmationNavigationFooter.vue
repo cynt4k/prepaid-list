@@ -1,17 +1,6 @@
 <template>
   <v-footer>
-    <v-dialog v-model="showDialog" persistent width="fit-content">
-      <v-layout align-center>
-        <v-card>
-          <v-card-title class="headline">
-            <img :src="require(`@/assets/img/confirmation.gif`)">
-          </v-card-title>
-          <v-card-title>
-            <h2>Kauf abgeschlossen!</h2>
-          </v-card-title>
-        </v-card>
-      </v-layout>
-    </v-dialog>
+    <confirmation-dialog v-model="showDialog" text="Kauf abgeschlossen!" />
     <v-btn
       :disabled="shoppingCartIsEmpty || showDialog"
       color="success"
@@ -30,11 +19,12 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Getter, namespace } from 'vuex-class';
 import { StateNamespaces } from '@/store/namespaces';
 import Confirmation from '@/views/buy-product/Confirmation.vue';
+import ConfirmationDialog from './ConfirmationDialog.vue';
 
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
 @Component({
-    components: { Confirmation },
+    components: { Confirmation , ConfirmationDialog},
 })
 export default class ConfirmationNavigationFooter extends Vue {
     @shoppingCartModule.Getter
