@@ -1,0 +1,24 @@
+image: node:10-alpine
+
+stages:
+  - build
+
+cache:
+  untracked: false
+  policy: pull-push
+  paths:
+    - backend/node_modules/
+    - frontend/prepaid-list/node_modules/
+
+build-backend:
+  stage: build
+  script:
+    - cd backend
+    - npm install
+    - npm run-script build
+
+build-frontend:
+  stage: build
+  script:
+    - cd frontend/prepaid-list
+    - npm run-script build
