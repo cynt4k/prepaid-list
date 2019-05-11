@@ -34,7 +34,7 @@
         </v-card>
       </div>
     </v-layout>
-    <recharge-navigation-footer @next="confirmationDialog = true"/>
+    <recharge-navigation-footer @next="confirmationDialog = true" :noInput="input == 0"/>
 
     <v-dialog v-model="confirmationDialog" width="500" persistent>
       <v-card>
@@ -117,9 +117,6 @@ export default class Recharge extends Vue {
 
     @userModule.Action(UserActionTypes.CHANGE_USER)
     private changeUserAction!: ChangeUserAction;
-
-    @Prop({ default: true })
-    private showFooter!: boolean;
 
     constructor() {
         super();
