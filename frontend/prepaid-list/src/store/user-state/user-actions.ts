@@ -7,11 +7,13 @@ import { StateNamespaces } from '../namespaces';
 import { namespace } from 'vuex-class';
 
 export type ChangeUserAction = (payload: User | undefined) => void;
-export type ResetUserAction = (payload: User | undefined) => void;
+export type ResetUserAction = () => void;
+export type UpdateBalanceAction = (payload: number) => void;
 
 export enum UserActionTypes {
     CHANGE_USER = 'changeUserAction',
-    RESET_STATE = 'resetStateAction'
+    RESET_STATE = 'resetStateAction',
+    UPDATE_BALANCE = 'updateBalanceAction'
 }
 
 const shoppingCartModule = StateNamespaces.SHOPPING_CART_STATE;
@@ -19,6 +21,9 @@ const shoppingCartModule = StateNamespaces.SHOPPING_CART_STATE;
 export const userActions: ActionTree<UserState, any> = {
     [UserActionTypes.CHANGE_USER](context, payload: User | undefined) {
         context.commit(UserMutationTypes.CHANGE_USER, payload);
+    },
+    [UserActionTypes.UPDATE_BALANCE](context, payload: number) {
+        context.commit(UserMutationTypes.UPDATE_BALANCE, payload);
     },
     [UserActionTypes.RESET_STATE](context) {
         context.commit(UserMutationTypes.RESET_STATE);

@@ -110,7 +110,7 @@ export interface IProductOrder {
 
 export interface IOrder {
     id: string;
-    user: string;
+    user: IUserModel;
     totalPrice: number;
     products: IProductOrder[];
 }
