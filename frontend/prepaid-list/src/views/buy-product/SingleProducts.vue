@@ -174,6 +174,7 @@ export default class SingleProducts extends Vue {
     private addToCart(p: Product) {
         const item: ShoppingCartItem = { product: p, amount: 1 };
         this.addProductAction(item);
+        //@ts-ignore
         this.$refs['footer'].update();
     }
 
@@ -184,6 +185,7 @@ export default class SingleProducts extends Vue {
             productExtra: extra,
         };
         this.addProductAction(item);
+        //@ts-ignore
         this.$refs['footer'].update();
         this.dialogExtraProduct = false;
     }
