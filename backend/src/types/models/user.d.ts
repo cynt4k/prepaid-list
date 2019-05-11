@@ -5,6 +5,7 @@ import { IAclGroupModel } from './acl-group';
 export interface IUserModel extends Document, ITimestamp {
     username: string;
     tokenUid: string;
+    password?: string;
     email: string;
     name: {
         firstname: string,
@@ -15,4 +16,6 @@ export interface IUserModel extends Document, ITimestamp {
     active: boolean;
     compareToken: (checkToken: string, cb: (e: any, isMatch: any) => {}) => void;
     updateToken: (newToken: string) => void;
+    comparePassword: (checkingPassword: string, cb: (e: any, isMatch: any) => void) => void;
+    updatePassword: (newPassword: string) => void;
 }

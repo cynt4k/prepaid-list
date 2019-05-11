@@ -12,6 +12,7 @@ import { ErrorCode } from '../types/error';
 export const userSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     tokenUid: { type: String, unique: true, select: false },
+    password: { type: String },
     email: { type: String, unique: true },
     name: {
         firstname: { type: String },
@@ -36,6 +37,23 @@ userSchema.methods.compareToken = function(checkingToken: string, cb: (e: any, i
 
 userSchema.methods.updateToken = function(newToken: string) {
     this.token = bcrypt.hashSync(newToken, bcrypt.genSaltSync(10));
+};
+
+userSchema.methods.comparePassword = function(checkingPassword: string, cb: (e: any, isMatch: any) => {}) {
+    if (!this.password) {
+        cb(new Error('No password set'), undefined);
+    }
+
+    bcrypt.compare(checkingPassword, this.password, (e: mongoose.Error, isMatch: boolean) => {
+        if (!this.password) {
+            cb(new Error('No password set'), undefined);
+        }
+        cb(e, isMatch);
+    });
+};
+
+userSchema.methods.updatePassword = function(newPassword: string) {
+    this.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(10));
 };
 
 userSchema.pre('validate', async function (): Promise<void> {

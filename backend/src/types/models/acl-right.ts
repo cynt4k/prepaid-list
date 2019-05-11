@@ -22,5 +22,6 @@ export enum AclRight {
     PROFILE_MOD = 'profile_mod',
     PROFILE_DISABLE = 'profile_disable',
     PROFILE_MOD_BALANCE = 'profile_mod_balance',
-    PROFILE_MOD_TOKENUID = 'profile_mod_tokenuid'
+    PROFILE_MOD_TOKENUID = 'profile_mod_tokenuid',
+    MANAGE_LOGIN = 'manage_login'
 }
