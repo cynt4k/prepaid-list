@@ -4,10 +4,8 @@ export class I18nMapper {
     
 
     public getDescription(message: II18nError, languageCode?: LanguageCode): string {
-        languageCode = LanguageCode.DE;
-        switch(message) {
-
-        }
+        // TODO: Implement
+        return '';
     }
 
     private getMessageToLanguage(message: II18nError, languageCode: LanguageCode): string {
@@ -22,5 +20,7 @@ export class I18nMapper {
         if (languageCode === LanguageCode.EN) {
             // TODO: Add english language
         }
+
+        return '';
     }
 }

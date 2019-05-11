@@ -1,0 +1,26 @@
+image: node:10-alpine
+
+stages:
+  - build
+
+cache:
+  untracked: false
+  policy: pull-push
+  paths:
+    - backend/node_modules/
+    - frontend/prepaid-list/node_modules/
+
+build-backend:
+  stage: build
+  script:
+    - apk update && apk add --no-cache python make gcc g++
+    - cd backend
+    - npm install
+    - npm run-script build
+
+build-frontend:
+  stage: build
+  script:
+    - cd frontend/prepaid-list
+    - npm install @vue/cli
+    - npm run-script build
