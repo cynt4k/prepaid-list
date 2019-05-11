@@ -11,61 +11,8 @@
       </div>
     </v-card>
 
-    <v-card v-if="show" class="shoppingCart">
-      <div>
-        <img :src="require(`@/assets/img/confirmation.gif`)">
-      </div>
-      <div>
-        <h2>Kauf abgeschlossen!</h2>
-      </div>
-    </v-card>
     <confirmation-navigation-footer/>
   </v-container>
-  <!-- <v-container grid-list-md text-xs-center>
-      <v-layout row wrap>
-        <v-flex xs6>
-          <v-card>
-            <v-card-text class="px-0">Benutzer</v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex xs6>
-          <v-card color="primary">
-            <v-card-text class="px-0">{{user ? user.nickname : ''}}</v-card-text>
-          </v-card>
-        </v-flex>
-
-        <v-flex xs6>
-          <v-card>
-            <v-card-text class="px-0">Guthaben</v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex xs6>
-          <v-card color="green">
-            <v-card-text class="px-0">{{user ? user.credit : 0 | currency}}</v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex xs6>
-          <v-card>
-            <v-card-text class="px-0">Abzug</v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex xs6>
-          <v-card color="red">
-            <v-card-text class="px-0">{{sum | currency}}</v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex xs6>
-          <v-card>
-            <v-card-text class="px-0">Restguthaben</v-card-text>
-          </v-card>
-        </v-flex>
-        <v-flex xs6>
-          <v-card color="orange">
-            <v-card-text class="px-0">{{(user ? user.credit : 0) - sum | currency}}</v-card-text>
-          </v-card>
-        </v-flex>
-      </v-layout>
-  </v-container>-->
 </template>
 
 <script lang="ts">

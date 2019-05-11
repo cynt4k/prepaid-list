@@ -4,7 +4,7 @@
       <v-layout align-center wrap fill-height style="width: 100%">
         <big-button-flex icon="mdi-information" title="Produktinfos" :to="{name: 'UserProductInfos'}"></big-button-flex>
         <big-button-flex icon="mdi-beer" title="Produkt kaufen" @click="buyProduct()"></big-button-flex>
-        <big-button-flex icon="mdi-cash-multiple" title="Aufladen"></big-button-flex>
+        <big-button-flex icon="mdi-cash-multiple" title="Aufladen" :to="{name: 'Recharge'}"></big-button-flex>
         <big-button-flex disabled icon="mdi-settings" title="Einstellungen"></big-button-flex>
         <big-button-flex red icon="mdi-logout-variant" title="Logout" @click="logout()"></big-button-flex>
       </v-layout>

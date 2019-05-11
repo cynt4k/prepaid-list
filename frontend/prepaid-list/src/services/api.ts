@@ -49,6 +49,21 @@ export class ApiService implements IApiService {
         });
     }
 
+    public put<T>(path: string, data: any, requireAuth?: boolean): Observable<IResponse<T>> {
+        const url = `${this.api}/${path}`;
+        const config: AxiosRequestConfig = {
+            params: { authRequired: (requireAuth) ? true : false }
+        };
+        return Observable.create((observable: any) => {
+            axios.put(url, data, config).then((response) => {
+                observable.next(response.data);
+                observable.complete();
+            }).catch((e) => {
+                observable.error(e);
+            });
+        });
+    }
+
     private interceptor() {
         axios.interceptors.request.use(async (config) => {
             const token = this._jwt.getToken();

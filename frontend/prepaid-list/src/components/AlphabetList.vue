@@ -58,22 +58,20 @@ export default class AlphabetList extends Vue {
     private subscriptions() {}
 
     @Watch('items')
-    onChildChanged(val: User[], oldVal: User[]) {
+    private onChildChanged(val: User[], oldVal: User[]) {
         const result = this.items
-            .map(user => ({ letter: user.nickname[0], user }))
+            .map((user: User) => ({ letter: user.nickname[0], user }))
             .reduce((acc: any, curr) => {
                 const letter = curr.letter.toLowerCase();
                 (acc[letter] = acc[letter] || []).push(curr.user);
                 return acc;
             }, {});
-            
+
         this.alphabet.forEach((letter: string) => {
             const obj: AlphabetUser = { letter, users: result[letter] };
             this.alphaUserList.push(obj);
         });
     }
-
-    private mounted() {}
 
     private emitUser(item: any) {
         this.$emit('user-selected', item);
