@@ -66,7 +66,7 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 });
 
 import { AuthRouter, UserRouter, OrderRouter, ProfileRouter, ProductRouter } from './routes';
-import { TranslationManageRouter, ProductManageRouter } from './routes/manage';
+import { TranslationManageRouter, ProductManageRouter, AuthManageRouter } from './routes/manage';
 
 app.use('/auth', AuthRouter);
 app.use('/user', UserRouter);
@@ -74,6 +74,7 @@ app.use('/order', OrderRouter);
 app.use('/profile', ProfileRouter);
 app.use('/info', ProductRouter);
 
+app.use('/manage/auth', AuthManageRouter);
 app.use('/manage/translation', TranslationManageRouter);
 app.use('/manage/product', ProductManageRouter);
 

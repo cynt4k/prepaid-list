@@ -31,6 +31,18 @@ export namespace AuthController {
         })(req, res, next);
     };
 
+    export const postLoginManage = (req: Request, res: Response, next: NextFunction) => {
+        passport.authenticate('login-manage', (e: Error, user: IUserModel, info: IVerifyOptions) => {
+            if (e) return next(e);
+            if (!user) return response(res, HttpCodes.NotFound, info.message);
+            req.login(user, (eLogin) => {
+                if (eLogin) return next(eLogin);
+                Passport.generateManageToken(req);
+                return response(res, HttpCodes.OK, I18n.INFO_SUCCESS, Passport.respondManageToken(req));
+            });
+        })(req, res, next);
+    };
+
     export let postRegister = (req: Request, res: Response, next: NextFunction) => {
         passport.authenticate('signup-user', (e: Error, user: IUserModel, info: IVerifyOptions) => {
             if (e) return next(e);
