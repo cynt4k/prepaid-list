@@ -5,6 +5,7 @@ import { IAclGroupModel } from './acl-group';
 export interface IUserModel extends Document, ITimestamp {
     username: string;
     tokenUid: string;
+    password?: string;
     email: string;
     name: {
         firstname: string,
