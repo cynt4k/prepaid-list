@@ -2,7 +2,7 @@
   <v-footer>
     <v-btn :disabled="noInput" color="success" class="next-btn" @click="$emit('next')">
       Einzahlen
-      <v-icon right>mdi-chevron-right-circle</v-icon>
+      <v-icon right>mdi-check-circle</v-icon>
     </v-btn>
   </v-footer>
 </template>

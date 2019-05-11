@@ -80,7 +80,11 @@ import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
 import { ILanguageTranslation } from '@/interfaces/services';
 import { IProfileService } from '@/types';
 import { IBalanceUpdateModel, IUserModel } from '../interfaces/services';
-import { UserActionTypes, ChangeUserAction } from '@/store/user-state';
+import {
+    UserActionTypes,
+    ChangeUserAction,
+    UpdateBalanceAction,
+} from '@/store/user-state';
 import { namespace } from 'vuex-class';
 import { StateNamespaces } from '@/store/namespaces';
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
@@ -115,8 +119,8 @@ export default class Recharge extends Vue {
     private confirmationDialog: boolean = false;
     private showConfirmation: boolean = false;
 
-    @userModule.Action(UserActionTypes.CHANGE_USER)
-    private changeUserAction!: ChangeUserAction;
+    @userModule.Action(UserActionTypes.UPDATE_BALANCE)
+    private updateBalanceAction!: UpdateBalanceAction;
 
     constructor() {
         super();
@@ -156,11 +160,7 @@ export default class Recharge extends Vue {
         const balance: IBalanceUpdateModel = { amount: this.input / 100 };
         this.profileService.addBalance(balance).subscribe(
             (infos: IUserModel) => {
-                this.changeUserAction({
-                    name: infos.username,
-                    credit: infos.balance,
-                    nickname: infos.username,
-                });
+                this.updateBalanceAction(infos.balance);
                 this.confirmationDialog = false;
                 this.showConfirmation = true;
             },

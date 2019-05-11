@@ -69,6 +69,7 @@ export const mutations: MutationTree<ShoppingCartState> = {
 export type AddProductAction = (payload: ShoppingCartItem) => void;
 export type RemoveProductAction = (payload: ShoppingCartItem) => void;
 export type DeleteProductAction = (payload: ShoppingCartItem) => void;
+export type ResetStateAction = () => void;
 
 export enum ShoppingCartActionTypes {
     ADD_PRODUCT = 'addProductAction',

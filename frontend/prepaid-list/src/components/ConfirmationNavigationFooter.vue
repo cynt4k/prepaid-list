@@ -1,8 +1,7 @@
 <template>
   <v-footer>
-    <confirmation-dialog v-model="showDialog" text="Kauf abgeschlossen!" />
     <v-btn
-      :disabled="shoppingCartIsEmpty || showDialog"
+      :disabled="shoppingCartIsEmpty"
       color="success"
       class="confirm-btn"
       @click="acceptOrder()"
@@ -19,26 +18,18 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Getter, namespace } from 'vuex-class';
 import { StateNamespaces } from '@/store/namespaces';
 import Confirmation from '@/views/buy-product/Confirmation.vue';
-import ConfirmationDialog from './ConfirmationDialog.vue';
 
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
 @Component({
-    components: { Confirmation , ConfirmationDialog},
+    components: { Confirmation },
 })
 export default class ConfirmationNavigationFooter extends Vue {
     @shoppingCartModule.Getter
     private shoppingCartIsEmpty!: boolean;
 
-    private showDialog: boolean = false;
-
     private acceptOrder(): void {
-        this.showDialog = true;
-        // setTimeout(() => (this.showDialog = false), 4000);
-
-        // ToDo to backend: send order
-        // Reset shopping cart state.
-        // update the credit of the current user
+        this.$emit('next');
     }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid fill-height>
-    <v-card v-if="!show" class="shoppingCart">
+    <v-card class="shoppingCart">
       <v-card-title>
         <v-icon style="font-size: 21px; margin-right: 10px">mdi-cart</v-icon>
         <h2>Warenkorb</h2>
@@ -11,7 +11,8 @@
       </div>
     </v-card>
 
-    <confirmation-navigation-footer/>
+    <confirmation-navigation-footer @next="acceptOrder()"/>
+    <confirmation-dialog v-model="showDialog" text="Kauf abgeschlossen!" @next="redirect()"/>
   </v-container>
 </template>
 
@@ -25,6 +26,21 @@ import { Getter, namespace } from 'vuex-class';
 import { StateNamespaces } from '@/store/namespaces';
 
 import ShoppingCart from '@/components/ShoppingCart.vue';
+import { IOrderService } from '@/types/services/order.service';
+import { container } from '@/inversify.config';
+import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
+import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
+import { INewOrder, INewProductOrder, IOrder } from '../../interfaces/services';
+import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
+import {
+    UserActionTypes,
+    ChangeUserAction,
+    UpdateBalanceAction,
+} from '@/store/user-state';
+import {
+    ShoppingCartActionTypes,
+    ResetStateAction,
+} from '../../store/shoppingcart-state/shoppingcart-state';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
@@ -34,6 +50,7 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
         NavigationToolbarLayout,
         ConfirmationNavigationFooter,
         ShoppingCart,
+        ConfirmationDialog,
     },
     filters: {
         currency(s: number) {
@@ -46,16 +63,48 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
     },
 })
 export default class Confirmation extends Vue {
-    private show: boolean = false;
+    private showDialog: boolean = false;
 
     @userModule.Getter
     private user!: User;
+    @userModule.Action(UserActionTypes.UPDATE_BALANCE)
+    private updateBalanceAction!: UpdateBalanceAction;
+
+    @shoppingCartModule.Action(ShoppingCartActionTypes.RESET_STATE)
+    private resetShoppingCart!: ResetStateAction;
 
     @shoppingCartModule.Getter
     private shoppingCartSum!: number;
+    @shoppingCartModule.Getter
+    private shoppingCartItems!: ShoppingCartItem[];
 
-    public switchContent() {
-        this.show = !this.show;
+    private orderService!: IOrderService;
+
+    private mounted() {
+        this.orderService = container.get<IOrderService>(
+            SERVICE_IDENTIFIER.ORDER_SERVICE
+        );
+    }
+
+    private acceptOrder() {
+        // TODO: Product Extras missing
+        const products: INewProductOrder[] = [];
+        this.shoppingCartItems.forEach((element: ShoppingCartItem) => {
+            products.push({
+                productId: element.product.id,
+                quantity: element.amount,
+            });
+        });
+        // ToDo: POST /order gibt nicht einen User-String, sondern einen IUserModel zurück.
+        const order: INewOrder = { products };
+        this.orderService.placeOrder(order).subscribe((resOrder: IOrder) => {
+            this.updateBalanceAction(resOrder.user.balance);
+            this.resetShoppingCart();
+            this.showDialog = true;
+        });
+    }
+    private redirect() {
+        this.$router.push({ name: 'Dashboard' });
     }
 }
 </script>

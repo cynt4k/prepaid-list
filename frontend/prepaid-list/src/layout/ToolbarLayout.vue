@@ -82,7 +82,7 @@ export default class ToolbarLayout extends Vue {
     private logout() {
         setTimeout(() => {
             this.$router.push({ name: 'Home' });
-            this.resetUserAction(undefined);
+            this.resetUserAction();
         }, 100);
     }
 }
