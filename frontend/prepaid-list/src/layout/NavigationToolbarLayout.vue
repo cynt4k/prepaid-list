@@ -1,11 +1,5 @@
 <template>
-  <toolbar-layout class="navigation-toolbar-layout" :showBackBtn="true" :showUserAndLogout="true">
-    <template v-slot:toolbar>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>{{titleFirst}}&nbsp;</span>
-        <span class="font-weight-light">{{titleSecond}}</span>
-      </v-toolbar-title>
-    </template>
+  <div class="navigation-toolbar-layout">
     <v-navigation-drawer
       :mini-variant.sync="mini"
       absolute
@@ -41,9 +35,10 @@
         />
       </v-list>
     </v-navigation-drawer>
-    <!-- <router-view/> -->
-    <slot></slot>
-  </toolbar-layout>
+    <div class="page-content">
+    <router-view/>
+    </div>
+  </div>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
@@ -78,6 +73,7 @@ export default class NavigationToolbarLayout extends Vue {
 </style>
 <style lang="scss">
 .navigation-toolbar-layout {
+  height: 100%;
     .navigation-button.hidden {
         a {
             justify-content: center;
@@ -86,8 +82,12 @@ export default class NavigationToolbarLayout extends Vue {
             display: none;
         }
     }
-    .page-content > div {
+    .page-content {
         padding-left: 60px;
+        height: 100%;
+        > div {
+          padding: 0;
+        }
     }
 }
 </style>

@@ -1,5 +1,4 @@
 <template>
-  <navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
     <v-container class="home" fluid fill-height>
       <v-layout
         align-center
@@ -38,13 +37,12 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-container>
-    <shopping-cart-dialog v-model="isShoppingCartDialogShown"/>
+    <shopping-cart-dialog v-if="showFooter" v-model="isShoppingCartDialogShown"/>
     <buy-product-navigation-footer
-      ref="footer"
+      ref="footer" v-if="showFooter"
       @show-shopping-cart-dialog="isShoppingCartDialogShown = true"
     />
-  </navigation-toolbar-layout>
+    </v-container>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
@@ -109,6 +107,8 @@ export default class SingleProducts extends Vue {
     private _productService!: IProductService;
     @Prop()
     private category!: string;
+    @Prop({default: true})
+    private showFooter!: boolean;
 
     @shoppingCartModule.Action(ShoppingCartActionTypes.ADD_PRODUCT)
     private addProductAction!: AddProductAction;
@@ -192,9 +192,14 @@ export default class SingleProducts extends Vue {
 <style lang="scss" scoped>
 .content-container {
     overflow: auto;
+    width: 100%;
+    padding: 10px;
 }
 .button-container {
     display: flex;
     flex-flow: wrap;
+}
+.home {
+  flex-flow: column;
 }
 </style>

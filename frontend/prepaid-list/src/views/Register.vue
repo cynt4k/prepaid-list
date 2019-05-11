@@ -1,15 +1,10 @@
 <template>
-  <toolbar-layout>
-    <template v-slot:toolbar>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Registrierung&nbsp;</span>
-      </v-toolbar-title>
-    </template>
-    <v-snackbar  v-model="snackbar" absolute top center color="success">
+  <!-- TODO: Snackbar in Event umwandeln (EventBus) -->
+  <!-- <v-snackbar  v-model="snackbar" absolute top center color="success">
       <span>Registrierung erfolgreich!</span>
       <v-icon dark>checkbox-marked-circle</v-icon>
-    </v-snackbar>
-    <v-container  class="register" align-center justify-center text-xs-center fluid fill-height>
+  </v-snackbar>-->
+  <v-container class="register" align-center justify-center text-xs-center fluid fill-height>
       <v-card flat>
         <v-container justify-center align-center v-if="registering">
           <!-- <v-layout align-center justify-center text-xs-center wrap class="btn-list-layout"> -->
@@ -93,7 +88,6 @@
         </v-dialog>
       </v-card>
     </v-container>
-  </toolbar-layout>
 </template>
 
 <script lang="ts">

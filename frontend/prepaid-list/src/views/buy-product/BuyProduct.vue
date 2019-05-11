@@ -1,5 +1,4 @@
 <template>
-  <navigation-toolbar-layout titleFirst="Produkt" titleSecond="kaufen">
     <v-container class="home" fluid fill-height>
       <v-layout
         align-center
@@ -13,18 +12,18 @@
             :key="category.name"
             :icon="category.icon"
             :title="category.name"
-            :to="{name: 'SingleProducts', params: {category: category.id}}"
+            :to="{path: `singleProducts/${category.id}`}"
+            :append="true"
           ></big-button-flex>
         </template>
       </v-layout>
+    <shopping-cart-dialog v-if="showFooter" v-model="isShoppingCartDialogShown"/>
+    <buy-product-navigation-footer v-if="showFooter" @show-shopping-cart-dialog="isShoppingCartDialogShown = true"/>
     </v-container>
-    <shopping-cart-dialog v-model="isShoppingCartDialogShown"/>
-    <buy-product-navigation-footer @show-shopping-cart-dialog="isShoppingCartDialogShown = true"/>
-  </navigation-toolbar-layout>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import { Category } from '@/interfaces/Category';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
@@ -47,6 +46,9 @@ export default class BuyProduct extends Vue {
     private categories: Category[] = [];
     private isShoppingCartDialogShown: boolean = false;
     private _productService!: IProductService;
+
+    @Prop({default: true})
+    private showFooter!: boolean;
 
     constructor() {
         super();
@@ -82,6 +84,7 @@ export default class BuyProduct extends Vue {
 <style lang="scss" scoped>
 .content-container {
     overflow: auto;
+    padding: 10px;
 }
 .home {
     flex-flow: column;

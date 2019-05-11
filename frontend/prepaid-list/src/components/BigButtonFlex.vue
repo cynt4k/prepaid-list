@@ -8,6 +8,7 @@
       @click="emitClick()"
       :to="to"
       :additional="additional"
+      :append="append"
     ></big-button>
   </v-flex>
 </template>
@@ -29,6 +30,8 @@ export default class BigButtonFlex extends Vue {
     private to!: string;
     @Prop()
     private additional!: string;
+    @Prop()
+    private append!: boolean;
 
     private emitClick() {
         this.$emit('click');

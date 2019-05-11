@@ -1,19 +1,11 @@
 <template>
-  <toolbar-layout>
-    <template v-slot:toolbar>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Digitale&nbsp;</span>
-        <span class="font-weight-light">Prepaid Liste</span>
-      </v-toolbar-title>
-    </template>
-    <v-container fluid fill-height>
-      <v-layout align-center justify-center text-xs-center wrap class="btn-list-layout">
-        <big-button-flex icon="mdi-account-plus" title="Registrieren" :to="{ name: 'Register' }"></big-button-flex>
-        <big-button-flex icon="mdi-login-variant" title="Login" @click="login()"></big-button-flex>
-        <big-button-flex icon="mdi-information" title="Produktinfos"></big-button-flex>
-      </v-layout>
-    </v-container>
-  </toolbar-layout>
+  <v-container fluid fill-height>
+    <v-layout align-center justify-center text-xs-center wrap class="btn-list-layout">
+      <big-button-flex icon="mdi-account-plus" title="Registrieren" :to="{ name: 'Register' }"></big-button-flex>
+      <big-button-flex icon="mdi-login-variant" title="Login" @click="login()"></big-button-flex>
+      <big-button-flex icon="mdi-information" title="Produktinfos" :to="{name: 'ProductInfos'}"></big-button-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script lang="ts">

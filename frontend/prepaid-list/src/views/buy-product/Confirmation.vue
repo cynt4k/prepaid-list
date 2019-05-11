@@ -1,27 +1,27 @@
 <template>
-  <navigation-toolbar-layout titleFirst="Einkauf" titleSecond="bestätigen">
-    <v-container>
-      <v-card v-if="!show" class="shoppingCart">
-        <v-card-title>
-          <v-icon style="font-size: 21px; margin-right: 10px">mdi-cart</v-icon>
-          <h2>Warenkorb</h2>
-        </v-card-title>
-        <v-divider></v-divider>
-        <div>
-          <shopping-cart/>
-        </div>
-      </v-card>
+  <v-container fluid fill-height>
+    <v-card v-if="!show" class="shoppingCart">
+      <v-card-title>
+        <v-icon style="font-size: 21px; margin-right: 10px">mdi-cart</v-icon>
+        <h2>Warenkorb</h2>
+      </v-card-title>
+      <v-divider></v-divider>
+      <div>
+        <shopping-cart/>
+      </div>
+    </v-card>
 
-      <v-card v-if="show" class="shoppingCart">
-        <div>
-          <img :src="require(`@/assets/img/confirmation.gif`)">
-        </div>
-        <div>
-          <h2>Kauf abgeschlossen!</h2>
-        </div>
-      </v-card>
-    </v-container>
-    <!-- <v-container grid-list-md text-xs-center>
+    <v-card v-if="show" class="shoppingCart">
+      <div>
+        <img :src="require(`@/assets/img/confirmation.gif`)">
+      </div>
+      <div>
+        <h2>Kauf abgeschlossen!</h2>
+      </div>
+    </v-card>
+    <confirmation-navigation-footer/>
+  </v-container>
+  <!-- <v-container grid-list-md text-xs-center>
       <v-layout row wrap>
         <v-flex xs6>
           <v-card>
@@ -65,9 +65,7 @@
           </v-card>
         </v-flex>
       </v-layout>
-    </v-container>-->
-    <confirmation-navigation-footer/>
-  </navigation-toolbar-layout>
+  </v-container>-->
 </template>
 
 <script lang="ts">
@@ -119,6 +117,8 @@ export default class Confirmation extends Vue {
 .shoppingCart {
     width: 100%;
     height: 100%;
+    padding: 10px;
+    background-color: initial !important;
 }
 </style>
  

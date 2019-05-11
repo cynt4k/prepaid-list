@@ -5,6 +5,7 @@
     @click="emitClick()"
     :disabled="disabled"
     :to="to"
+    :append="append"
   >
     <v-layout align-center justify-center text-xs-center wrap column>
       <v-icon size="15vh">{{icon}}</v-icon>
@@ -33,6 +34,8 @@ export default class BigButton extends Vue {
     private to!: string;
     @Prop()
     private additional!: string;
+    @Prop()
+    private append!: boolean;
 
     private emitClick() {
         if (!this.disabled) {
