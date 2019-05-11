@@ -13,6 +13,7 @@ cache:
 build-backend:
   stage: build
   script:
+    - apk update && apk add --no-cache python3 make gcc
     - cd backend
     - npm install
     - npm run-script build
@@ -21,4 +22,5 @@ build-frontend:
   stage: build
   script:
     - cd frontend/prepaid-list
+    - npm install -g vue
     - npm run-script build
