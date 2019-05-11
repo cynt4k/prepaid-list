@@ -12,7 +12,7 @@ export class JwtService implements IJwtService {
     }
 
     public getUsername() {
-        return window.localStorage['user'];
+        return window.localStorage[`user`];
     }
 
     public saveToken(token: string) {
@@ -24,7 +24,7 @@ export class JwtService implements IJwtService {
     }
 
     public saveUsername(username: string) {
-        window.localStorage['user'] = username;
+        window.localStorage[`user`] = username;
     }
 
     public destoryToken() {

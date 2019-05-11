@@ -1,25 +1,28 @@
 <template>
-    <v-container class="home" fluid fill-height>
-      <v-layout
-        align-center
-        justify-center
-        text-xs-center
-        wrap
-        class="btn-list-layout content-container"
-      >
-        <template v-for="category in categories">
-          <big-button-flex
-            :key="category.name"
-            :icon="category.icon"
-            :title="category.name"
-            :to="{path: `singleProducts/${category.id}`}"
-            :append="true"
-          ></big-button-flex>
-        </template>
-      </v-layout>
+  <v-container class="home" fluid fill-height>
+    <v-layout
+      align-center
+      justify-center
+      text-xs-center
+      wrap
+      class="btn-list-layout content-container"
+    >
+      <template v-for="category in categories">
+        <big-button-flex
+          :key="category.name"
+          :icon="category.icon"
+          :title="category.name"
+          :to="{path: `singleProducts/${category.id}`}"
+          :append="true"
+        ></big-button-flex>
+      </template>
+    </v-layout>
     <shopping-cart-dialog v-if="showFooter" v-model="isShoppingCartDialogShown"/>
-    <buy-product-navigation-footer v-if="showFooter" @show-shopping-cart-dialog="isShoppingCartDialogShown = true"/>
-    </v-container>
+    <buy-product-navigation-footer
+      v-if="showFooter"
+      @show-shopping-cart-dialog="isShoppingCartDialogShown = true"
+    />
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -32,7 +35,12 @@ import ShoppingCartDialog from '@/components/ShoppingCartDialog.vue';
 import { IProductService } from '@/types';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
-import { ILanguageTranslation } from '../../interfaces/services';
+import {
+    ILanguageTranslation,
+    LanguageCode,
+    ICategoryModel,
+    ITranslationModel,
+} from '../../interfaces/services';
 
 @Component({
     components: {
@@ -45,9 +53,9 @@ import { ILanguageTranslation } from '../../interfaces/services';
 export default class BuyProduct extends Vue {
     private categories: Category[] = [];
     private isShoppingCartDialogShown: boolean = false;
-    private _productService!: IProductService;
+    private productService!: IProductService;
 
-    @Prop({default: true})
+    @Prop({ default: true })
     private showFooter!: boolean;
 
     constructor() {
@@ -55,29 +63,36 @@ export default class BuyProduct extends Vue {
     }
 
     private mounted() {
-      this._productService = container.get<IProductService>(SERVICE_IDENTIFIER.PRODUCT_SERVICE);
-      // this._productService.getProducts().subscribe((data: any) => console.log(data));
-      this._productService.getCategories().subscribe((data) => {
-        this.categories = data.map((category) => {
-          const translation = ((): ILanguageTranslation => {
-            const data = category.name.translations.filter((elem) => elem.languageCode === 'DE');
-            if (data.length === 1) {
-              return data[0];
-            } else {
-              return <ILanguageTranslation>{
-                languageCode: 'DE',
-                name: 'Unbekannt',
-                shortname: 'Unbek.'
-              };
-            }
-          })();
-          return <Category> {
-            name: translation.name,
-            icon: 'mdi-pizza',
-            id: category.id
-          };
-        })
-      });
+        this.productService = container.get<IProductService>(
+            SERVICE_IDENTIFIER.PRODUCT_SERVICE
+        );
+        // this.productService.getProducts().subscribe((data: any) => console.log(data));
+        this.productService
+            .getCategories()
+            .subscribe((categories: ICategoryModel[]) => {
+                this.categories = categories.map((category: ICategoryModel) => {
+                    const translation = ((): ILanguageTranslation => {
+                        const data = category.name.translations.filter(
+                            (elem: ILanguageTranslation) =>
+                                elem.languageCode === 'DE'
+                        );
+                        if (data.length === 1) {
+                            return data[0];
+                        } else {
+                            return {
+                                languageCode: 'DE' as LanguageCode,
+                                name: 'Unbekannt',
+                                shortname: 'Unbek.',
+                            };
+                        }
+                    })();
+                    return {
+                        name: translation.name,
+                        icon: 'mdi-pizza',
+                        id: category.id,
+                    };
+                });
+            });
     }
 }
 </script>

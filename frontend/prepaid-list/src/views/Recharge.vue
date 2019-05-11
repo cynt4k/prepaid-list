@@ -58,7 +58,11 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <confirmation-dialog v-model="showConfirmation" text="Erfolgreich aufgeladen!" @next="redirect()" />
+    <confirmation-dialog
+      v-model="showConfirmation"
+      text="Erfolgreich aufgeladen!"
+      @next="redirect()"
+    />
   </v-container>
 </template>
 
@@ -73,7 +77,7 @@ import ShoppingCartDialog from '@/components/ShoppingCartDialog.vue';
 import { IProductService } from '@/types';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
-import { ILanguageTranslation } from '../../interfaces/services';
+import { ILanguageTranslation } from '@/interfaces/services';
 import { IProfileService } from '@/types';
 import { IBalanceUpdateModel, IUserModel } from '../interfaces/services';
 import { UserActionTypes, ChangeUserAction } from '@/store/user-state';
@@ -81,6 +85,7 @@ import { namespace } from 'vuex-class';
 import { StateNamespaces } from '@/store/namespaces';
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
 import router from '../router';
+import { EventBus } from '../assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
@@ -90,7 +95,7 @@ const userModule = namespace(StateNamespaces.USER_STATE);
         BigButtonFlex,
         BigButton,
         RechargeNavigationFooter,
-        ConfirmationDialog
+        ConfirmationDialog,
     },
     filters: {
         currency(s: number) {
@@ -104,7 +109,7 @@ const userModule = namespace(StateNamespaces.USER_STATE);
     },
 })
 export default class Recharge extends Vue {
-    private profileService: IProfileService;
+    private profileService!: IProfileService;
     private fixedPrices: any = [];
     private input: number;
     private confirmationDialog: boolean = false;
@@ -162,13 +167,14 @@ export default class Recharge extends Vue {
                 this.confirmationDialog = false;
                 this.showConfirmation = true;
             },
-            data => {
+            (err: any) => {
                 // TODO: onError
+                EventBus.$emit('message', { message: err });
             }
         );
     }
     private redirect() {
-      router.push({name: 'Dashboard'});
+        router.push({ name: 'Dashboard' });
     }
 }
 </script>

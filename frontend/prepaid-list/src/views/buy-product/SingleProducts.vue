@@ -1,48 +1,49 @@
 <template>
-    <v-container class="home" fluid fill-height>
-      <v-layout
-        align-center
-        justify-center
-        text-xs-center
-        wrap
-        class="btn-list-layout content-container"
-      >
-        <template v-for="product in products">
-          <big-button-flex
-            :key="product.name"
-            :title="product.name"
-            :additional="product | extras | currency(product.extras ? 'ab ' : '')"
-            @click="product.extras ? showDialog(product) : addToCart(product)"
-          ></big-button-flex>
-        </template>
-      </v-layout>
-      <v-dialog v-model="dialogExtraProduct" v-if="selectedProduct">
-        <v-card>
-          <v-card-title>
-            <h2>Typ auswählen</h2>
-          </v-card-title>
-          <v-card-text>
-            <div class="button-container">
-              <big-button-flex
-                v-for="extra in selectedProduct.extras"
-                :key="extra.id"
-                :title="extra.name"
-                :additional="extra.price | currency"
-                @click="addExtraToCart(selectedProduct, extra)"
-              />
-            </div>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" flat @click="dialogExtraProduct=false">Schließen</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+  <v-container class="home" fluid fill-height>
+    <v-layout
+      align-center
+      justify-center
+      text-xs-center
+      wrap
+      class="btn-list-layout content-container"
+    >
+      <template v-for="product in products">
+        <big-button-flex
+          :key="product.name"
+          :title="product.name"
+          :additional="product | extras | currency(product.extras ? 'ab ' : '')"
+          @click="product.extras ? showDialog(product) : addToCart(product)"
+        ></big-button-flex>
+      </template>
+    </v-layout>
+    <v-dialog v-model="dialogExtraProduct" v-if="selectedProduct">
+      <v-card>
+        <v-card-title>
+          <h2>Typ auswählen</h2>
+        </v-card-title>
+        <v-card-text>
+          <div class="button-container">
+            <big-button-flex
+              v-for="extra in selectedProduct.extras"
+              :key="extra.id"
+              :title="extra.name"
+              :additional="extra.price | currency"
+              @click="addExtraToCart(selectedProduct, extra)"
+            />
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" flat @click="dialogExtraProduct=false">Schließen</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <shopping-cart-dialog v-if="showFooter" v-model="isShoppingCartDialogShown"/>
     <buy-product-navigation-footer
-      ref="footer" v-if="showFooter"
+      ref="footer"
+      v-if="showFooter"
       @show-shopping-cart-dialog="isShoppingCartDialogShown = true"
     />
-    </v-container>
+  </v-container>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
@@ -68,6 +69,8 @@ import {
     ILanguageTranslation,
     IProductExtra,
     ITranslationModel,
+    LanguageCode,
+    IProductModel,
 } from '../../interfaces/services';
 
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
@@ -77,14 +80,15 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
         BigButtonFlex,
         NavigationToolbarLayout,
         BuyProductNavigationFooter,
-	ShoppingCartDialog,
+        ShoppingCartDialog,
     },
     filters: {
         extras(product: Product): number {
             if ((product.extras || []).length !== 0) {
-                return product.extras!.reduce((acc, val) =>
-                    acc.price < val.price ? acc : val
-                , <ProductExtra> {}).price;
+                return product.extras!.reduce(
+                    (acc: any, val) => (acc.price < val.price ? acc : val),
+                    {}
+                ).price;
             }
             return product.price;
         },
@@ -104,10 +108,10 @@ export default class SingleProducts extends Vue {
     private selectedProduct: Product | null = null;
     private isShoppingCartDialogShown: boolean = false;
 
-    private _productService!: IProductService;
+    private productService!: IProductService;
     @Prop()
     private category!: string;
-    @Prop({default: true})
+    @Prop({ default: true })
     private showFooter!: boolean;
 
     @shoppingCartModule.Action(ShoppingCartActionTypes.ADD_PRODUCT)
@@ -122,45 +126,49 @@ export default class SingleProducts extends Vue {
         languageCode: string
     ): ILanguageTranslation {
         const data = translation.translations.filter(
-            elem => elem.languageCode === languageCode
+            (elem: ILanguageTranslation) => elem.languageCode === languageCode
         );
         if (data.length === 1) {
             return data[0];
         }
-        return <ILanguageTranslation>{
-            languageCode: languageCode,
+        const langCode = languageCode as LanguageCode;
+        return {
+            languageCode: langCode,
             name: 'Unbekannt',
             shortname: 'Unbek.',
         };
     }
 
     private mounted() {
-        this._productService = container.get<IProductService>(
+        this.productService = container.get<IProductService>(
             SERVICE_IDENTIFIER.PRODUCT_SERVICE
         );
-        this._productService
+        this.productService
             .getProductsByCategory(this.category)
-            .subscribe(products => {
-                this.products = products.map(product => {
+            .subscribe((products: IProductModel[]) => {
+                this.products = products.map((product: IProductModel) => {
                     const translation = this.getTranslation(product.name, 'DE');
                     const extras = ((): ProductExtra[] | undefined => {
-                      if (product.extras.length === 0 || !product.extras) {
-                        return undefined;
-                      }
-                      return product.extras.map((extra) => {
-                        const extraTranslation = this.getTranslation(extra.name, 'DE');
-                        return <ProductExtra> {
-                          name: extraTranslation.name,
-                          price: extra.price
-                        };
-                      });
+                        if (product.extras.length === 0 || !product.extras) {
+                            return undefined;
+                        }
+                        return product.extras.map((extra: IProductExtra) => {
+                            const extraTranslation = this.getTranslation(
+                                extra.name,
+                                'DE'
+                            );
+                            return {
+                                name: extraTranslation.name,
+                                price: extra.price,
+                            };
+                        });
                     })();
-                    return <Product>{
+                    return {
                         name: translation.name,
                         id: product.id,
                         price: product.price,
                         icon: 'mdi-pizza',
-                        extras: extras
+                        extras,
                     };
                 });
             });
@@ -174,7 +182,8 @@ export default class SingleProducts extends Vue {
     private addToCart(p: Product) {
         const item: ShoppingCartItem = { product: p, amount: 1 };
         this.addProductAction(item);
-        //@ts-ignore
+        // @ts-ignore
+        // tslint:disable
         this.$refs['footer'].update();
     }
 
@@ -202,6 +211,6 @@ export default class SingleProducts extends Vue {
     flex-flow: wrap;
 }
 .home {
-  flex-flow: column;
+    flex-flow: column;
 }
 </style>

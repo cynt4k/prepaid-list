@@ -11,11 +11,11 @@ import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
 @injectable()
 export class ApiService implements IApiService {
     private api: string;
-    private _jwt: JwtService;
+    private jwt: JwtService;
 
     constructor() {
         this.api = 'http://app02.dev.nue.schneider-its.net:3000';
-        this._jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+        this.jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
         this.interceptor();
     }
 
@@ -39,12 +39,12 @@ export class ApiService implements IApiService {
         const config: AxiosRequestConfig = {
             params: { authRequired: (requireAuth) ? true : false }
         };
-        return Observable.create((observable: any) => {
+        return Observable.create((observer: any) => {
             axios.post(url, data, config).then((response) => {
-                observable.next(response.data);
-                observable.complete();
+                observer.next(response.data);
+                observer.complete();
             }).catch((e) => {
-                observable.error(e);
+                observer.error(e);
             });
         });
     }
@@ -54,20 +54,20 @@ export class ApiService implements IApiService {
         const config: AxiosRequestConfig = {
             params: { authRequired: (requireAuth) ? true : false }
         };
-        return Observable.create((observable: any) => {
+        return Observable.create((observer: any) => {
             axios.put(url, data, config).then((response) => {
-                observable.next(response.data);
-                observable.complete();
+                observer.next(response.data);
+                observer.complete();
             }).catch((e) => {
-                observable.error(e);
+                observer.error(e);
             });
         });
     }
 
     private interceptor() {
         axios.interceptors.request.use(async (config) => {
-            const token = this._jwt.getToken();
-            const refreshToken = this._jwt.getRefreshToken();
+            const token = this.jwt.getToken();
+            const refreshToken = this.jwt.getRefreshToken();
             const headersConfig: any = {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -86,17 +86,17 @@ export class ApiService implements IApiService {
             }
             config.params.authRequired = undefined;
             config.headers = {
-                'Authorization': token
+                Authorization: token
             };
 
             if (token) {
                 try {
                     const newToken = await this.post<IResponseToken>(`auth/refresh`, { refreshToken }).toPromise();
-                    this._jwt.saveToken(newToken.data.token);
+                    this.jwt.saveToken(newToken.data.token);
                     return Promise.resolve(config);
                 } catch (e) {
-                    this._jwt.destoryToken();
-                    this._jwt.destoryRefreshToken();
+                    this.jwt.destoryToken();
+                    this.jwt.destoryRefreshToken();
                     return Promise.reject(e);
                 }
             }
