@@ -11,10 +11,7 @@ const router: Router = Router();
 router.get('/products', ProductController.getAllProducts);
 router.get('/product/:barcode', ProductController.getProductByBarcode);
 router.get('/categories/all', ProductController.getAll);
-router.get('/categories', CheckAcl.middlewareIsAllowed(AclRight.PRODUCT_GET), ProductController.getCategories);
-router.get('/category/:id/products',
-    CheckAuth.isAuth,
-    CheckAcl.middlewareIsAllowed(AclRight.CATEGORY_GET, AclRight.PRODUCT_GET),
-    ProductController.getAllProductsForCategory);
+router.get('/categories', ProductController.getCategories);
+router.get('/category/:id/products', ProductController.getAllProductsForCategory);
 
 export const ProductRouter: Router = router;
