@@ -161,6 +161,10 @@ export interface ITranslationModel {
     type: LanguageType;
 }
 
+export interface IBalanceUpdateModel {
+    amount: number;
+}
+
 
 @Path('auth')
 export class Auth {
@@ -288,4 +292,11 @@ export class Profile {
     // @Response<IResponse<IUserModel>>(200, 'Update the data for the current user')
     // @ts-ignore
     updateProfile(updateUser: IUserModel): IResponse<IUserModel> { }
+
+    @Security('token')
+    @Path('balance')
+    @PUT
+    @Tags('profile')
+    // @ts-ignore
+    updateBalance(newBalance: IBalanceUpdateModel): IResponse<IUserModel> { }
 }

@@ -1,8 +1,9 @@
 import { Model, Schema } from 'mongoose';
 import mongoose from 'mongoose';
-import { IUserModel } from '../types/models';
+import { IUserModel, IBalanceModel } from '../types/models';
 import bcrypt from 'bcrypt';
 import { AclGroup } from './acl-group';
+import { Balance } from './balance';
 import { PrepaidListError } from '../errors';
 import mongooseHistory from 'mongoose-history';
 import mongooseTimestamp from 'mongoose-timestamp';
@@ -25,6 +26,7 @@ export const userSchema = new mongoose.Schema({
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
+    delete ret.password;
     delete ret.tokenUid;
     return ret;
 }}});
@@ -54,6 +56,19 @@ userSchema.methods.comparePassword = function(checkingPassword: string, cb: (e: 
 
 userSchema.methods.updatePassword = function(newPassword: string) {
     this.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(10));
+};
+
+userSchema.methods.updateBalance = function(amount: number, cb: (e: any) => {}) {
+    const newBalance: IBalanceModel = <IBalanceModel> {
+        user: this.id,
+        amount: amount,
+        balance: this.balance
+    };
+    new Balance(newBalance).save().then(() => {
+        return cb(undefined);
+    }).catch((err) => {
+        return cb(err);
+    });
 };
 
 userSchema.pre('validate', async function (): Promise<void> {

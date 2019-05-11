@@ -17,7 +17,7 @@ export namespace ProfileValidator {
 
     export const addBalance = (): RequestHandler[] => {
         return [
-            check('balance', I18n.VAL_USER_BALANCE_NOT_PROVIDED).exists(),
+            check('amount', I18n.VAL_USER_BALANCE_NOT_PROVIDED).exists().isNumeric(),
             ErrorHandler.validateBody
         ];
     };
