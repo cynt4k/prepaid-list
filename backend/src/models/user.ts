@@ -40,7 +40,14 @@ userSchema.methods.updateToken = function(newToken: string) {
 };
 
 userSchema.methods.comparePassword = function(checkingPassword: string, cb: (e: any, isMatch: any) => {}) {
+    if (!this.password) {
+        cb(new Error('No password set'), undefined);
+    }
+
     bcrypt.compare(checkingPassword, this.password, (e: mongoose.Error, isMatch: boolean) => {
+        if (!this.password) {
+            cb(new Error('No password set'), undefined);
+        }
         cb(e, isMatch);
     });
 };

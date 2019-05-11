@@ -5,10 +5,11 @@ import { User } from '../../models';
 import bcrypt from 'bcrypt';
 import { any } from 'bluebird';
 import { Request, NextFunction } from 'express';
-import { IUserModel } from '../../types/models';
+import { IUserModel, AclRight } from '../../types/models';
 import { IUser } from '../../types/express';
 import { Template, I18n } from '../../misc';
 import { randomBytes } from 'crypto';
+import { CheckAcl } from '../acl';
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -70,6 +71,31 @@ passport.use('login-username', new LocalStrategy({
         return done(undefined, user);
     } catch (e) {
         return done(e);
+    }
+}));
+
+passport.use('login-manage', new LocalStrategy({
+    passReqToCallback: true,
+    usernameField: 'username',
+    passwordField: 'password'
+}, async (req: Request, username: string, password: string, done) => {
+    try {
+        let user = await User.findOne({ username: username.toLowerCase() });
+        if (!user) {
+            return done(undefined, false, { message: I18n.WARN_USERS_NOT_FOUND });
+        }
+        const isAllowed = await CheckAcl.isAllowed(user.id, AclRight.MANAGE_LOGIN);
+        if (!isAllowed) {
+            return done(undefined, false, { message: I18n.WARN_USER_NOT_ALLOWED });
+        }
+        user.comparePassword(password, (e, isMatch) => {
+            if (!isMatch) {
+                return done(undefined, false, { message: I18n.WARN_USER_PASSWORD_WRONG });
+            }
+            return done(undefined, user, { message: I18n.INFO_SUCCESS });
+        });
+    } catch (e) {
+
     }
 }));
 
@@ -138,11 +164,27 @@ export namespace Passport {
         }, refreshToken, refreshObject);
     };
 
+    export const generateManageToken = (req: Request) => {
+        req.token = jwt.sign({
+            username: (req.user || { username: undefined}).username,
+            id: (req.user || {id: undefined}).id
+        }, process.env.JWT_SECRET || '', {
+            expiresIn: '1h'
+        });
+    };
+
     export const respondToken = (req: Request) => {
         return {
             user: (req.user || {username: undefined}).username,
             token: req.token,
             refreshToken: req.refreshToken
+        };
+    };
+
+    export const respondManageToken = (req: Request) => {
+        return {
+            user: (req.user || { username: undefined} ).username,
+            token: req.token
         };
     };
 
