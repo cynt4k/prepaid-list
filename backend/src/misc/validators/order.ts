@@ -14,6 +14,23 @@ export namespace OrderValidator {
                     if (!elem.productId || !elem.quantity) {
                         return false;
                     }
+                    if (elem.quantity <= 0) {
+                        return false;
+                    }
+                    if (elem.extras) {
+                        const extraValid = elem.extras.every((extra) => {
+                            if (!extra.productId || !elem.quantity) {
+                                return false;
+                            }
+                            if (extra.quantity <= 0) {
+                                return false;
+                            }
+                            return true;
+                        });
+                        if (!extraValid) {
+                            return false;
+                        }
+                    }
                     return true;
                 });
             }),

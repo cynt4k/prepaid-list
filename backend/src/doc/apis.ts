@@ -66,8 +66,10 @@ export enum AclRight {
     PROFILE_MOD = 'profile_mod',
     PROFILE_DISABLE = 'profile_disable',
     PROFILE_MOD_BALANCE = 'profile_mod_balance',
-    PROFILE_MOD_TOKENUID = 'profile_mod_tokenuid'
+    PROFILE_MOD_TOKENUID = 'profile_mod_tokenuid',
+    MANAGE_LOGIN = 'manage_login'
 }
+
 
 
 export interface IAclModel {
@@ -107,15 +109,29 @@ export interface IProductOrder {
     price: number;
     totalPrice: number;
     quantity: number;
+    extras?: IProductExtraOrder[];
+}
+
+export interface IProductExtraOrder {
+    productId: string;
+    price: number;
+    totalPrice: number;
+    quantity: number;
 }
 
 export interface IOrder {
-    user: string;
+    user: IUserModel;
     totalPrice: number;
     products: IProductOrder[];
 }
 
 export interface INewProductOrder {
+    productId: string;
+    quantity: number;
+    extras?: INewProductExtraOrder;
+}
+
+export interface INewProductExtraOrder {
     productId: string;
     quantity: number;
 }

@@ -14,7 +14,12 @@ const productExtraSchema = new mongoose.Schema({
     name: { type: mongoose.Schema.Types.ObjectId, ref: 'Translation', required: true, autopopulate: true },
     icon: { type: String },
     price: { type: Number, required: true }
-}, { _id: false });
+}, { toJSON: { transform: function(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    return ret;
+}}});
 
 export const productSchema = new mongoose.Schema({
     name: { type: Schema.Types.ObjectId, ref: 'Translation', required: true, autopopulate: true },
