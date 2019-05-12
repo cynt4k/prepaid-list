@@ -30,7 +30,7 @@ import { IOrderService } from '@/types/services/order.service';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
-import { INewOrder, INewProductOrder, IOrder } from '../../interfaces/services';
+import { INewOrder, INewProductOrder, IOrder, INewProductExtraOrder } from '../../interfaces/services';
 import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
 import {
     UserActionTypes,
@@ -87,15 +87,23 @@ export default class Confirmation extends Vue {
     }
 
     private acceptOrder() {
-        // TODO: Product Extras missing
         const products: INewProductOrder[] = [];
         this.shoppingCartItems.forEach((element: ShoppingCartItem) => {
+            const extras: INewProductExtraOrder[] = ((): INewProductExtraOrder[] => {
+                if (element.productExtra) {
+                    return [{
+                        productId: element.productExtra.id,
+                        quantity: 1,
+                    }];
+                }
+                return [];
+            })();
             products.push({
                 productId: element.product.id,
                 quantity: element.amount,
+                extras: (extras.length !== 0 ? extras : undefined)
             });
         });
-        // ToDo: POST /order gibt nicht einen User-String, sondern einen IUserModel zurück.
         const order: INewOrder = { products };
         this.orderService.placeOrder(order).subscribe((resOrder: IOrder) => {
             this.updateBalanceAction(resOrder.user.balance);

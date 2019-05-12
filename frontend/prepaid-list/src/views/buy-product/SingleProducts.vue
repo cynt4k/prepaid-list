@@ -168,6 +168,7 @@ export default class SingleProducts extends Vue {
                                 'DE'
                             );
                             return {
+                                id: extra.id,
                                 name: extraTranslation.name,
                                 price: extra.price,
                             };
