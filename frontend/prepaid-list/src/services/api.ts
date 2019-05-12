@@ -14,7 +14,9 @@ export class ApiService implements IApiService {
     private jwt: JwtService;
 
     constructor() {
-        this.api = 'http://app02.dev.nue.schneider-its.net:3000';
+        // this.api = 'http://app02.dev.nue.schneider-its.net:3000';
+        this.api = process.env.VUE_API_URL || 'http://localhost:3000';
+        // this.api = process.env.VUE_APP_API_URL;
         this.jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
         this.interceptor();
     }
