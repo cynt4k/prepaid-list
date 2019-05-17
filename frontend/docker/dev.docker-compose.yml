@@ -11,5 +11,7 @@ services:
       - /usr/src/app/node_modules
     ports:
       - 8080:8080
+    env_file:
+       - backend.env
 #volumes:
   #node_modules:
