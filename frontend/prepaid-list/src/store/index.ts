@@ -9,6 +9,6 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     modules: {
         [StateNamespaces.USER_STATE]: userModule,
-        [StateNamespaces.SHOPPING_CART_STATE]: shoppingCartModule
+        [StateNamespaces.SHOPPING_CART_STATE]: shoppingCartModule,
     },
 });

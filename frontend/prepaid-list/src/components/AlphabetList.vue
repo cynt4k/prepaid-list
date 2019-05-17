@@ -55,8 +55,6 @@ export default class AlphabetList extends Vue {
         return [...'abcdefghijklmnopqrstuvwxyz'];
     }
 
-    private subscriptions() {}
-
     @Watch('items')
     private onChildChanged(val: User[], oldVal: User[]) {
         const result = this.items

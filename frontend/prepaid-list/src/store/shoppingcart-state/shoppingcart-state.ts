@@ -69,6 +69,7 @@ export const mutations: MutationTree<ShoppingCartState> = {
 export type AddProductAction = (payload: ShoppingCartItem) => void;
 export type RemoveProductAction = (payload: ShoppingCartItem) => void;
 export type DeleteProductAction = (payload: ShoppingCartItem) => void;
+export type ResetStateAction = () => void;
 
 export enum ShoppingCartActionTypes {
     ADD_PRODUCT = 'addProductAction',
@@ -123,8 +124,8 @@ export const getters: GetterTree<ShoppingCartState, any> = {
         });
         return sum;
     },
-    shoppingCartIsEmpty: (state, getters): boolean => {
-        return getters.shoppingCartItems.length === 0;
+    shoppingCartIsEmpty: (state, getters1): boolean => {
+        return getters1.shoppingCartItems.length === 0;
     },
 };
 

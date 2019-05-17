@@ -55,7 +55,7 @@ export default new Router({
                 title: titleFct(route),
                 titleFirst: 'Digitale',
                 titleSecond: 'Prepaidliste',
-                showBackBtn: route.name !== 'Home',
+                showBackBtn: route.name !== 'Home' && route.name !== 'Dashboard',
             }),
             children: [
                 { name: 'Home', component: Home, path: '/' },

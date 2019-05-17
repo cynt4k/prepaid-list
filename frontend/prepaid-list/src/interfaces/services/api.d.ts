@@ -63,8 +63,10 @@ export enum AclRight {
     PROFILE_MOD = 'profile_mod',
     PROFILE_DISABLE = 'profile_disable',
     PROFILE_MOD_BALANCE = 'profile_mod_balance',
-    PROFILE_MOD_TOKENUID = 'profile_mod_tokenuid'
+    PROFILE_MOD_TOKENUID = 'profile_mod_tokenuid',
+    MANAGE_LOGIN = 'manage_login'
 }
+
 
 
 export interface IAclModel {
@@ -88,9 +90,11 @@ export interface IUserModel {
 }
 
 export interface IUser {
-    id: string;
-    nickname: string;
-    name?: string;
+    username: string;
+    name: {
+        firstname: string;
+        lastname: string;
+    };
 }
 
 export interface ICategoryModel {
@@ -101,7 +105,14 @@ export interface ICategoryModel {
 }
 
 export interface IProductOrder {
-    id: string;
+    productId: string;
+    price: number;
+    totalPrice: number;
+    quantity: number;
+    extras?: IProductExtraOrder[];
+}
+
+export interface IProductExtraOrder {
     productId: string;
     price: number;
     totalPrice: number;
@@ -110,12 +121,18 @@ export interface IProductOrder {
 
 export interface IOrder {
     id: string;
-    user: string;
+    user: IUserModel;
     totalPrice: number;
     products: IProductOrder[];
 }
 
 export interface INewProductOrder {
+    productId: string;
+    quantity: number;
+    extras?: INewProductExtraOrder[];
+}
+
+export interface INewProductExtraOrder {
     productId: string;
     quantity: number;
 }
@@ -134,6 +151,7 @@ export interface IProductModel {
 }
 
 export interface IProductExtra {
+    id: string;
     name: ITranslationModel;
     icon: string;
     price: number;
@@ -154,13 +172,17 @@ export enum LanguageType {
 export interface ILanguageTranslation {
     languageCode: LanguageCode;
     name: string;
-    shortname?: string;
+    shortname: string;
 }
 
 export interface ITranslationModel {
     id: string;
     translations: ILanguageTranslation[];
     type: LanguageType;
+}
+
+export interface IBalanceUpdateModel {
+    amount: number;
 }
 
 export enum II18nError {
@@ -209,8 +231,4 @@ export enum II18nError {
     VAL_PRODUCT_BARCODE_NOT_VALID = 'V_PRODUCT_BARCODE_NOT_VALID',
     VAL_PRODUCT_PRICE_NOT_VALID = 'V_PRODUCT_PRICE_NOT_VALID',
     VAL_PRODUCT_EXTRAS_NOT_VALID = 'V_PRODUCT_EXTRAS_NOT_VALID'
-}
-
-export interface IBalanceUpdateModel {
-    amount: number;
 }

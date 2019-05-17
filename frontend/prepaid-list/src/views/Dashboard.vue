@@ -40,18 +40,18 @@ const userModule = namespace(StateNamespaces.USER_STATE);
 export default class Dashboard extends Vue {
     @userModule.Getter
     private user!: User;
-    private _userService: IUserService;
-    private _jwtService: IJwtService;
+    private userService: IUserService;
+    private jwtService: IJwtService;
 
     @userModule.Action(UserActionTypes.RESET_STATE)
     private resetUserAction!: ResetUserAction;
 
     constructor() {
         super();
-        this._userService = container.get<IUserService>(
+        this.userService = container.get<IUserService>(
             SERVICE_IDENTIFIER.USER_SERVICE
         );
-        this._jwtService = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+        this.jwtService = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
     }
 
     private buyProduct() {
@@ -60,8 +60,8 @@ export default class Dashboard extends Vue {
 
     private logout() {
         this.resetUserAction(undefined);
-        this._jwtService.destoryToken();
-        this._jwtService.destoryRefreshToken();
+        this.jwtService.destoryToken();
+        this.jwtService.destoryRefreshToken();
         setTimeout(() => this.$router.push({ name: 'Home' }), 100);
     }
 
@@ -70,10 +70,10 @@ export default class Dashboard extends Vue {
             message: `Servus, ${this.user.nickname}`,
             snackbarType: 'info',
         };
-        this._userService = container.get<IUserService>(
+        this.userService = container.get<IUserService>(
             SERVICE_IDENTIFIER.USER_SERVICE
         );
-        this._jwtService = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+        this.jwtService = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
         EventBus.$emit('message', message);
     }
 }

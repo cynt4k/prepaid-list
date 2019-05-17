@@ -34,7 +34,7 @@
         </v-card>
       </div>
     </v-layout>
-    <recharge-navigation-footer @next="confirmationDialog = true"/>
+    <recharge-navigation-footer @next="confirmationDialog = true" :noInput="input == 0"/>
 
     <v-dialog v-model="confirmationDialog" width="500" persistent>
       <v-card>
@@ -58,7 +58,11 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <confirmation-dialog v-model="showConfirmation" text="Erfolgreich aufgeladen!" @next="redirect()" />
+    <confirmation-dialog
+      v-model="showConfirmation"
+      text="Erfolgreich aufgeladen!"
+      @next="redirect()"
+    />
   </v-container>
 </template>
 
@@ -73,14 +77,19 @@ import ShoppingCartDialog from '@/components/ShoppingCartDialog.vue';
 import { IProductService } from '@/types';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
-import { ILanguageTranslation } from '../../interfaces/services';
+import { ILanguageTranslation } from '@/interfaces/services';
 import { IProfileService } from '@/types';
 import { IBalanceUpdateModel, IUserModel } from '../interfaces/services';
-import { UserActionTypes, ChangeUserAction } from '@/store/user-state';
+import {
+    UserActionTypes,
+    ChangeUserAction,
+    UpdateBalanceAction,
+} from '@/store/user-state';
 import { namespace } from 'vuex-class';
 import { StateNamespaces } from '@/store/namespaces';
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
 import router from '../router';
+import { EventBus } from '../assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
@@ -90,7 +99,7 @@ const userModule = namespace(StateNamespaces.USER_STATE);
         BigButtonFlex,
         BigButton,
         RechargeNavigationFooter,
-        ConfirmationDialog
+        ConfirmationDialog,
     },
     filters: {
         currency(s: number) {
@@ -104,17 +113,14 @@ const userModule = namespace(StateNamespaces.USER_STATE);
     },
 })
 export default class Recharge extends Vue {
-    private profileService: IProfileService;
+    private profileService!: IProfileService;
     private fixedPrices: any = [];
     private input: number;
     private confirmationDialog: boolean = false;
     private showConfirmation: boolean = false;
 
-    @userModule.Action(UserActionTypes.CHANGE_USER)
-    private changeUserAction!: ChangeUserAction;
-
-    @Prop({ default: true })
-    private showFooter!: boolean;
+    @userModule.Action(UserActionTypes.UPDATE_BALANCE)
+    private updateBalanceAction!: UpdateBalanceAction;
 
     constructor() {
         super();
@@ -154,21 +160,18 @@ export default class Recharge extends Vue {
         const balance: IBalanceUpdateModel = { amount: this.input / 100 };
         this.profileService.addBalance(balance).subscribe(
             (infos: IUserModel) => {
-                this.changeUserAction({
-                    name: infos.username,
-                    credit: infos.balance,
-                    nickname: infos.username,
-                });
+                this.updateBalanceAction(infos.balance);
                 this.confirmationDialog = false;
                 this.showConfirmation = true;
             },
-            data => {
+            (err: any) => {
                 // TODO: onError
+                EventBus.$emit('message', { message: err });
             }
         );
     }
     private redirect() {
-      router.push({name: 'Dashboard'});
+        router.push({ name: 'Dashboard' });
     }
 }
 </script>
