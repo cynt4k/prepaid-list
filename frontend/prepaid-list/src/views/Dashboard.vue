@@ -59,9 +59,7 @@ export default class Dashboard extends Vue {
     }
 
     private logout() {
-        this.resetUserAction(undefined);
-        this.jwtService.destoryToken();
-        this.jwtService.destoryRefreshToken();
+        this.resetUserAction();
         setTimeout(() => this.$router.push({ name: 'Home' }), 100);
     }
 
