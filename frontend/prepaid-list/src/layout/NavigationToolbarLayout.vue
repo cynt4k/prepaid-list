@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation-toolbar-layout">
+  <div class="navigation-toolbar-layout" @click.stop="hideNavigation()">
     <v-navigation-drawer
       :mini-variant.sync="mini"
       absolute
@@ -28,20 +28,32 @@
           :class="{hidden: mini}"
         />
         <navigation-button
+          nameOfRoute="UserProductInfos"
+          title="Produktinfos"
+          icon="mdi-information"
+          :class="{hidden: mini}"
+        />
+        <navigation-button
           nameOfRoute="BuyProduct"
           title="Produkt kaufen"
           icon="mdi-beer"
           :class="{hidden: mini}"
         />
+        <navigation-button
+          nameOfRoute="Recharge"
+          title="Aufladen"
+          icon="mdi-cash-multiple"
+          :class="{hidden: mini}"
+        />
       </v-list>
     </v-navigation-drawer>
     <div class="page-content">
-    <router-view/>
+      <router-view/>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import ToolbarLayout from '@/layout/ToolbarLayout.vue';
 import NavigationButton from '@/layout/navigation-drawer/NavigationButton.vue';
 
@@ -52,6 +64,10 @@ export default class NavigationToolbarLayout extends Vue {
     @Prop()
     private titleSecond!: string;
     private mini: boolean = true;
+
+    private hideNavigation() {
+        this.mini = true;
+    }
 }
 </script>
 
@@ -73,7 +89,7 @@ export default class NavigationToolbarLayout extends Vue {
 </style>
 <style lang="scss">
 .navigation-toolbar-layout {
-  height: 100%;
+    height: 100%;
     .navigation-button.hidden {
         a {
             justify-content: center;
@@ -86,7 +102,7 @@ export default class NavigationToolbarLayout extends Vue {
         padding-left: 60px;
         height: 100%;
         > div {
-          padding: 0;
+            padding: 0;
         }
     }
 }
