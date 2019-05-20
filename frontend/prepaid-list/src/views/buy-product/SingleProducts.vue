@@ -199,23 +199,27 @@ export default class SingleProducts extends Vue {
     }
 
     private addToCart(p: Product) {
-        const item: ShoppingCartItem = { product: p, amount: 1 };
-        this.addProductAction(item);
-        // @ts-ignore
-        // tslint:disable
-        this.$refs['footer'].update();
+        if (this.showFooter) {
+            const item: ShoppingCartItem = { product: p, amount: 1 };
+            this.addProductAction(item);
+            // @ts-ignore
+            // tslint:disable
+            this.$refs['footer'].update();
+        }
     }
 
     private addExtraToCart(product: Product, extra: ProductExtra) {
-        const item: ShoppingCartItem = {
-            product,
-            amount: 1,
-            productExtra: extra,
-        };
-        this.addProductAction(item);
-        //@ts-ignore
-        this.$refs['footer'].update();
-        this.dialogExtraProduct = false;
+        if (this.showFooter) {
+            const item: ShoppingCartItem = {
+                product,
+                amount: 1,
+                productExtra: extra,
+            };
+            this.addProductAction(item);
+            //@ts-ignore
+            this.$refs['footer'].update();
+            this.dialogExtraProduct = false;
+        }
     }
 }
 </script>
