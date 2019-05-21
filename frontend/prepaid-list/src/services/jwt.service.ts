@@ -11,20 +11,12 @@ export class JwtService implements IJwtService {
         return window.localStorage[`refreshToken`];
     }
 
-    public getUsername() {
-        return window.localStorage[`user`];
-    }
-
     public saveToken(token: string) {
         window.localStorage[`token`] = token;
     }
 
     public saveRefreshToken(refreshToken: string) {
         window.localStorage[`refreshToken`] = refreshToken;
-    }
-
-    public saveUsername(username: string) {
-        window.localStorage[`user`] = username;
     }
 
     public destoryToken() {
