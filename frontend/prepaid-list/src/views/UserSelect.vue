@@ -64,7 +64,6 @@ export default class UserSelect extends Vue {
             (data: IResponseToken) => {
                 this.jwt.saveToken(data.token);
                 this.jwt.saveRefreshToken(data.refreshToken);
-                this.jwt.saveUsername(data.user);
                 this.userService
                     .getUserInfos()
                     .subscribe((infos: IUserModel) => {
