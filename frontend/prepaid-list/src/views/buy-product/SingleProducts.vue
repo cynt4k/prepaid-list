@@ -25,15 +25,20 @@
     <v-dialog v-model="dialogExtraProduct" v-if="selectedProduct">
       <v-card>
         <v-card-title>
-          <h2>Typ auswählen</h2>
+          <h2>Typ für {{selectedProduct.name}} auswählen</h2>
         </v-card-title>
         <v-card-text>
           <div class="button-container">
             <big-button-flex
+              title="Standard"
+              :additional="selectedProduct.price | currency"
+              @click="addToCart(selectedProduct)"
+            />
+            <big-button-flex
               v-for="extra in selectedProduct.extras"
               :key="extra.id"
               :title="extra.name"
-              :additional="extra.price | currency"
+              :additional="extra.price + selectedProduct.price | currency"
               @click="addExtraToCart(selectedProduct, extra)"
             />
           </div>
@@ -205,6 +210,7 @@ export default class SingleProducts extends Vue {
             // @ts-ignore
             // tslint:disable
             this.$refs['footer'].update();
+            this.dialogExtraProduct = false;
         }
     }
 

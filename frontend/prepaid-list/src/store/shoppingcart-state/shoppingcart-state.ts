@@ -117,9 +117,9 @@ export const getters: GetterTree<ShoppingCartState, any> = {
         let sum: number = 0;
         Object.keys(state.shoppingCart).forEach((key: string) => {
             const item: ShoppingCartItem = state.shoppingCart[key];
-            const price = item.productExtra
-                ? item.productExtra.price
-                : item.product.price;
+            const price =
+                item.product.price +
+                (item.productExtra ? item.productExtra.price : 0);
             sum += price * state.shoppingCart[key].amount;
         });
         return sum;
