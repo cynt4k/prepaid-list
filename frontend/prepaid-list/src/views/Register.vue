@@ -1,15 +1,10 @@
 <template>
-  <!-- TODO: Snackbar in Event umwandeln (EventBus) -->
-  <!-- <v-snackbar  v-model="snackbar" absolute top center color="success">
-      <span>Registrierung erfolgreich!</span>
-      <v-icon dark>checkbox-marked-circle</v-icon>
-  </v-snackbar>-->
   <v-container class="register" align-center justify-center text-xs-center fluid fill-height>
     <v-card flat>
       <v-container justify-center align-center v-if="registering">
         <!-- <v-layout align-center justify-center text-xs-center wrap class="btn-list-layout"> -->
         <v-progress-circular :size="200" color="primary" indeterminate></v-progress-circular>
-        <h4>Registering</h4>
+        <h4>Register</h4>
         <v-btn class="back-to-home-btn" flat color="red">Abbrechen</v-btn>
       </v-container>
       <v-form v-if="!registering" ref="form" @submit.prevent="submit">
@@ -19,7 +14,7 @@
             <v-flex xs12 sm6>
               <v-text-field
                 v-model="firstName"
-                :rules="nameRules"
+                :rules="chkNotEmptyRule"
                 color="green darken-2"
                 label="Vorname"
                 required
@@ -30,18 +25,18 @@
             <v-flex xs12 sm6>
               <v-text-field
                 v-model="lastName"
-                :rules="nameRules"
+                :rules="chkNotEmptyRule"
                 color="blue darken-2"
                 label="Nachname"
                 required
               ></v-text-field>
             </v-flex>
 
-            <!-- Nachname -->
+            <!-- Nick -->
             <v-flex xs12 sm6>
               <v-text-field
                 v-model="nick"
-                :rules="[val => (val || '').length > 0 || 'Dieses Feld muss gefüllt sein']"
+                :rules="chkNotEmptyRule"
                 color="blue darken-2"
                 label="Nick"
                 required
@@ -50,11 +45,8 @@
 
             <!-- EMail -->
             <v-flex xs12>
-              <v-text-field v-model="email" :rules="emailRules" color="teal">
-                <div slot="label">
-                  E-Mail
-                  <small>(optional)</small>
-                </div>
+              <v-text-field v-model="email" :rules="emailRules" required color="teal">
+                <div slot="label">E-Mail</div>
               </v-text-field>
             </v-flex>
             <v-flex xs12>
@@ -99,13 +91,18 @@ import ToolbarLayout from '@/layout/ToolbarLayout.vue';
 import { IApiService, IUserService, IJwtService } from '@/types';
 import { container } from '../inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
-import { IUserRegister, IResponseToken } from '../interfaces/services';
+import {
+    IUserRegister,
+    IResponseToken,
+    IApiResponse,
+} from '../interfaces/services';
 import { tap, catchError } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
 import { UserActionTypes, ChangeUserAction } from '../store/user-state';
 import { User } from '../interfaces/User';
+import { EventBus } from '@/assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
@@ -125,16 +122,12 @@ export default class Register extends Vue {
     private api!: IApiService;
     private userService!: IUserService;
     private jwt!: IJwtService;
-    private nameRules = [
+    private chkNotEmptyRule = [
         (val: any) => (val || '').length > 0 || 'Dieses Feld muss gefüllt sein',
     ];
 
-    private emailRules = [
-        (val: any) =>
-            (val || '').length === 0 ||
-            /.+@.+/.test(val) ||
-            'E-Mailadresse ist ungültig',
-    ];
+    private emailRules = [this.emailValid];
+
     constructor() {
         super();
     }
@@ -151,6 +144,13 @@ export default class Register extends Vue {
         this.$refs.form.reset();
     }
 
+    private regexMail(val: any) {
+        return (val || '').length > 0 && /.+@.+\...+/.test(val);
+    }
+
+    private emailValid(val: any) {
+        return this.regexMail(val) || 'E-Mailadresse ist ungültig';
+    }
     private submit() {
         const user: IUserRegister = {
             username: this.nick,
@@ -177,15 +177,37 @@ export default class Register extends Vue {
                     1000
                 );
                 this.registering = true;
+
+                const message = {
+                    message: 'Registrierung erfolgreich!',
+                    snackbarType: 'info',
+                };
+
+                EventBus.$emit('message', { message });
             },
-            (e: any) => {
+            (err: IApiResponse<any>) => {
+                // TODO - TranslatorService mit einbinden für I18N-Konvertierung
+                // TODO - Pruefen auf Code und abhängig von ErrCode Message ausgeben
+                const errMessage = {
+                    message: err.message,
+                    snackbarType: 'error',
+                };
+
                 this.registering = false;
+
+                EventBus.$emit('message', { errMessage });
             }
         );
     }
 
     get formIsValid() {
-        return this.firstName && this.lastName && this.nick && this.acceptTerms;
+        return (
+            this.firstName &&
+            this.lastName &&
+            this.nick &&
+            this.regexMail(this.email) &&
+            this.acceptTerms
+        );
     }
 }
 </script>
