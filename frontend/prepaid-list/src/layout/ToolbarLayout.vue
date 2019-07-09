@@ -17,6 +17,9 @@
         </v-toolbar-title>
       </slot>
       <v-spacer></v-spacer>
+	  <span v-if="user">
+		  <logoff/>
+	  </span>
       <span v-if="user">
         <v-chip slot="activator" color="green" text-color="white" class="credit-chip">
           <v-avatar class="green darken-4">
@@ -45,6 +48,9 @@
   </div>
 </template>
 <script lang="ts">
+
+import Logoff from '@/components/Logoff.vue';
+
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import { User } from '@/interfaces/User';
@@ -64,7 +70,8 @@ const userModule = namespace(StateNamespaces.USER_STATE);
             });
             return formatter.format(s);
         },
-    },
+	},
+	components: { Logoff },
 })
 export default class ToolbarLayout extends Vue {
     @userModule.Action(UserActionTypes.RESET_STATE)

@@ -14,67 +14,87 @@ export class ApiService implements IApiService {
     private jwt: JwtService;
 
     constructor() {
-        // this.api = 'http://app02.dev.nue.schneider-its.net:3000';
-        this.api = process.env.VUE_APP_API_URL || 'http://localhost:3000';
+        this.api = 'http://app02.dev.nue.schneider-its.net:3000';
+        // this.api = process.env.VUE_APP_API_URL || 'http://localhost:3000';
         // this.api = process.env.VUE_APP_API_URL;
         this.jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
         this.interceptor();
     }
 
-    public get<T>(path: string, requireAuth?: boolean): Observable<IResponse<T>> {
+    public get<T>(
+        path: string,
+        requireAuth?: boolean
+    ): Observable<IResponse<T>> {
+        // this.jwt.decodeToken(this.jwt.getToken());
         const url = `${this.api}/${path}`;
         const config: AxiosRequestConfig = {
-            params: { authRequired: (requireAuth) ? true : false },
+            params: { authRequired: requireAuth ? true : false },
         };
         return Observable.create((observer: any) => {
-            axios.get(url, config).then((response) => {
-                observer.next(response.data);
-                observer.complete();
-            }).catch((e) => {
-                observer.error(e);
-            });
+            axios
+                .get(url, config)
+                .then(response => {
+                    observer.next(response.data);
+                    observer.complete();
+                })
+                .catch(e => {
+                    observer.error(e);
+                });
         });
     }
 
-    public post<T>(path: string, data: any, requireAuth?: boolean): Observable<IResponse<T>> {
+    public post<T>(
+        path: string,
+        data: any,
+        requireAuth?: boolean
+    ): Observable<IResponse<T>> {
         const url = `${this.api}/${path}`;
         const config: AxiosRequestConfig = {
-            params: { authRequired: (requireAuth) ? true : false }
+            params: { authRequired: requireAuth ? true : false },
         };
         return Observable.create((observer: any) => {
-            axios.post(url, data, config).then((response) => {
-                observer.next(response.data);
-                observer.complete();
-            }).catch((e) => {
-                observer.error(e);
-            });
+            axios
+                .post(url, data, config)
+                .then(response => {
+                    observer.next(response.data);
+                    observer.complete();
+                })
+                .catch(e => {
+                    observer.error(e);
+                });
         });
     }
 
-    public put<T>(path: string, data: any, requireAuth?: boolean): Observable<IResponse<T>> {
+    public put<T>(
+        path: string,
+        data: any,
+        requireAuth?: boolean
+    ): Observable<IResponse<T>> {
         const url = `${this.api}/${path}`;
         const config: AxiosRequestConfig = {
-            params: { authRequired: (requireAuth) ? true : false }
+            params: { authRequired: requireAuth ? true : false },
         };
         return Observable.create((observer: any) => {
-            axios.put(url, data, config).then((response) => {
-                observer.next(response.data);
-                observer.complete();
-            }).catch((e) => {
-                observer.error(e);
-            });
+            axios
+                .put(url, data, config)
+                .then(response => {
+                    observer.next(response.data);
+                    observer.complete();
+                })
+                .catch(e => {
+                    observer.error(e);
+                });
         });
     }
 
     private interceptor() {
-        axios.interceptors.request.use(async (config) => {
+        axios.interceptors.request.use(async config => {
             const token = this.jwt.getToken();
             const refreshToken = this.jwt.getRefreshToken();
             const headersConfig: any = {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                Accept: 'application/json',
             };
-
 
             if (config.url!.includes('auth/refresh')) {
                 config.headers.Authorization = token;
@@ -88,12 +108,15 @@ export class ApiService implements IApiService {
             }
             config.params.authRequired = undefined;
             config.headers = {
-                Authorization: token
+                Authorization: token,
             };
 
             if (token) {
                 try {
-                    const newToken = await this.post<IResponseToken>(`auth/refresh`, { refreshToken }).toPromise();
+                    const newToken = await this.post<IResponseToken>(
+                        `auth/refresh`,
+                        { refreshToken }
+                    ).toPromise();
                     this.jwt.saveToken(newToken.data.token);
                     return Promise.resolve(config);
                 } catch (e) {

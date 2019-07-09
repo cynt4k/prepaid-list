@@ -1,4 +1,3 @@
-
 export interface IJwtService {
     getToken(): string;
     getRefreshToken(): string;
@@ -6,4 +5,5 @@ export interface IJwtService {
     saveRefreshToken(refreshToken: string): void;
     destoryToken(): void;
     destoryRefreshToken(): void;
+    decodeToken(token: string): any;
 }

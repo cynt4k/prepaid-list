@@ -1,5 +1,6 @@
 import { injectable } from 'inversify';
 import { IJwtService } from '@/types';
+import jwt_decode from 'jwt-decode';
 
 @injectable()
 export class JwtService implements IJwtService {
@@ -25,5 +26,11 @@ export class JwtService implements IJwtService {
 
     public destoryRefreshToken() {
         window.localStorage.removeItem(`refreshToken`);
+    }
+
+    public decodeToken(token: string) {
+        let test = jwt_decode(token);
+        console.log(test);
+        return test;
     }
 }
