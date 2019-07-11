@@ -1,6 +1,14 @@
 # Installation
 1. First install vue-cli: `npm install -g @vue/cli`
 
+# Build docker image
+- Create `.env.local` file in frontend folder.
+- Execute following in frontend folder: `docker build -t <image> -f docker/Dockerfile .`
+- Push image and serve with compose. 
+
+Example for compose:
+
+
 # Project scripts
 ## Project setup
 ```

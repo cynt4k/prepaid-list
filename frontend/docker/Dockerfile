@@ -1,9 +1,10 @@
 # build stage
 FROM node:lts-alpine as build-stage
 WORKDIR /app
-COPY ../prepaid-list/package*.json ./
+
+COPY prepaid-list/package.json ./
 RUN npm install
-COPY ../prepaid-list .
+COPY prepaid-list .
 RUN npm run build
 
 # production stage
