@@ -1,10 +1,9 @@
 <template>
-  <v-container fluid fill-height column>
-    <v-layout align-center justify-center text-xs-center column>
+  <v-container fluid fill-height column style="flex-flow:column">
       <v-alert :value="true" type="info" class="panel">
         <h2>OTH-Karte scannen (RFID-Reader) oder Benutzer auswählen</h2>
       </v-alert>
-
+    <v-layout align-center justify-center text-xs-center column style="width:100%">
       <alphabet-list class="alphabet-list" @user-selected="openDashboard" :items="users"></alphabet-list>
     </v-layout>
   </v-container>

@@ -10,7 +10,7 @@
     >
       <div class="numpad">
         <div class="output">
-          <v-text-field readonly solo single-line reverse :value="input | currency"></v-text-field>
+          <v-text-field readonly solo single-line reverse hide-details :value="input | currency"></v-text-field>
           <v-btn flat icon @click="removeValue()">
             <v-icon>mdi-backspace</v-icon>
           </v-btn>

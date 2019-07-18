@@ -1,5 +1,5 @@
 <template>
-  <v-container class="register" align-center justify-center text-xs-center fluid fill-height>
+  <v-container class="register content-container" align-center justify-center text-xs-center fluid fill-height>
     <v-card flat>
       <v-container justify-center align-center v-if="registering">
         <!-- <v-layout align-center justify-center text-xs-center wrap class="btn-list-layout"> -->
@@ -219,5 +219,10 @@ h4 {
 }
 .back-to-home-btn {
     margin: 15px 0 -20px 0;
+}
+</style>
+<style lang="scss" scoped>
+.content-container {
+    overflow: auto;
 }
 </style>

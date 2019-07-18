@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid fill-height class="content-container">
-    <v-layout align-center justify-center text-xs-center column class="btn-list-layout">
+  <v-container fluid fill-height>
+    <v-layout align-center justify-center text-xs-center column class="btn-list-layout content-container">
       <v-layout align-center wrap fill-height style="width: 100%">
         <big-button-flex
           icon="mdi-information"
