@@ -22,7 +22,7 @@
       </div>
       <div class="fast-access">
         <v-card class="card">
-          <v-card-title class="font-weight-light">Schnellauswahl</v-card-title>
+          <v-card-title class="font-weight-light fast-access-title">Schnellauswahl</v-card-title>
           <template v-for="price in fixedPrices">
             <big-button
               :disabled="input != 0"
@@ -190,13 +190,14 @@ export default class Recharge extends Vue {
 .numpad {
     height: 100%;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column;
     justify-content: center;
     width: 70%;
     .numpad-buttons {
         display: flex;
         flex-flow: row wrap;
         justify-content: center;
+        height: inherit;
     }
     .output {
         width: 100%;
@@ -205,7 +206,8 @@ export default class Recharge extends Vue {
         margin-left: 10px;
 
         button {
-            margin-left: 20px;
+            margin-left: 7px;
+            margin-right: 25px;
         }
 
         /deep/ input {
@@ -232,8 +234,11 @@ export default class Recharge extends Vue {
 
     .big-button {
         margin: 10px 0;
-        height: 23%;
+        height: 21%;
         width: 90%;
+    }
+    .fast-access-title {
+      margin-bottom: auto;
     }
 }
 </style>
