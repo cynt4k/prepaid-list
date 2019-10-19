@@ -20,8 +20,15 @@
       "call-signature",
       "arrow-call-signature",
       "parameter",
-      "arrow-parameter"
+      // "arrow-parameter"
     ],
-    "trailing-comma": true
+    "trailing-comma": true,
+    "variable-name": {
+      "options": [
+        "allow-leading-underscore",
+        "allow-pascal-case"
+      ]
+    },
+    "member-ordering": false
   }
 }
