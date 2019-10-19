@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { EventBus } from '@/assets/EventBus';
+import { EventBus, EventBusMessage, SnackbarOptions } from '@/assets/EventBus';
 
 import axios from 'axios';
 import VueRx from 'vue-rx';
@@ -28,17 +28,31 @@ export default class App extends Vue {
     private snackbarType: string = '';
     private duration: number = 3000;
     private isLoading: boolean = false;
+    private timer: number = -1;
 
     private mounted() {
-        EventBus.$on('message', (options: any) => {
+        EventBus.$on(EventBusMessage.MESSAGE, (options: SnackbarOptions) => {
             this.duration = options.duration ? options.duration : 3000;
             this.snackbar = true;
             this.text = options.message;
             this.snackbarType = options.snackbarType;
         });
 
-        EventBus.$on('loading', (isLoading: boolean) => {
+        EventBus.$on(EventBusMessage.LOADING, (isLoading: boolean) => {
             this.isLoading = isLoading;
+            if (isLoading) {
+              if (this.timer !== -1) {
+                /* before setting new timer, delete old one. */
+                clearTimeout(this.timer);
+              }
+              this.timer  = setTimeout(() => {
+                EventBus.$emit(EventBusMessage.MESSAGE, { message: 'Timeout beim Laden.' });
+                this.isLoading = false;
+              }, 10000);
+            } else {
+              clearTimeout(this.timer);
+              this.timer = -1;
+            }
         });
     }
 }
