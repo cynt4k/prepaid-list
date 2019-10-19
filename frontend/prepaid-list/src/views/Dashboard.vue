@@ -21,7 +21,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import BigButton from '@/components/BigButton.vue';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import ToolbarLayout from '@/layout/ToolbarLayout.vue';
-import { EventBus } from '@/assets/EventBus';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 import { userGetters, ResetUserAction } from '../store/user-state';
 
 import { User } from '@/interfaces/User';
@@ -64,15 +64,15 @@ export default class Dashboard extends Vue {
     }
 
     private mounted() {
-        const message = {
+        const message: SnackbarOptions = {
             message: `Servus, ${this.user.nickname}`,
-            snackbarType: 'info',
+            snackbarType: TypeColor.INFO,
         };
         this.userService = container.get<IUserService>(
             SERVICE_IDENTIFIER.USER_SERVICE
         );
         this.jwtService = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
-        EventBus.$emit('message', message);
+        EventBus.$emit(EventBusMessage.MESSAGE, message);
     }
 }
 </script>

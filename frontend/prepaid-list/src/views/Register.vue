@@ -102,7 +102,7 @@ import { namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
 import { UserActionTypes, ChangeUserAction } from '../store/user-state';
 import { User } from '../interfaces/User';
-import { EventBus } from '@/assets/EventBus';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
@@ -183,7 +183,7 @@ export default class Register extends Vue {
                     snackbarType: 'info',
                 };
 
-                EventBus.$emit('message', { message });
+                EventBus.$emit(EventBusMessage.MESSAGE, { message });
             },
             (err: IApiResponse<any>) => {
                 // TODO - TranslatorService mit einbinden für I18N-Konvertierung

@@ -89,7 +89,7 @@ import { namespace } from 'vuex-class';
 import { StateNamespaces } from '@/store/namespaces';
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
 import router from '../router';
-import { EventBus } from '../assets/EventBus';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
@@ -166,7 +166,8 @@ export default class Recharge extends Vue {
             },
             (err: any) => {
                 // TODO: onError
-                EventBus.$emit('message', { message: err });
+                const options: SnackbarOptions = { message: err, snackbarType: TypeColor.ERROR };
+                EventBus.$emit(EventBusMessage.MESSAGE, options);
             }
         );
     }
