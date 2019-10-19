@@ -5,4 +5,5 @@ export const SERVICE_IDENTIFIER = {
     USER_SERVICE: Symbol('user-service'),
     PROFILE_SERVICE: Symbol('profile-service'),
     ORDER_SERVICE: Symbol('order-service'),
+    ERRORHANDLING_SERVICE: Symbol('errorhandling-service')
 };
