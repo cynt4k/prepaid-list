@@ -34,8 +34,8 @@ class User extends VuexModule implements IUserState {
 
     @Action
     public async login(userInfo: { username: string, password: string }): Promise<void> {
-        let { username, password } = userInfo;
-        username = username.trim();
+        const username = userInfo.username.trim();
+        const password = userInfo.password;
         const data = await UserService.postLogin(username, password);
         this.SET_TOKEN(data.token);
         this.SET_REFRESH_TOKEN(data.refreshToken);
@@ -45,7 +45,7 @@ class User extends VuexModule implements IUserState {
 
     @Action
     public async getUserInfo(): Promise<void> {
-
+        // NOP
     }
 }
 

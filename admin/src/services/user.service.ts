@@ -11,7 +11,7 @@ const paths: ApiPaths = {
 };
 
 async function postLogin(username: string, password: string): Promise<IResponseToken> {
-    return new Promise<IResponseToken>((resolve ,reject) => {
+    return new Promise<IResponseToken>((resolve, reject): void => {
         ApiService.post<IResponseToken>(paths.login, { username, password }, false).subscribe((observer) => {
             return resolve({
                 refreshToken: observer.data!.refreshToken,

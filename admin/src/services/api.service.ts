@@ -13,6 +13,10 @@ const _url = process.env.APP_API_URL || 'http://localhost:3000';
 
 (async (): Promise<void> => {
     axios.interceptors.request.use(async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
+        if (!config.params.authRequired) {
+            config.params.authRequired = undefined;
+            return config;
+        }
         return config;
     });
 })();

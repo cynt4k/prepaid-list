@@ -88,7 +88,7 @@
 import Vue from 'vue';
 
 export default Vue.extend({
-  data: () => ({
+  data: (): object => ({
     ecosystem: [
       {
         text: 'vuetify-loader',

@@ -19,8 +19,7 @@
       true,
       "call-signature",
       "arrow-call-signature",
-      "parameter",
-      // "arrow-parameter"
+      "parameter"
     ],
     "trailing-comma": true,
     "variable-name": {
