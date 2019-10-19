@@ -85,6 +85,7 @@ import {
 } from '../../interfaces/services';
 
 import { EventBus } from '@/assets/EventBus';
+import { EventBusMessage } from '@/assets/EventBus';
 
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
@@ -157,7 +158,7 @@ export default class SingleProducts extends Vue {
         this.productService = container.get<IProductService>(
             SERVICE_IDENTIFIER.PRODUCT_SERVICE
         );
-        EventBus.$emit('loading', true);
+        EventBus.$emit(EventBusMessage.LOADING, true);
         this.isDataLoading = true;
         this.productService.getProductsByCategory(this.category).subscribe(
             (products: IProductModel[]) => {
@@ -192,7 +193,7 @@ export default class SingleProducts extends Vue {
                 EventBus.$emit('message', { message: data });
             },
             () => {
-                EventBus.$emit('loading', false);
+                EventBus.$emit(EventBusMessage.LOADING, false);
                 this.isDataLoading = false;
             }
         );

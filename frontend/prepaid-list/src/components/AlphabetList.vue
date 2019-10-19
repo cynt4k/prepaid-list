@@ -18,7 +18,7 @@
           <span>{{letterObj.letter}}</span>
         </v-subheader>
 
-        <div class="users" :key="letterObj.letter">
+        <div class="users" :key="`div.${letterObj.letter}`">
           <template v-for="item in letterObj.users" ref="tempRef">
             <v-list-tile class="listitem" :key="item.title" avatar @click="emitUser(item)" ripple>
               <v-list-tile-avatar>
