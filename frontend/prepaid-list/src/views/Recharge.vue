@@ -190,14 +190,12 @@ export default class Recharge extends Vue {
 .numpad {
     height: 100%;
     display: flex;
-    flex-flow: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
     justify-content: center;
     width: 70%;
     .numpad-buttons {
         display: flex;
-        flex-flow: row;
-        flex-wrap: wrap;
+        flex-flow: row wrap;
         justify-content: center;
     }
     .output {
