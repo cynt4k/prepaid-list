@@ -25,7 +25,7 @@ import { UserActionTypes, ChangeUserAction } from '../store/user-state';
 import { Action, namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
 import { IResponseToken, IUserModel, IUser } from '../interfaces/services';
-import { EventBus } from '@/assets/EventBus';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
@@ -54,7 +54,10 @@ export default class UserSelect extends Vue {
             (data: IUser[]) => {
                 this.users =  data;
             },
-            (err: any) => EventBus.$emit('message', { message: err })
+            (err: any) => {
+                const options: SnackbarOptions = { message: err, snackbarType: TypeColor.ERROR };
+                EventBus.$emit(EventBusMessage.MESSAGE, options);
+            }
         );
     }
 
@@ -78,7 +81,8 @@ export default class UserSelect extends Vue {
                     });
             },
             (err: any) => {
-                EventBus.$emit('message', { message: err });
+                const options: SnackbarOptions = { message: err, snackbarType: TypeColor.ERROR };
+                EventBus.$emit(EventBusMessage.MESSAGE, { message: err });
             }
         );
     }

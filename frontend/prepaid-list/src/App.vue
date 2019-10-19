@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { EventBus, EventBusMessage, SnackbarOptions } from '@/assets/EventBus';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 
 import axios from 'axios';
 import VueRx from 'vue-rx';
@@ -35,7 +35,7 @@ export default class App extends Vue {
             this.duration = options.duration ? options.duration : 3000;
             this.snackbar = true;
             this.text = options.message;
-            this.snackbarType = options.snackbarType;
+            this.snackbarType = options.snackbarType ? options.snackbarType : 'info';
         });
 
         EventBus.$on(EventBusMessage.LOADING, (isLoading: boolean) => {
@@ -46,7 +46,8 @@ export default class App extends Vue {
                 clearTimeout(this.timer);
               }
               this.timer  = setTimeout(() => {
-                EventBus.$emit(EventBusMessage.MESSAGE, { message: 'Timeout beim Laden.' });
+                const options: SnackbarOptions = { message: 'Timeout beim Laden.', snackbarType: TypeColor.WARN };
+                EventBus.$emit(EventBusMessage.MESSAGE, options);
                 this.isLoading = false;
               }, 10000);
             } else {
