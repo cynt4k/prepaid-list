@@ -22,7 +22,7 @@ import { UserActionTypes } from '../store/user-state';
 import { State, Getter, Mutation, Action, namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
 
-import { EventBus } from '@/assets/EventBus';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 
 import { IUserService, IJwtService } from '../types';
 
@@ -35,27 +35,24 @@ export default class AutoLogoff extends Vue {
     private jwtService: IJwtService;
     private leftTime!: number;
     private baseTime!: number;
-	private interval: any;
-
+    private interval: any;
 
     @userModule.Action(UserActionTypes.RESET_STATE)
-	private resetUserAction!: ResetUserAction;
-	
-	@userModule.Getter
-	private token!: string;
+    private resetUserAction!: ResetUserAction;
+
+    @userModule.Getter private token!: string;
 
     constructor() {
         super();
         this.jwtService = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
     }
 
-    mounted() {
-		this.leftTime = this.getCurrTimeLeftInSeconds() - 240;
+    private mounted() {
+        this.leftTime = this.getCurrTimeLeftInSeconds() - 240;
         this.baseTime = this.getMaxTimeLeftInSeconds() - 240;
 
         this.interval = setInterval(() => {
-            this.leftTime = this.getCurrTimeLeftInSeconds() - 240;	// TODO REMOVE BEFORE FLIGHT
-            console.log(this.leftTime);
+            this.leftTime = this.getCurrTimeLeftInSeconds() - 240; // TODO REMOVE BEFORE FLIGHT
             if (this.leftTime <= 0) {
                 this.performAutoLogoff();
                 clearInterval(this.interval);
@@ -64,48 +61,47 @@ export default class AutoLogoff extends Vue {
         }, 1000);
     }
 
-    beforeDestroy() {
+    private beforeDestroy() {
         clearInterval(this.interval);
-	}
+    }
 
-	public getCurrTimeLeftInSeconds() {
-		const decodedToken = this.jwtService.decodeToken(this.token);
+    private getCurrTimeLeftInSeconds() {
+        const decodedToken = this.jwtService.decodeToken(this.token);
         return Math.trunc(decodedToken.exp - this.getCurrentTimeInSeconds());
-	}
+    }
 
-	public getMaxTimeLeftInSeconds() {
-		const decodedToken = this.jwtService.decodeToken(this.token);
+    private getMaxTimeLeftInSeconds() {
+        const decodedToken = this.jwtService.decodeToken(this.token);
         return Math.trunc(decodedToken.exp - decodedToken.iat);
     }
 
-	private performTokenRefresh() {
-		try {
-			// this.jwtService.refreshToken();
-			EventBus.$emit('token-refresh');
-		} catch (e) {
-			console.log('Error on token refresh -> Perform Auto Logoff');
-			this.performAutoLogoff();
-		}
-	}
-	@Watch('token')
-	private updateTime(oldVal: any, newVal: any) {
-		this.leftTime = this.getCurrTimeLeftInSeconds() - 240;
+    private performTokenRefresh() {
+        try {
+            // this.jwtService.refreshToken();
+            EventBus.$emit('token-refresh');
+        } catch (e) {
+            this.performAutoLogoff();
+        }
+    }
+    @Watch('token')
+    private updateTime(oldVal: any, newVal: any) {
+        this.leftTime = this.getCurrTimeLeftInSeconds() - 240;
         this.baseTime = this.getMaxTimeLeftInSeconds() - 240;
-	}
+    }
 
-	private get decodedToken() {
-		console.log('get decoded')
-		return this.token;
-	}
-	// The displayed time is calculated by the following rules:
-  	// > 30 seconds it's rounded to the next (bigger) minute value (added 'm' for 'minutes');
-  	// <= 30 seconds the seconds value will be displayed (without decimal places; added 's' for 'seconds')
-	private getDisplayValue() {
-		if (this.leftTime > 30)
-			return Math.round(this.leftTime / 60) + 'm';
-		else
-			return Math.trunc(this.leftTime) + 's';
-	}
+    private get decodedToken() {
+        return this.token;
+    }
+    // The displayed time is calculated by the following rules:
+    // > 30 seconds it's rounded to the next (bigger) minute value (added 'm' for 'minutes');
+    // <= 30 seconds the seconds value will be displayed (without decimal places; added 's' for 'seconds')
+    private getDisplayValue() {
+        if (this.leftTime > 30) {
+            return Math.round(this.leftTime / 60) + 'm';
+        } else {
+            return Math.trunc(this.leftTime) + 's';
+        }
+    }
 
     // calculates the remaining time in percent
     private calcPercentage(timeLeft: number): number {
@@ -115,14 +111,13 @@ export default class AutoLogoff extends Vue {
     // Callback method for the auto logoff. Creates also a message for the SnackBar and
     // execute the ResetAction of the User (Redirect to Home).
     private performAutoLogoff() {
-        console.log('Perform auto logoff');
-        const message = {
-            message: `Automatische Abmeldung`,
-            snackbarType: 'info',
+        const message: SnackbarOptions = {
+            message: 'Automatische Abmeldung',
+            snackbarType: TypeColor.INFO,
         };
         this.resetUserAction();
         this.$router.push({ name: 'Home' });
-        EventBus.$emit('message', message);
+        EventBus.$emit(EventBusMessage.MESSAGE, message);
     }
 
     // Determine the color of the timer depending on the current percentage
@@ -136,16 +131,16 @@ export default class AutoLogoff extends Vue {
         } else {
             return 'red';
         }
-	}
+    }
 
-	private getCurrentTimeInSeconds() {
+    private getCurrentTimeInSeconds() {
         return Date.now().valueOf() / 1000;
     }
 }
 </script>
 <style lang="scss">
-	.v-progress-circular {
-		margin: 1rem;
-	}
+.v-progress-circular {
+    margin: 1rem;
+}
 </style>
 

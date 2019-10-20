@@ -8,7 +8,7 @@ import { IResponseToken } from '@/interfaces/services';
 @injectable()
 export class JwtService implements IJwtService {
 
-	public getToken() {
+    public getToken() {
         return window.localStorage[`token`];
     }
 
@@ -33,8 +33,6 @@ export class JwtService implements IJwtService {
     }
 
     public decodeToken(token: string) {
-        let test = jwt_decode(token);
-        console.log(test);
-        return test;
+        return jwt_decode(token);
     }
 }

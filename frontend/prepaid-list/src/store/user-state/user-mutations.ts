@@ -6,9 +6,9 @@ import { State } from 'vuex-class';
 export enum UserMutationTypes {
     LOGIN_USER = 'loginUserMutation',
     RESET_STATE = 'resetStateMutation',
-	UPDATE_BALANCE = 'updateBalanceMutation',
-	REFRESH_TOKEN = 'refreshTokenMutation',
-	INVALIDATE_TOKEN = 'invalidateTokenMutation'
+    UPDATE_BALANCE = 'updateBalanceMutation',
+    REFRESH_TOKEN = 'refreshTokenMutation',
+    INVALIDATE_TOKEN = 'invalidateTokenMutation'
 }
 
 export const userMutations: MutationTree<UserState> = {
@@ -16,17 +16,17 @@ export const userMutations: MutationTree<UserState> = {
         state.user = payload;
     },
     [UserMutationTypes.RESET_STATE]: (state: UserState) => {
-		state.user = undefined;
+        state.user = undefined;
     },
     [UserMutationTypes.UPDATE_BALANCE]: (state: UserState, payload: number) => {
         if (state.user) {
             state.user.credit = payload;
         }
-	},
-	[UserMutationTypes.REFRESH_TOKEN]: (state: UserState, payload: string) => {
-		state.token = payload;
-	},
-	[UserMutationTypes.INVALIDATE_TOKEN]: (state: UserState) => {
+    },
+    [UserMutationTypes.REFRESH_TOKEN]: (state: UserState, payload: string) => {
+        state.token = payload;
+    },
+    [UserMutationTypes.INVALIDATE_TOKEN]: (state: UserState) => {
         state.token = undefined;
     },
 };

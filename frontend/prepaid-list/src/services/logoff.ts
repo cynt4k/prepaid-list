@@ -11,14 +11,14 @@ import { IResponseToken } from '@/interfaces/services';
 
 @injectable()
 export class LogoffService implements ILogoffService {
-	private jwt: IJwtService;
-	private api: IApiService;
+    private jwt: IJwtService;
+    private api: IApiService;
     private maxTimeLeftInSeconds: number = 60; // default 60 seconds
     private decodedToken: any;
 
     constructor() {
-		this.jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
-		this.api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
+        this.jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+        this.api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
         this.setUp();
     }
 
@@ -33,14 +33,14 @@ export class LogoffService implements ILogoffService {
     // Refresh the current token - based on the RefreshToken.
     public async refreshToken() {
         // TODO: Tobi anhauen wg. Möglichkeit den Token zu refreshen -> über API?
-		// TODO: Call refreshToken(); -> GUI wird automatisch aktualisiert
-		const newToken = await this.api
+        // TODO: Call refreshToken(); -> GUI wird automatisch aktualisiert
+        const newToken = await this.api
             .post<IResponseToken>(`auth/refresh`, { refreshToken: this.jwt.getRefreshToken() })
             .toPromise();
-		this.jwt.saveToken(newToken.data.token);
+        this.jwt.saveToken(newToken.data.token);
 
-		// decode new token and save to service
-		this.setUp();
+        // decode new token and save to service
+        this.setUp();
     }
 
     private validateDecodedToken(decToken: any) {

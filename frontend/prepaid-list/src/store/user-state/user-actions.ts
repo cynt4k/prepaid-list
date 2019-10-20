@@ -45,11 +45,11 @@ const userService = container.get<IUserService>(
 export const userActions: ActionTree<UserState, any> = {
     async [UserActionTypes.REGISTER_USER](context, payload: IUserRegister) {
         // TODO : REGISTER
-        let data: IResponseToken = await userService
+        const data: IResponseToken = await userService
             .registerUser(payload)
             .toPromise();
 
-		// TODO : Pruefen ob einfach die Login-Action aufgerufen werden kann - selbe Daten
+        // TODO : Pruefen ob einfach die Login-Action aufgerufen werden kann - selbe Daten
         context.dispatch(UserActionTypes.SAVE_TOKEN, data);
         context.commit(UserMutationTypes.LOGIN_USER, {
             name: payload.name.firstname,
@@ -59,12 +59,11 @@ export const userActions: ActionTree<UserState, any> = {
     },
     async [UserActionTypes.LOGIN_USER](context, user: User) {
         // TODO : REGISTER UND LOGIN als eigene User-Action zusammenlegen
-        let data: IResponseToken = await userService
+        const data: IResponseToken = await userService
             .loginUserByUsername(user.nickname)
             .toPromise();
-        let infos: IUserModel = await userService.getUserInfos().toPromise();
-
         context.dispatch(UserActionTypes.SAVE_TOKEN, data);
+        const infos: IUserModel = await userService.getUserInfos().toPromise();
         context.commit(UserMutationTypes.LOGIN_USER, {
             name: infos.username,
             credit: infos.balance,

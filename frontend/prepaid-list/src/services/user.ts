@@ -41,11 +41,11 @@ export class UserService implements IUserService {
         return this.api
             .post<IResponseToken>('auth/login/user', { username })
             .pipe(map((res: IApiResponse<any>) => res.data));
-	}
-	
+    }
+
     public registerUser(user: IUserRegister): Observable<IResponseToken> {
         return this.api
             .post<IResponseToken>('auth/register', user)
             .pipe(map((res: IApiResponse<any>) => res.data));
-	}
+    }
 }

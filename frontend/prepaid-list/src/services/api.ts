@@ -33,11 +33,11 @@ export class ApiService implements IApiService {
         return Observable.create((observer: any) => {
             axios
                 .get(url, config)
-                .then(response => {
+                .then((response) => {
                     observer.next(response.data);
                     observer.complete();
                 })
-                .catch(e => {
+                .catch((e) => {
                     observer.error(e);
                 });
         });
@@ -55,11 +55,11 @@ export class ApiService implements IApiService {
         return Observable.create((observer: any) => {
             axios
                 .post(url, data, config)
-                .then(response => {
+                .then((response) => {
                     observer.next(response.data);
                     observer.complete();
                 })
-                .catch(e => {
+                .catch((e) => {
                     observer.error(e);
                 });
         });
@@ -77,18 +77,18 @@ export class ApiService implements IApiService {
         return Observable.create((observer: any) => {
             axios
                 .put(url, data, config)
-                .then(response => {
+                .then((response) => {
                     observer.next(response.data);
                     observer.complete();
                 })
-                .catch(e => {
+                .catch((e) => {
                     observer.error(e);
                 });
         });
     }
 
     private interceptor() {
-        axios.interceptors.request.use(async config => {
+        axios.interceptors.request.use(async (config) => {
             const token = this.jwt.getToken();
             const refreshToken = this.jwt.getRefreshToken();
             const headersConfig: any = {
@@ -111,13 +111,14 @@ export class ApiService implements IApiService {
                 Authorization: token,
             };
 
-			// TODO: Umbauen auf EventBus und VUEX -> Action ausführen wenn AKTUALISIERUNG emitted wird und Logout wenn INVALID emitted wird!
+            // TODO: Umbauen auf EventBus und VUEX
+            // -> Action ausführen wenn AKTUALISIERUNG emitted wird und Logout wenn INVALID emitted wird!
             if (token) {
                 try {
                     EventBus.$emit('token-refresh');
                     return Promise.resolve(config);
                 } catch (e) {
-					EventBus.$emit('token-invalid');
+                    EventBus.$emit('token-invalid');
                     // this.jwt.destroyToken();
                     // this.jwt.destroyRefreshToken();
                     return Promise.reject(e);

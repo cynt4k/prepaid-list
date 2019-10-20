@@ -48,7 +48,6 @@
   </div>
 </template>
 <script lang="ts">
-
 import AutoLogoff from '@/components/AutoLogoff.vue';
 
 import { Component, Vue, Prop } from 'vue-property-decorator';
@@ -70,25 +69,23 @@ const userModule = namespace(StateNamespaces.USER_STATE);
             });
             return formatter.format(s);
         },
-	},
-	components: { AutoLogoff },
+    },
+    components: { AutoLogoff },
 })
 export default class ToolbarLayout extends Vue {
     @userModule.Action(UserActionTypes.RESET_STATE)
     private resetUserAction!: ResetUserAction;
 
-    @userModule.Getter
-    private user!: User;
+    @userModule.Getter private user!: User;
 
     @Prop({ default: false })
     private showBackBtn!: boolean;
 
-    @Prop()
-    private title!: Title;
+    @Prop() private title!: Title;
 
     private logout() {
-		this.resetUserAction();
-		this.$router.push({ name: 'Home' });
+        this.resetUserAction();
+        this.$router.push({ name: 'Home' });
     }
 }
 </script>
