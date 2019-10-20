@@ -6,4 +6,5 @@ export interface IUserService {
     loginUserByUsername(username: string): Observable<IResponseToken>;
     getUserInfos(): Observable<IUserModel>;
     registerUser(user: IUserRegister): Observable<IResponseToken>;
+    loginUserByToken(token: string): Observable<IResponseToken>;
 }

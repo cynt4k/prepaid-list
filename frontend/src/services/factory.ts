@@ -12,6 +12,8 @@ import { UserService } from './implementation/user.service';
 import { JwtService } from './implementation/jwt.service';
 import { ProductService } from './implementation/product.service';
 import { OrderService } from './implementation/order.service';
+import { WebsocketService } from './implementation/websocket.service';
+import { IWebsocketService } from './types/websocket.service';
 
 export default class Factory {
     private static instance: Factory | null = null;
@@ -22,6 +24,8 @@ export default class Factory {
     private productService: IProductService | null = null;
     private orderService: IOrderService | null = null;
     private errorHandlingService: IErrorHandlingService | null = null;
+    private websocketService: IWebsocketService | null = null;
+
     // eslint-disable-next-line no-useless-constructor
     private constructor() { }
 
@@ -79,5 +83,12 @@ export default class Factory {
         this.errorHandlingService = new ErrorHandlingService();
       }
       return this.errorHandlingService;
+    }
+
+    get WebsocketService(): IWebsocketService {
+      if (!this.websocketService) {
+        this.websocketService = new WebsocketService();
+      }
+      return this.websocketService;
     }
 }

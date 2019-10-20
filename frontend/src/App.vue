@@ -24,6 +24,7 @@ import {
 
 import VueRx from 'vue-rx';
 import Store, { userStore } from '@/store';
+import { RawLocation } from 'vue-router';
 
 Vue.use(VueRx);
 
@@ -75,6 +76,10 @@ export default class App extends Vue {
     EventBus.$on('token-refresh', () => {
       userStore.refreshToken();
     });
+    EventBus.$on(EventBusMessage.ROUTING, (route: RawLocation) => {
+      this.$router.push(route);
+    });
+    userStore.initRFIDReader();
   }
 }
 </script>

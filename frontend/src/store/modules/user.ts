@@ -4,6 +4,7 @@ import store from '../index';
 import { shoppingCartStore } from '../store-accessor';
 import { User } from '@/services/entities/User';
 import { IUserRegister, IResponseToken, IUserModel } from '@/services/entities/api';
+import { EventBus, EventBusMessage } from '@/assets/EventBus';
 
 @Module({ name: 'user', namespaced: true, store })
 export default class UserModule extends VuexModule {
@@ -123,5 +124,26 @@ export default class UserModule extends VuexModule {
     Factory.getInstance().JwtService.saveRefreshToken(payload.refreshToken);
     this.refreshTokenMutation(payload.token);
     // return payload.token;
+  }
+
+  @Action
+  public async initRFIDReader() {
+    const callback = async(event: MessageEvent): Promise<void> => {
+      const userService = Factory.getInstance().UserService;
+      const cardId = JSON.parse(event.data)['cardId'][0];
+      console.log('cardId', cardId);
+      const data: IResponseToken = await userService.loginUserByToken(String(cardId)).toPromise();
+      this.saveToken(data);
+      const infos: IUserModel = await userService.getUserInfos().toPromise();
+      const user: User = {
+        name: infos.name.firstname + infos.name.lastname,
+        credit: infos.balance,
+        nickname: infos.username
+      };
+      await this.loginUser(user);
+      EventBus.$emit(EventBusMessage.ROUTING, { name: 'Dashboard' });
+    };
+    const websocketLocation: string = 'ws://localhost:8765';
+    Factory.getInstance().WebsocketService.initNewSocket(websocketLocation, callback);
   }
 }

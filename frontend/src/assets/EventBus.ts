@@ -3,7 +3,11 @@ import { ErrorMessage, ErrorType } from '@/services/entities/ErrorMessage';
 
 export const EventBus = new Vue();
 
-export const enum EventBusMessage {LOADING = 'loading', MESSAGE = 'message'}
+export const enum EventBusMessage {
+    LOADING = 'loading',
+    MESSAGE = 'message',
+    ROUTING = 'routing'
+}
 
 export enum TypeColor {SUCCESS = 'success', INFO= 'info', WARN= 'warning', ERROR= 'error'}
 

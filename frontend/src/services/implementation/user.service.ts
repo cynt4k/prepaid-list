@@ -43,4 +43,10 @@ export class UserService implements IUserService {
         .post<IResponseToken>('auth/register', user)
         .pipe(map((res: IResponse<any>) => res.data));
     }
+
+    public loginUserByToken(token: string): Observable<IResponseToken> {
+      return this.api
+        .post<IResponseToken>('auth/login/token', { token })
+        .pipe(map((res: IResponse<any>) => res.data));
+    }
 }
