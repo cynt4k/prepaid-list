@@ -1,5 +1,9 @@
 {
+	"api.UNKNOWN": "Es ist ein Fehler aufgetreten",
+	"api.warning.W_USERS_NOT_FOUND": "Benutzer nicht gefunden",
+	"api.warning.W_USER_PASSWORD_WRONG": "Passwort ist falsch",
 	"frontend.view.login.password": "Passwort",
 	"frontend.view.login.submit": "Anmelden",
-	"frontend.view.login.username": "Benutzername"
+	"frontend.view.login.username": "Benutzername",
+	"frontend.view.login.validate": "Überprüfe die Eingabe"
 }

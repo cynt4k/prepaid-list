@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { Observable, TeardownLogic, Subscriber } from 'rxjs';
 import { IApiResponse } from '@/types/service';
 
@@ -31,7 +31,7 @@ function get<T>(path: string, requireAuth?: boolean): Observable<IApiResponse<T>
         axios.get<IApiResponse<T>>(url, config).then((res: AxiosResponse<IApiResponse<T>>) => {
             observer.next(res.data);
             observer.complete();
-        }).catch((e: Error) => {
+        }).catch((e: AxiosError<IApiResponse<any>>) => {
             observer.error(e);
         });
     });
@@ -47,7 +47,7 @@ function post<T>(path: string, data: unknown, requireAuth?: boolean): Observable
         axios.post<IApiResponse<T>>(url, data, config).then((res: AxiosResponse<IApiResponse<T>>) => {
             observer.next(res.data);
             observer.complete();
-        }).catch((e: Error) => {
+        }).catch((e: AxiosError<IApiResponse<any>>) => {
             observer.error(e);
         });
     });
@@ -67,7 +67,7 @@ function del(path: string, id: string, requireAuth?: boolean): Observable<IApiRe
         axios.delete<IApiResponse<undefined>>(url, config).then((res: AxiosResponse<IApiResponse<undefined>>) => {
             observer.next();
             observer.complete();
-        }).catch((e: Error) => {
+        }).catch((e: AxiosError<IApiResponse<any>>) => {
             observer.error(e);
         });
     });

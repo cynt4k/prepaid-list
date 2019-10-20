@@ -2,6 +2,9 @@ import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-dec
 import store from '@/store';
 import { IUserState } from './user.state';
 import { UserService } from '@/services/user.service';
+import { AxiosError } from 'axios';
+import { IResponse } from '@/types/service';
+import { MessageModule } from '../message';
 
 @Module({ dynamic: true, store, name: 'user' })
 export class UserState extends VuexModule implements IUserState {
@@ -36,11 +39,18 @@ export class UserState extends VuexModule implements IUserState {
     public async login(userInfo: { username: string, password: string }): Promise<void> {
         const username = userInfo.username.trim();
         const password = userInfo.password;
-        const data = await UserService.postLogin(username, password);
-        this.SET_TOKEN(data.token);
-        this.SET_REFRESH_TOKEN(data.refreshToken);
-        this.SET_NICKNAME(data.user);
-        this.SET_LOGIN(true);
+        try {
+            const data = await UserService.postLogin(username, password);
+            this.SET_TOKEN(data.token);
+            this.SET_REFRESH_TOKEN(data.refreshToken);
+            this.SET_NICKNAME(data.user);
+            this.SET_LOGIN(true);
+        } catch (e) {
+            const axiosError = e as AxiosError<IResponse<any>>;
+            if (axiosError.response) {
+                MessageModule.addApiMessage(axiosError.response.data);
+            }
+        }
     }
 
     @Action
