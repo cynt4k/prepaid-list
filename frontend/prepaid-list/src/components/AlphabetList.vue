@@ -54,7 +54,11 @@ export default class AlphabetList extends Vue {
     }
 
     private get alphabet() {
-        return [...'abcdefghijklmnopqrstuvwxyz'];
+      return [...'abcdefghijklmnopqrstuvwxyz'];
+    }
+
+    private mounted() {
+        this.onChildChanged([], []);
     }
 
     @Watch('items')
@@ -66,7 +70,7 @@ export default class AlphabetList extends Vue {
                 (acc[letter] = acc[letter] || []).push(curr.user);
                 return acc;
             }, {});
-
+        this.alphaUserList = [];
         this.alphabet.forEach((letter: string) => {
             const obj: AlphabetUser = { letter, users: result[letter] };
             this.alphaUserList.push(obj);
@@ -133,13 +137,13 @@ interface AlphabetUser {
 }
 
 .users {
-      display: flex;
+    display: flex;
     flex-flow: row wrap;
     .listitem {
-      width: 50%;
+        width: 50%;
     }
     .listitem:nth-last-child(1):nth-child(odd) {
-      width: 100%;
+        width: 100%;
     }
 }
 </style>
