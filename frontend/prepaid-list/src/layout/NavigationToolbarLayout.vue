@@ -59,10 +59,6 @@ import NavigationButton from '@/layout/navigation-drawer/NavigationButton.vue';
 
 @Component({ components: { ToolbarLayout, NavigationButton } })
 export default class NavigationToolbarLayout extends Vue {
-    @Prop()
-    private titleFirst!: string;
-    @Prop()
-    private titleSecond!: string;
     private mini: boolean = true;
 
     private hideNavigation() {

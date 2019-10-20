@@ -18,7 +18,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import ConfirmationNavigationFooter from '@/components/ConfirmationNavigationFooter.vue';
 
 import { User } from '@/interfaces/User';
@@ -50,7 +49,6 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
 @Component({
     components: {
-        NavigationToolbarLayout,
         ConfirmationNavigationFooter,
         ShoppingCart,
         ConfirmationDialog,

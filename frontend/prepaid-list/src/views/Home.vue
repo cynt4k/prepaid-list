@@ -11,9 +11,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
-import ToolbarLayout from '@/layout/ToolbarLayout.vue';
 
-@Component({ components: { BigButtonFlex, ToolbarLayout } })
+@Component({ components: { BigButtonFlex } })
 export default class Home extends Vue {
     private login() {
         setTimeout(() => this.$router.push({ name: 'UserSelect' }), 10);

@@ -68,7 +68,6 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import { Category } from '@/interfaces/Category';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import BigButton from '@/components/BigButton.vue';
@@ -95,7 +94,6 @@ const userModule = namespace(StateNamespaces.USER_STATE);
 
 @Component({
     components: {
-        NavigationToolbarLayout,
         BigButtonFlex,
         BigButton,
         RechargeNavigationFooter,
