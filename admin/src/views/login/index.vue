@@ -45,6 +45,7 @@ import { Route } from 'vue-router';
 import { required, minLength, between } from 'vuelidate/lib/validators';
 import { UserModule } from '../../store/modules/user';
 import { mdiEye, mdiEyeOff } from '@mdi/js';
+import { MessageModule } from '../../store/modules/message';
 
 @Component({
     name: 'Login',
@@ -75,6 +76,13 @@ export default class extends Vue {
     }
     private async submit(): Promise<void> {
         this.$v.$touch();
+        if (this.$v.$invalid) {
+            MessageModule.addMessage({
+                type: 'warning',
+                shortText: this.$t('frontend.view.login.validate').toString()
+            });
+            return;
+        }
         await UserModule.login({ username: this.username, password: this.password });
     }
 
