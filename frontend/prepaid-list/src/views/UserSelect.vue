@@ -61,9 +61,11 @@ export default class UserSelect extends Vue {
             SERVICE_IDENTIFIER.USER_SERVICE
         );
         this.jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
+        EventBus.$emit(EventBusMessage.LOADING, true);
         this.userService.getAllUser().subscribe(
             (data: IUser[]) => {
                 this.users = data;
+                EventBus.$emit(EventBusMessage.LOADING, false);
             },
             (err: any) => {
                 const options: SnackbarOptions = {
@@ -71,6 +73,7 @@ export default class UserSelect extends Vue {
                     snackbarType: TypeColor.ERROR,
                 };
                 EventBus.$emit(EventBusMessage.MESSAGE, options);
+                EventBus.$emit(EventBusMessage.LOADING, false);
             }
         );
     }
