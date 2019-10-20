@@ -20,11 +20,9 @@ import { Observable } from 'rxjs';
 @injectable()
 export class UserService implements IUserService {
     private api: IApiService;
-    jwt: IJwtService;
 
     constructor() {
         this.api = container.get<IApiService>(SERVICE_IDENTIFIER.API);
-        this.jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
     }
 
     public getAllUser(): Observable<IUser[]> {
@@ -40,16 +38,14 @@ export class UserService implements IUserService {
     }
 
     public loginUserByUsername(username: string): Observable<IResponseToken> {
-        let a = this.api
+        return this.api
             .post<IResponseToken>('auth/login/user', { username })
             .pipe(map((res: IApiResponse<any>) => res.data));
-        // let j = this.jwt;
-        // debugger;
-        return a;
-    }
+	}
+	
     public registerUser(user: IUserRegister): Observable<IResponseToken> {
         return this.api
             .post<IResponseToken>('auth/register', user)
             .pipe(map((res: IApiResponse<any>) => res.data));
-    }
+	}
 }

@@ -5,7 +5,8 @@ import { userMutations } from './user-mutations';
 import { userGetters } from './user-getters';
 
 const initialUserState: UserState = {
-    user: undefined
+	user: undefined,
+	token: undefined
 };
 
 export const userModule: Module<UserState, any> = {

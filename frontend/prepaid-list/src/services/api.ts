@@ -7,11 +7,12 @@ import { IResponse, IResponseToken } from '@/interfaces/services';
 import { JwtService } from './jwt.service';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
+import { EventBus } from '@/assets/EventBus';
 
 @injectable()
 export class ApiService implements IApiService {
     private api: string;
-    private jwt: JwtService;
+    private jwt: IJwtService;
 
     constructor() {
         this.api = 'http://app02.dev.nue.schneider-its.net:3000';
@@ -25,7 +26,6 @@ export class ApiService implements IApiService {
         path: string,
         requireAuth?: boolean
     ): Observable<IResponse<T>> {
-        // this.jwt.decodeToken(this.jwt.getToken());
         const url = `${this.api}/${path}`;
         const config: AxiosRequestConfig = {
             params: { authRequired: requireAuth ? true : false },
@@ -93,7 +93,7 @@ export class ApiService implements IApiService {
             const refreshToken = this.jwt.getRefreshToken();
             const headersConfig: any = {
                 'Content-Type': 'application/json',
-                Accept: 'application/json',
+                'Accept': 'application/json',
             };
 
             if (config.url!.includes('auth/refresh')) {
@@ -111,17 +111,15 @@ export class ApiService implements IApiService {
                 Authorization: token,
             };
 
+			// TODO: Umbauen auf EventBus und VUEX -> Action ausführen wenn AKTUALISIERUNG emitted wird und Logout wenn INVALID emitted wird!
             if (token) {
                 try {
-                    const newToken = await this.post<IResponseToken>(
-                        `auth/refresh`,
-                        { refreshToken }
-                    ).toPromise();
-                    this.jwt.saveToken(newToken.data.token);
+                    EventBus.$emit('token-refresh');
                     return Promise.resolve(config);
                 } catch (e) {
-                    this.jwt.destoryToken();
-                    this.jwt.destoryRefreshToken();
+					EventBus.$emit('token-invalid');
+                    // this.jwt.destroyToken();
+                    // this.jwt.destroyRefreshToken();
                     return Promise.reject(e);
                 }
             }

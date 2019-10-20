@@ -82,7 +82,7 @@ import { IProfileService } from '@/types';
 import { IBalanceUpdateModel, IUserModel } from '../interfaces/services';
 import {
     UserActionTypes,
-    ChangeUserAction,
+    // ChangeUserAction,
     UpdateBalanceAction,
 } from '@/store/user-state';
 import { namespace } from 'vuex-class';

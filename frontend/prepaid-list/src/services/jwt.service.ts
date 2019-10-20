@@ -1,10 +1,14 @@
-import { injectable } from 'inversify';
-import { IJwtService } from '@/types';
+import { injectable, inject } from 'inversify';
+import { IJwtService, IApiService } from '@/types';
 import jwt_decode from 'jwt-decode';
+import { container } from '@/inversify.config';
+import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
+import { IResponseToken } from '@/interfaces/services';
 
 @injectable()
 export class JwtService implements IJwtService {
-    public getToken() {
+
+	public getToken() {
         return window.localStorage[`token`];
     }
 
@@ -20,11 +24,11 @@ export class JwtService implements IJwtService {
         window.localStorage[`refreshToken`] = refreshToken;
     }
 
-    public destoryToken() {
+    public destroyToken() {
         window.localStorage.removeItem(`token`);
     }
 
-    public destoryRefreshToken() {
+    public destroyRefreshToken() {
         window.localStorage.removeItem(`refreshToken`);
     }
 

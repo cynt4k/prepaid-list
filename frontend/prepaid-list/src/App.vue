@@ -5,7 +5,7 @@
     </div>
     <v-snackbar top v-model="snackbar" :color="snackbarType" :timeout="duration">
       <v-alert :value="true" :type="snackbarType" class="panel">
-        <h3>{{text}}</h3>
+        <h3>{{messageText}}</h3>
       </v-alert>
     </v-snackbar>
     <router-view></router-view>
@@ -15,31 +15,53 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { EventBus } from '@/assets/EventBus';
+import { Getter, namespace } from 'vuex-class';
+import { StateNamespaces } from '@/store/namespaces';
 
 import axios from 'axios';
 import VueRx from 'vue-rx';
+import { UserActionTypes, RefreshTokenAction, ResetUserAction } from './store/user-state';
 
 Vue.use(VueRx);
 
+const userModule = namespace(StateNamespaces.USER_STATE);
+
 @Component({})
 export default class App extends Vue {
-    private text: string = '';
+    private messageText: string = '';
     private snackbar: boolean = false;
     private snackbarType: string = '';
     private duration: number = 3000;
-    private isLoading: boolean = false;
+	private isLoading: boolean = false;
+	
+	@userModule.Action(UserActionTypes.REFRESH_TOKEN)
+	private refreshTokenAction!: RefreshTokenAction;
+	
+	@userModule.Action(UserActionTypes.RESET_STATE)
+    private resetUserAction!: ResetUserAction;
 
     private mounted() {
         EventBus.$on('message', (options: any) => {
             this.duration = options.duration ? options.duration : 3000;
             this.snackbar = true;
-            this.text = options.message;
+            this.messageText = options.message;
             this.snackbarType = options.snackbarType;
         });
 
         EventBus.$on('loading', (isLoading: boolean) => {
             this.isLoading = isLoading;
-        });
+		});
+		
+		EventBus.$on('token-invalid', () => {
+			// auto logoff if token is invalid
+			this.resetUserAction();
+			this.$router.push({ name: 'Home' });
+		});
+
+		EventBus.$on('token-refresh', () => {
+			this.refreshTokenAction();
+		});
+
     }
 }
 </script>

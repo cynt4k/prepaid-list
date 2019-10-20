@@ -26,7 +26,7 @@ import { userGetters, ResetUserAction } from '../store/user-state';
 
 import { User } from '@/interfaces/User';
 import { UserActionTypes } from '../store/user-state';
-import { ChangeUserAction } from '../store/user-state';
+// import { ChangeUserAction } from '../store/user-state';
 import { State, Getter, Mutation, Action, namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
 

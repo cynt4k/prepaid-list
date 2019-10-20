@@ -3,7 +3,7 @@ export interface IJwtService {
     getRefreshToken(): string;
     saveToken(token: string): void;
     saveRefreshToken(refreshToken: string): void;
-    destoryToken(): void;
-    destoryRefreshToken(): void;
-    decodeToken(token: string): any;
+    destroyToken(): void;
+    destroyRefreshToken(): void;
+	decodeToken(token: string): any;
 }
