@@ -40,7 +40,8 @@ import {
     LanguageCode,
     ICategoryModel,
     ITranslationModel,
-} from '../../interfaces/services';
+} from '@/interfaces/services';
+import { EventBusMessage, EventBus } from '@/assets/EventBus';
 
 @Component({
     components: {
@@ -66,7 +67,7 @@ export default class BuyProduct extends Vue {
         this.productService = container.get<IProductService>(
             SERVICE_IDENTIFIER.PRODUCT_SERVICE
         );
-        // this.productService.getProducts().subscribe((data: any) => console.log(data));
+        EventBus.$emit(EventBusMessage.LOADING, true);
         this.productService
             .getCategories()
             .subscribe((categories: ICategoryModel[]) => {
@@ -92,6 +93,7 @@ export default class BuyProduct extends Vue {
                         id: category.id,
                     };
                 });
+                EventBus.$emit(EventBusMessage.LOADING, false);
             });
     }
 }

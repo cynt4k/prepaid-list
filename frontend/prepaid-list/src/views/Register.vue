@@ -1,5 +1,5 @@
 <template>
-  <v-container class="register" align-center justify-center text-xs-center fluid fill-height>
+  <v-container class="register content-container" align-center justify-center text-xs-center fluid fill-height>
     <v-card flat>
       <v-container justify-center align-center v-if="registering">
         <!-- <v-layout align-center justify-center text-xs-center wrap class="btn-list-layout"> -->
@@ -102,7 +102,7 @@ import { namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
 import { UserActionTypes, RegisterUserAction } from '../store/user-state';
 import { User } from '../interfaces/User';
-import { EventBus } from '@/assets/EventBus';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
@@ -153,73 +153,38 @@ export default class Register extends Vue {
         return this.regexMail(val) || 'E-Mailadresse ist ungültig';
     }
     private submit() {
-        const newUser: IUserRegister = {
-            username: this.nick,
-            email: this.email,
-            name: {
-                firstname: this.firstName,
-                lastname: this.lastName,
-            },
-		};
+          const newUser: IUserRegister = {
+              username: this.nick,
+              email: this.email,
+              name: {
+                  firstname: this.firstName,
+                  lastname: this.lastName,
+              },
+      };
 
-		try {
-			this.registerUserAction(newUser);
-			this.registering = false;
-			this.snackbar = true;
-	
-			this.resetForm();
-			setTimeout(
-				() => this.$router.push({ name: 'Dashboard' }),
-				1000
-			);
-			this.registering = true;
-	
-			const message = {
-				message: 'Registrierung erfolgreich!',
-				snackbarType: 'info',
-			};
-	
-			EventBus.$emit('message', { message });
+      try {
+        this.registerUserAction(newUser);
+        this.registering = false;
+        this.snackbar = true;
+    
+        this.resetForm();
+        setTimeout(
+          () => this.$router.push({ name: 'Dashboard' }),
+          1000
+        );
+        this.registering = true;
+        
+        const options: SnackbarOptions = { message: 'Registrierung erfolgreich!', snackbarType: TypeColor.INFO };
+        EventBus.$emit(EventBusMessage.MESSAGE, options);
 
-		} catch (err) {
-			// TODO - TranslatorService mit einbinden für I18N-Konvertierung
-			// TODO - Pruefen auf Code und abhängig von ErrCode Message ausgeben
-			const errMessage = {
-				message: err.message,
-				snackbarType: 'error',
-			};
+      } catch (err) {
+        this.registering = false;
 
-			this.registering = false;
-
-			EventBus.$emit('message', { errMessage });
-		}
-
-        // this.userService.registerUser(user).subscribe(
-        //     (data: IResponseToken) => {
-        //         this.registering = false;
-        //         this.snackbar = true;
-        //         this.jwt.saveToken(data.token);
-        //         this.jwt.saveRefreshToken(data.refreshToken);
-        //         this.registerUserAction({
-        //             name: this.firstName,
-        //             credit: 0.0,
-        //             nickname: this.nick,
-        //         });
-                
-        //     },
-        //     (err: IApiResponse<any>) => {
-        //         // TODO - TranslatorService mit einbinden für I18N-Konvertierung
-        //         // TODO - Pruefen auf Code und abhängig von ErrCode Message ausgeben
-        //         const errMessage = {
-        //             message: err.message,
-        //             snackbarType: 'error',
-        //         };
-
-        //         this.registering = false;
-
-        //         EventBus.$emit('message', { errMessage });
-        //     }
-        // );
+        // TODO - TranslatorService mit einbinden für I18N-Konvertierung
+        // TODO - Pruefen auf Code und abhängig von ErrCode Message ausgeben
+        const options: SnackbarOptions = { message: err.message, snackbarType: TypeColor.ERROR };
+        EventBus.$emit(EventBusMessage.MESSAGE, options);
+      }
     }
 
     get formIsValid() {
@@ -241,5 +206,10 @@ h4 {
 }
 .back-to-home-btn {
     margin: 15px 0 -20px 0;
+}
+</style>
+<style lang="scss" scoped>
+.content-container {
+    overflow: auto;
 }
 </style>

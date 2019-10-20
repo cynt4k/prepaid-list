@@ -73,6 +73,11 @@ export namespace OrderController {
             }
             return response(res, HttpCodes.InternalServerError, I18n.ERR_INTERNAL_SERVER);
         } catch (e) {
+            if (e instanceof PrepaidListError) {
+                if (e.getCode() === ErrorCode.LOW_BALANCE) {
+                    return response(res, HttpCodes.BadRequest, I18n.ERR_LOW_BALANCE);
+                }
+            }
             return next(e);
         }
     };

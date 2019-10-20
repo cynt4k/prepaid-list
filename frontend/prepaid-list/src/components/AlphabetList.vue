@@ -18,20 +18,22 @@
           <span>{{letterObj.letter}}</span>
         </v-subheader>
 
-        <template v-for="item in letterObj.users" ref="tempRef">
-          <v-list-tile :key="item.title" avatar @click="emitUser(item)" ripple>
-            <v-list-tile-avatar>
-              <img :src="item.avatar" v-if="item.avatar">
-              <v-icon x-large v-else>mdi-account-circle</v-icon>
-            </v-list-tile-avatar>
+        <div class="users" :key="`div.${letterObj.letter}`">
+          <template v-for="item in letterObj.users" ref="tempRef">
+            <v-list-tile class="listitem" :key="item.title" avatar @click="emitUser(item)" ripple>
+              <v-list-tile-avatar>
+                <img :src="item.avatar" v-if="item.avatar">
+                <v-icon x-large v-else>mdi-account-circle</v-icon>
+              </v-list-tile-avatar>
 
-            <v-list-tile-content>
-              <!-- <v-list-tile-title v-html="item.name"></v-list-tile-title> -->
-              <v-list-tile-sub-title v-html="item.nickname"></v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action></v-list-tile-action>
-          </v-list-tile>
-        </template>
+              <v-list-tile-content>
+                <!-- <v-list-tile-title v-html="item.name"></v-list-tile-title> -->
+                <v-list-tile-sub-title v-html="item.nickname"></v-list-tile-sub-title>
+              </v-list-tile-content>
+              <v-list-tile-action></v-list-tile-action>
+            </v-list-tile>
+          </template>
+        </div>
       </template>
     </v-list>
   </div>
@@ -122,9 +124,22 @@ interface AlphabetUser {
 }
 .letter-separator {
     background-color: grey;
+    font-size: 10px;
+    height: 25px;
     > span {
         text-transform: uppercase;
         font-size: 150%;
+    }
+}
+
+.users {
+      display: flex;
+    flex-flow: row wrap;
+    .listitem {
+      width: 50%;
+    }
+    .listitem:nth-last-child(1):nth-child(odd) {
+      width: 100%;
     }
 }
 </style>

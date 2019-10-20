@@ -10,7 +10,7 @@
     >
       <div class="numpad">
         <div class="output">
-          <v-text-field readonly solo single-line reverse :value="input | currency"></v-text-field>
+          <v-text-field readonly solo single-line reverse hide-details :value="input | currency"></v-text-field>
           <v-btn flat icon @click="removeValue()">
             <v-icon>mdi-backspace</v-icon>
           </v-btn>
@@ -22,7 +22,7 @@
       </div>
       <div class="fast-access">
         <v-card class="card">
-          <v-card-title class="font-weight-light">Schnellauswahl</v-card-title>
+          <v-card-title class="font-weight-light fast-access-title">Schnellauswahl</v-card-title>
           <template v-for="price in fixedPrices">
             <big-button
               :disabled="input != 0"
@@ -89,7 +89,7 @@ import { namespace } from 'vuex-class';
 import { StateNamespaces } from '@/store/namespaces';
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
 import router from '../router';
-import { EventBus } from '../assets/EventBus';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
@@ -166,7 +166,8 @@ export default class Recharge extends Vue {
             },
             (err: any) => {
                 // TODO: onError
-                EventBus.$emit('message', { message: err });
+                const options: SnackbarOptions = { message: err, snackbarType: TypeColor.ERROR };
+                EventBus.$emit(EventBusMessage.MESSAGE, options);
             }
         );
     }
@@ -190,15 +191,14 @@ export default class Recharge extends Vue {
 .numpad {
     height: 100%;
     display: flex;
-    flex-flow: row;
-    flex-wrap: wrap;
+    flex-flow: column;
     justify-content: center;
     width: 70%;
     .numpad-buttons {
         display: flex;
-        flex-flow: row;
-        flex-wrap: wrap;
+        flex-flow: row wrap;
         justify-content: center;
+        height: inherit;
     }
     .output {
         width: 100%;
@@ -207,7 +207,8 @@ export default class Recharge extends Vue {
         margin-left: 10px;
 
         button {
-            margin-left: 20px;
+            margin-left: 7px;
+            margin-right: 25px;
         }
 
         /deep/ input {
@@ -234,8 +235,11 @@ export default class Recharge extends Vue {
 
     .big-button {
         margin: 10px 0;
-        height: 23%;
+        height: 21%;
         width: 90%;
+    }
+    .fast-access-title {
+      margin-bottom: auto;
     }
 }
 </style>

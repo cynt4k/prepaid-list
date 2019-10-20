@@ -10,7 +10,7 @@
     <v-layout align-center justify-center text-xs-center wrap column>
       <v-icon size="15vh">{{icon}}</v-icon>
       <v-card-title class="title">
-        <h1 class="font-weight-light">{{additional}}</h1>
+        <h1 v-if="additional" class="font-weight-light">{{additional}}</h1>
         <h2 class="font-weight-light">{{title}}</h2>
       </v-card-title>
     </v-layout>

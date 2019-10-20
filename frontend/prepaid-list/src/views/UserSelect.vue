@@ -21,22 +21,30 @@ import { ApiService } from '../services/api';
 import { container } from '../inversify.config';
 import { IApiService, IUserService, IJwtService } from '@/types';
 
-import { UserActionTypes, LoginUserAction, SaveTokenAction } from '../store/user-state';
+import {
+    UserActionTypes,
+    LoginUserAction,
+    SaveTokenAction,
+} from '../store/user-state';
 import { Action, namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
 import { IResponseToken, IUserModel, IUser } from '../interfaces/services';
-import { EventBus } from '@/assets/EventBus';
+import {
+    EventBus,
+    EventBusMessage,
+    SnackbarOptions,
+    TypeColor,
+} from '@/assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
 @Component({ components: { AlphabetList, ToolbarLayout } })
 export default class UserSelect extends Vue {
-
     @userModule.Action(UserActionTypes.LOGIN_USER)
-	private loginUserAction!: LoginUserAction;
-	
-	@userModule.Action(UserActionTypes.SAVE_TOKEN)
-	private saveTokenAction!: SaveTokenAction;
+    private loginUserAction!: LoginUserAction;
+
+    @userModule.Action(UserActionTypes.SAVE_TOKEN)
+    private saveTokenAction!: SaveTokenAction;
 
     private users: IUser[];
     private api!: IApiService;
@@ -56,30 +64,40 @@ export default class UserSelect extends Vue {
         this.jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
         this.userService.getAllUser().subscribe(
             (data: IUser[]) => {
-                this.users =  data;
+                this.users = data;
             },
-            (err: any) => EventBus.$emit('message', { message: err })
+            (err: any) => {
+                const options: SnackbarOptions = {
+                    message: err,
+                    snackbarType: TypeColor.ERROR,
+                };
+                EventBus.$emit(EventBusMessage.MESSAGE, options);
+            }
         );
     }
 
-    private loginUser(user: User) {
+    private async loginUser(user: User) {
         try {
-			this.loginUserAction(user);
-			setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
-		} catch (err) {
-			EventBus.$emit('message', { message: err });
-		}
+            await this.loginUserAction(user);
+            setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
+        } catch (err) {
+            const options: SnackbarOptions = {
+                message: err,
+                snackbarType: TypeColor.ERROR,
+            };
+            EventBus.$emit(EventBusMessage.MESSAGE, { message: err });
+        }
     }
 }
 </script>
 <style lang="scss" scoped>
-	.alphabet-list {
-		width: 100%;
-	}
-	.panel {
-		width: 100%;
-		background-color: grey;
-		margin: 10px;
-		margin-top: 0;
-	}
+.alphabet-list {
+    width: 100%;
+}
+.panel {
+    width: 100%;
+    background-color: grey;
+    margin: 10px;
+    margin-top: 0;
+}
 </style>

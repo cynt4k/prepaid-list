@@ -27,11 +27,13 @@ import { StateNamespaces } from '@/store/namespaces';
 
 import ShoppingCart from '@/components/ShoppingCart.vue';
 import { IOrderService } from '@/types/services/order.service';
+import { IErrorHandlingService } from '@/types/services/errorHandling.service';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
 import { INewOrder, INewProductOrder, IOrder, INewProductExtraOrder } from '../../interfaces/services';
 import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
+import { ErrorMessage } from '@/interfaces/ErrorMessage';
 import {
     UserActionTypes,
     // ChangeUserAction,
@@ -41,6 +43,7 @@ import {
     ShoppingCartActionTypes,
     ResetStateAction,
 } from '../../store/shoppingcart-state/shoppingcart-state';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor, TypeColorConverter } from '@/assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
@@ -79,10 +82,14 @@ export default class Confirmation extends Vue {
     private shoppingCartItems!: ShoppingCartItem[];
 
     private orderService!: IOrderService;
+    private errorHandlingService!: IErrorHandlingService;
 
     private mounted() {
         this.orderService = container.get<IOrderService>(
             SERVICE_IDENTIFIER.ORDER_SERVICE
+        );
+        this.errorHandlingService = container.get<IErrorHandlingService>(
+            SERVICE_IDENTIFIER.ERRORHANDLING_SERVICE
         );
     }
 
@@ -105,11 +112,20 @@ export default class Confirmation extends Vue {
             });
         });
         const order: INewOrder = { products };
-        this.orderService.placeOrder(order).subscribe((resOrder: IOrder) => {
-            this.updateBalanceAction(resOrder.user.balance);
-            this.resetShoppingCart();
-            this.showDialog = true;
-        });
+        this.orderService.placeOrder(order).subscribe(
+            (resOrder: IOrder) => {
+                this.updateBalanceAction(resOrder.user.balance);
+                this.resetShoppingCart();
+                this.showDialog = true;
+            },
+            (error) => {
+                const errorCode: string = error.response.data.message;
+                const message: ErrorMessage = this.errorHandlingService.translateError(errorCode, '');
+                const typeColor: TypeColor = TypeColorConverter.convertFromErrorMessage(message);
+                const options: SnackbarOptions = { message: message.message, snackbarType: typeColor };
+                EventBus.$emit(EventBusMessage.MESSAGE, options);
+            }
+        );
     }
     private redirect() {
         this.$router.push({ name: 'Dashboard' });

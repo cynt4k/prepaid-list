@@ -3,7 +3,7 @@
     <v-layout align-center>
       <v-card>
         <v-card-title class="headline">
-          <img :src="require(`@/assets/img/confirmation.gif`)">
+          <img :src="src">
         </v-card-title>
         <v-card-title>
           <h2>{{text}}</h2>
@@ -22,11 +22,15 @@ export default class ConfirmationDialog extends Vue {
     @Prop()
     private text!: string;
 
+    private src: string = '';
+
     @Watch('value')
     private onChanged(val: boolean, oldVal: boolean) {
+        this.src = require(`@/assets/img/confirmation.gif`);
         setTimeout(() => {
-            this.$emit('next');
-        }, 3500);
+          this.src = '';
+          this.$emit('next');
+        }, 1500);
     }
 }
 </script>

@@ -14,9 +14,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { EventBus } from '@/assets/EventBus';
 import { Getter, namespace } from 'vuex-class';
 import { StateNamespaces } from '@/store/namespaces';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 
 import axios from 'axios';
 import VueRx from 'vue-rx';
@@ -32,36 +32,50 @@ export default class App extends Vue {
     private snackbar: boolean = false;
     private snackbarType: string = '';
     private duration: number = 3000;
-	private isLoading: boolean = false;
+    private isLoading: boolean = false;
+    private timer: number = -1;
 	
-	@userModule.Action(UserActionTypes.REFRESH_TOKEN)
-	private refreshTokenAction!: RefreshTokenAction;
-	
-	@userModule.Action(UserActionTypes.RESET_STATE)
+    @userModule.Action(UserActionTypes.REFRESH_TOKEN)
+    private refreshTokenAction!: RefreshTokenAction;
+    
+    @userModule.Action(UserActionTypes.RESET_STATE)
     private resetUserAction!: ResetUserAction;
 
     private mounted() {
-        EventBus.$on('message', (options: any) => {
+        EventBus.$on(EventBusMessage.MESSAGE, (options: SnackbarOptions) => {
             this.duration = options.duration ? options.duration : 3000;
             this.snackbar = true;
             this.messageText = options.message;
-            this.snackbarType = options.snackbarType;
+            this.snackbarType = options.snackbarType ? options.snackbarType : 'info';
         });
 
-        EventBus.$on('loading', (isLoading: boolean) => {
+        EventBus.$on(EventBusMessage.LOADING, (isLoading: boolean) => {
             this.isLoading = isLoading;
-		});
+	            if (isLoading) {
+              if (this.timer !== -1) {
+                /* before setting new timer, delete old one. */
+                clearTimeout(this.timer);
+              }
+              this.timer  = setTimeout(() => {
+                const options: SnackbarOptions = { message: 'Timeout beim Laden.', snackbarType: TypeColor.WARN };
+                EventBus.$emit(EventBusMessage.MESSAGE, options);
+                this.isLoading = false;
+              }, 10000);
+            } else {
+              clearTimeout(this.timer);
+              this.timer = -1;
+            }
+      });
 		
-		EventBus.$on('token-invalid', () => {
-			// auto logoff if token is invalid
-			this.resetUserAction();
-			this.$router.push({ name: 'Home' });
-		});
+      EventBus.$on('token-invalid', () => {
+        // auto logoff if token is invalid
+        this.resetUserAction();
+        this.$router.push({ name: 'Home' });
+      });
 
-		EventBus.$on('token-refresh', () => {
-			this.refreshTokenAction();
-		});
-
+      EventBus.$on('token-refresh', () => {
+        this.refreshTokenAction();
+      });
     }
 }
 </script>

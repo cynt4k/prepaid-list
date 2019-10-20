@@ -82,9 +82,9 @@ import {
     ITranslationModel,
     LanguageCode,
     IProductModel,
-} from '../../interfaces/services';
+} from '@/interfaces/services';
 
-import { EventBus } from '@/assets/EventBus';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 
 const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 
@@ -157,7 +157,7 @@ export default class SingleProducts extends Vue {
         this.productService = container.get<IProductService>(
             SERVICE_IDENTIFIER.PRODUCT_SERVICE
         );
-        EventBus.$emit('loading', true);
+        EventBus.$emit(EventBusMessage.LOADING, true);
         this.isDataLoading = true;
         this.productService.getProductsByCategory(this.category).subscribe(
             (products: IProductModel[]) => {
@@ -189,10 +189,11 @@ export default class SingleProducts extends Vue {
                 });
             },
             (data: any) => {
-                EventBus.$emit('message', { message: data });
+                const options: SnackbarOptions = { message: data, snackbarType: TypeColor.ERROR };
+                EventBus.$emit(EventBusMessage.MESSAGE, options);
             },
             () => {
-                EventBus.$emit('loading', false);
+                EventBus.$emit(EventBusMessage.LOADING, false);
                 this.isDataLoading = false;
             }
         );
