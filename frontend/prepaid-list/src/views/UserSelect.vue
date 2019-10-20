@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid fill-height column style="flex-flow:column">
+<v-container fluid fill-height column>
+    <v-layout align-center justify-center text-xs-center column>
       <v-alert :value="true" type="info" class="panel">
         <h2>OTH-Karte scannen (RFID-Reader) oder Benutzer auswählen</h2>
       </v-alert>
-    <v-layout align-center justify-center text-xs-center column style="width:100%">
-      <alphabet-list class="alphabet-list" @user-selected="openDashboard" :items="users"></alphabet-list>
+      <alphabet-list class="alphabet-list" @user-selected="loginUser" :items="users"></alphabet-list>
     </v-layout>
   </v-container>
 </template>
@@ -21,18 +21,30 @@ import { ApiService } from '../services/api';
 import { container } from '../inversify.config';
 import { IApiService, IUserService, IJwtService } from '@/types';
 
-import { UserActionTypes, ChangeUserAction } from '../store/user-state';
+import {
+    UserActionTypes,
+    LoginUserAction,
+    SaveTokenAction,
+} from '../store/user-state';
 import { Action, namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
 import { IResponseToken, IUserModel, IUser } from '../interfaces/services';
-import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
+import {
+    EventBus,
+    EventBusMessage,
+    SnackbarOptions,
+    TypeColor,
+} from '@/assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
 @Component({ components: { AlphabetList, ToolbarLayout } })
 export default class UserSelect extends Vue {
-    @userModule.Action(UserActionTypes.CHANGE_USER)
-    private changeUserAction!: ChangeUserAction;
+    @userModule.Action(UserActionTypes.LOGIN_USER)
+    private loginUserAction!: LoginUserAction;
+
+    @userModule.Action(UserActionTypes.SAVE_TOKEN)
+    private saveTokenAction!: SaveTokenAction;
 
     private users: IUser[];
     private api!: IApiService;
@@ -52,39 +64,29 @@ export default class UserSelect extends Vue {
         this.jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
         this.userService.getAllUser().subscribe(
             (data: IUser[]) => {
-                this.users =  data;
+                this.users = data;
             },
             (err: any) => {
-                const options: SnackbarOptions = { message: err, snackbarType: TypeColor.ERROR };
+                const options: SnackbarOptions = {
+                    message: err,
+                    snackbarType: TypeColor.ERROR,
+                };
                 EventBus.$emit(EventBusMessage.MESSAGE, options);
             }
         );
     }
 
-    private openDashboard(user: User) {
-        this.userService.loginUserByUsername(user.nickname).subscribe(
-            (data: IResponseToken) => {
-                this.jwt.saveToken(data.token);
-                this.jwt.saveRefreshToken(data.refreshToken);
-                this.userService
-                    .getUserInfos()
-                    .subscribe((infos: IUserModel) => {
-                        this.changeUserAction({
-                            name: infos.username,
-                            credit: infos.balance,
-                            nickname: infos.username,
-                        });
-                        setTimeout(
-                            () => this.$router.push({ name: 'Dashboard' }),
-                            10
-                        );
-                    });
-            },
-            (err: any) => {
-                const options: SnackbarOptions = { message: err, snackbarType: TypeColor.ERROR };
-                EventBus.$emit(EventBusMessage.MESSAGE, { message: err });
-            }
-        );
+    private async loginUser(user: User) {
+        try {
+            await this.loginUserAction(user);
+            setTimeout(() => this.$router.push({ name: 'Dashboard' }), 10);
+        } catch (err) {
+            const options: SnackbarOptions = {
+                message: err,
+                snackbarType: TypeColor.ERROR,
+            };
+            EventBus.$emit(EventBusMessage.MESSAGE, { message: err });
+        }
     }
 }
 </script>
@@ -99,4 +101,3 @@ export default class UserSelect extends Vue {
     margin-top: 0;
 }
 </style>
-

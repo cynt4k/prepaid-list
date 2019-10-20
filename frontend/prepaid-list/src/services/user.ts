@@ -1,6 +1,11 @@
 import { injectable } from 'inversify';
 import { map } from 'rxjs/operators';
-import { IProductService, IApiService, IUserService } from '@/types';
+import {
+    IProductService,
+    IApiService,
+    IUserService,
+    IJwtService,
+} from '@/types';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
 import {
@@ -21,7 +26,9 @@ export class UserService implements IUserService {
     }
 
     public getAllUser(): Observable<IUser[]> {
-        return this.api.get<IUser[]>('user').pipe(map((res: IApiResponse<any>) => res.data));
+        return this.api
+            .get<IUser[]>('user')
+            .pipe(map((res: IApiResponse<any>) => res.data));
     }
 
     public getUserInfos(): Observable<IUserModel> {
@@ -35,6 +42,7 @@ export class UserService implements IUserService {
             .post<IResponseToken>('auth/login/user', { username })
             .pipe(map((res: IApiResponse<any>) => res.data));
     }
+
     public registerUser(user: IUserRegister): Observable<IResponseToken> {
         return this.api
             .post<IResponseToken>('auth/register', user)

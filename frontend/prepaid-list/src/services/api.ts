@@ -7,62 +7,83 @@ import { IResponse, IResponseToken } from '@/interfaces/services';
 import { JwtService } from './jwt.service';
 import { container } from '@/inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
+import { EventBus } from '@/assets/EventBus';
 
 @injectable()
 export class ApiService implements IApiService {
     private api: string;
-    private jwt: JwtService;
+    private jwt: IJwtService;
 
     constructor() {
-        // this.api = 'http://app02.dev.nue.schneider-its.net:3000';
-        this.api = process.env.VUE_APP_API_URL || 'http://localhost:3000';
+        this.api = 'http://app02.dev.nue.schneider-its.net:3000';
+        // this.api = process.env.VUE_APP_API_URL || 'http://localhost:3000';
         // this.api = process.env.VUE_APP_API_URL;
         this.jwt = container.get<IJwtService>(SERVICE_IDENTIFIER.JWT);
         this.interceptor();
     }
 
-    public get<T>(path: string, requireAuth?: boolean): Observable<IResponse<T>> {
+    public get<T>(
+        path: string,
+        requireAuth?: boolean
+    ): Observable<IResponse<T>> {
         const url = `${this.api}/${path}`;
         const config: AxiosRequestConfig = {
-            params: { authRequired: (requireAuth) ? true : false },
+            params: { authRequired: requireAuth ? true : false },
         };
         return Observable.create((observer: any) => {
-            axios.get(url, config).then((response) => {
-                observer.next(response.data);
-                observer.complete();
-            }).catch((e) => {
-                observer.error(e);
-            });
+            axios
+                .get(url, config)
+                .then((response) => {
+                    observer.next(response.data);
+                    observer.complete();
+                })
+                .catch((e) => {
+                    observer.error(e);
+                });
         });
     }
 
-    public post<T>(path: string, data: any, requireAuth?: boolean): Observable<IResponse<T>> {
+    public post<T>(
+        path: string,
+        data: any,
+        requireAuth?: boolean
+    ): Observable<IResponse<T>> {
         const url = `${this.api}/${path}`;
         const config: AxiosRequestConfig = {
-            params: { authRequired: (requireAuth) ? true : false }
+            params: { authRequired: requireAuth ? true : false },
         };
         return Observable.create((observer: any) => {
-            axios.post(url, data, config).then((response) => {
-                observer.next(response.data);
-                observer.complete();
-            }).catch((e) => {
-                observer.error(e);
-            });
+            axios
+                .post(url, data, config)
+                .then((response) => {
+                    observer.next(response.data);
+                    observer.complete();
+                })
+                .catch((e) => {
+                    observer.error(e);
+                });
         });
     }
 
-    public put<T>(path: string, data: any, requireAuth?: boolean): Observable<IResponse<T>> {
+    public put<T>(
+        path: string,
+        data: any,
+        requireAuth?: boolean
+    ): Observable<IResponse<T>> {
         const url = `${this.api}/${path}`;
         const config: AxiosRequestConfig = {
-            params: { authRequired: (requireAuth) ? true : false }
+            params: { authRequired: requireAuth ? true : false },
         };
         return Observable.create((observer: any) => {
-            axios.put(url, data, config).then((response) => {
-                observer.next(response.data);
-                observer.complete();
-            }).catch((e) => {
-                observer.error(e);
-            });
+            axios
+                .put(url, data, config)
+                .then((response) => {
+                    observer.next(response.data);
+                    observer.complete();
+                })
+                .catch((e) => {
+                    observer.error(e);
+                });
         });
     }
 
@@ -72,9 +93,8 @@ export class ApiService implements IApiService {
             const refreshToken = this.jwt.getRefreshToken();
             const headersConfig: any = {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
             };
-
 
             if (config.url!.includes('auth/refresh')) {
                 config.headers.Authorization = token;
@@ -88,17 +108,19 @@ export class ApiService implements IApiService {
             }
             config.params.authRequired = undefined;
             config.headers = {
-                Authorization: token
+                Authorization: token,
             };
 
+            // TODO: Umbauen auf EventBus und VUEX
+            // -> Action ausführen wenn AKTUALISIERUNG emitted wird und Logout wenn INVALID emitted wird!
             if (token) {
                 try {
-                    const newToken = await this.post<IResponseToken>(`auth/refresh`, { refreshToken }).toPromise();
-                    this.jwt.saveToken(newToken.data.token);
+                    EventBus.$emit('token-refresh');
                     return Promise.resolve(config);
                 } catch (e) {
-                    this.jwt.destoryToken();
-                    this.jwt.destoryRefreshToken();
+                    EventBus.$emit('token-invalid');
+                    // this.jwt.destroyToken();
+                    // this.jwt.destroyRefreshToken();
                     return Promise.reject(e);
                 }
             }

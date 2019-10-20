@@ -100,16 +100,22 @@ import { tap, catchError } from 'rxjs/operators';
 import { Observable, from } from 'rxjs';
 import { namespace } from 'vuex-class';
 import { StateNamespaces } from '../store/namespaces';
-import { UserActionTypes, ChangeUserAction } from '../store/user-state';
+import { UserActionTypes, RegisterUserAction } from '../store/user-state';
 import { User } from '../interfaces/User';
-import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
+import {
+    EventBus,
+    EventBusMessage,
+    SnackbarOptions,
+    TypeColor,
+} from '@/assets/EventBus';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
 @Component({ components: { ToolbarLayout } })
 export default class Register extends Vue {
-    @userModule.Action(UserActionTypes.CHANGE_USER)
-    private changeUserAction!: ChangeUserAction;
+    @userModule.Action(UserActionTypes.REGISTER_USER)
+    private registerUserAction!: RegisterUserAction;
+
     private firstName: string = '';
     private lastName: string = '';
     private nick: string = '';
@@ -152,7 +158,7 @@ export default class Register extends Vue {
         return this.regexMail(val) || 'E-Mailadresse ist ungültig';
     }
     private submit() {
-        const user: IUserRegister = {
+        const newUser: IUserRegister = {
             username: this.nick,
             email: this.email,
             name: {
@@ -160,44 +166,32 @@ export default class Register extends Vue {
                 lastname: this.lastName,
             },
         };
-        this.userService.registerUser(user).subscribe(
-            (data: IResponseToken) => {
-                this.registering = false;
-                this.snackbar = true;
-                this.jwt.saveToken(data.token);
-                this.jwt.saveRefreshToken(data.refreshToken);
-                this.changeUserAction({
-                    name: this.firstName,
-                    credit: 0.0,
-                    nickname: this.nick,
-                });
-                this.resetForm();
-                setTimeout(
-                    () => this.$router.push({ name: 'Dashboard' }),
-                    1000
-                );
-                this.registering = true;
 
-                const message = {
-                    message: 'Registrierung erfolgreich!',
-                    snackbarType: 'info',
-                };
+        try {
+            this.registerUserAction(newUser);
+            this.registering = false;
+            this.snackbar = true;
 
-                EventBus.$emit(EventBusMessage.MESSAGE, { message });
-            },
-            (err: IApiResponse<any>) => {
-                // TODO - TranslatorService mit einbinden für I18N-Konvertierung
-                // TODO - Pruefen auf Code und abhängig von ErrCode Message ausgeben
-                const errMessage = {
-                    message: err.message,
-                    snackbarType: 'error',
-                };
+            this.resetForm();
+            setTimeout(() => this.$router.push({ name: 'Dashboard' }), 1000);
+            this.registering = true;
 
-                this.registering = false;
+            const options: SnackbarOptions = {
+                message: 'Registrierung erfolgreich!',
+                snackbarType: TypeColor.INFO,
+            };
+            EventBus.$emit(EventBusMessage.MESSAGE, options);
+        } catch (err) {
+            this.registering = false;
 
-                EventBus.$emit('message', { errMessage });
-            }
-        );
+            // TODO - TranslatorService mit einbinden für I18N-Konvertierung
+            // TODO - Pruefen auf Code und abhängig von ErrCode Message ausgeben
+            const options: SnackbarOptions = {
+                message: err.message,
+                snackbarType: TypeColor.ERROR,
+            };
+            EventBus.$emit(EventBusMessage.MESSAGE, options);
+        }
     }
 
     get formIsValid() {
