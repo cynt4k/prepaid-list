@@ -87,7 +87,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import ToolbarLayout from '@/layout/ToolbarLayout.vue';
 import { IApiService, IUserService, IJwtService } from '@/types';
 import { container } from '../inversify.config';
 import { SERVICE_IDENTIFIER } from '@/models/Identifiers';
@@ -111,7 +110,7 @@ import {
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
-@Component({ components: { ToolbarLayout } })
+@Component({ components: { } })
 export default class Register extends Vue {
     @userModule.Action(UserActionTypes.REGISTER_USER)
     private registerUserAction!: RegisterUserAction;

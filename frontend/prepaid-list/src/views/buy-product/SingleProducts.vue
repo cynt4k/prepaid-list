@@ -61,7 +61,6 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import { Product } from '@/interfaces/Product';
 import { ProductExtra } from '@/interfaces/ProductExtra';
-import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import BuyProductNavigationFooter from '@/components/BuyProductNavigationFooter.vue';
 import { Getter, namespace } from 'vuex-class';
 import {
@@ -91,7 +90,6 @@ const shoppingCartModule = namespace(StateNamespaces.SHOPPING_CART_STATE);
 @Component({
     components: {
         BigButtonFlex,
-        NavigationToolbarLayout,
         BuyProductNavigationFooter,
         ShoppingCartDialog,
     },

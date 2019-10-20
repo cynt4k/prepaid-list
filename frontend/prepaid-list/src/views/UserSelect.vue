@@ -1,9 +1,9 @@
 <template>
-<v-container fluid fill-height column>
-    <v-layout align-center justify-center text-xs-center column>
-      <v-alert :value="true" type="info" class="panel">
+<v-container fluid fill-height class="user-select">
+    <v-alert :value="true" type="info" class="panel">
         <h2>OTH-Karte scannen (RFID-Reader) oder Benutzer auswählen</h2>
-      </v-alert>
+    </v-alert>
+    <v-layout align-center justify-center text-xs-center column class="full-width">
       <alphabet-list class="alphabet-list" @user-selected="loginUser" :items="users"></alphabet-list>
     </v-layout>
   </v-container>
@@ -15,7 +15,6 @@ import { inject } from 'inversify';
 import AlphabetList from '@/components/AlphabetList.vue';
 import { User } from '@/interfaces/User';
 import { map } from 'rxjs/operators';
-import ToolbarLayout from '@/layout/ToolbarLayout.vue';
 import { SERVICE_IDENTIFIER } from '../models/Identifiers';
 import { ApiService } from '../services/api';
 import { container } from '../inversify.config';
@@ -38,7 +37,7 @@ import {
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
-@Component({ components: { AlphabetList, ToolbarLayout } })
+@Component({ components: { AlphabetList } })
 export default class UserSelect extends Vue {
     @userModule.Action(UserActionTypes.LOGIN_USER)
     private loginUserAction!: LoginUserAction;
@@ -91,6 +90,9 @@ export default class UserSelect extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+.user-select {
+    flex-flow: column;
+}
 .alphabet-list {
     width: 100%;
 }
@@ -99,5 +101,8 @@ export default class UserSelect extends Vue {
     background-color: grey;
     margin: 10px;
     margin-top: 0;
+}
+.full-width {
+    width: 100%;
 }
 </style>

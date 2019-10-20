@@ -37,7 +37,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import NavigationFooter from '@/components/NavigationFooter.vue';
 
 import { Product } from '@/interfaces/Product';

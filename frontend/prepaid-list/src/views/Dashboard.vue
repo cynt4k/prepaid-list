@@ -20,7 +20,6 @@
 import { Component, Vue } from 'vue-property-decorator';
 import BigButton from '@/components/BigButton.vue';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
-import ToolbarLayout from '@/layout/ToolbarLayout.vue';
 import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 import { userGetters, ResetUserAction } from '../store/user-state';
 
@@ -36,7 +35,7 @@ import { SERVICE_IDENTIFIER } from '../models/Identifiers';
 
 const userModule = namespace(StateNamespaces.USER_STATE);
 
-@Component({ components: { BigButton, BigButtonFlex, ToolbarLayout } })
+@Component({ components: { BigButton, BigButtonFlex } })
 export default class Dashboard extends Vue {
     @userModule.Getter
     private user!: User;

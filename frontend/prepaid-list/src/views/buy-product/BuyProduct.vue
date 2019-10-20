@@ -27,7 +27,6 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import { Category } from '@/interfaces/Category';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import BuyProductNavigationFooter from '@/components/BuyProductNavigationFooter.vue';
@@ -45,7 +44,6 @@ import { EventBusMessage, EventBus } from '@/assets/EventBus';
 
 @Component({
     components: {
-        NavigationToolbarLayout,
         BigButtonFlex,
         BuyProductNavigationFooter,
         ShoppingCartDialog,

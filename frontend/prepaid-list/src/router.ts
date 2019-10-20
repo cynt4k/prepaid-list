@@ -46,15 +46,13 @@ function titleFct(route: Route): Title {
     }
 }
 
-export default new Router({
+const router = new Router({
     routes: [
         {
             path: '/',
             component: ToolbarLayout,
             props: (route: Route) => ({
                 title: titleFct(route),
-                titleFirst: 'Digitale',
-                titleSecond: 'Prepaidliste',
                 showBackBtn: route.name !== 'Home' && route.name !== 'Dashboard',
             }),
             children: [
@@ -131,3 +129,18 @@ export default new Router({
         },
     ],
 });
+
+import { store } from './store';
+
+router.beforeEach((to, from, next) => {
+    if (to.path.includes('/user/')) {
+        /* Pretty hacky to include the store... */
+        const token = store.getters['UserModule/token'];
+        if (!token) {
+            next({name: 'Home'});
+        }
+    }
+    next();
+});
+
+export default router;
