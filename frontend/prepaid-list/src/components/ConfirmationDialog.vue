@@ -28,8 +28,8 @@ export default class ConfirmationDialog extends Vue {
     private onChanged(val: boolean, oldVal: boolean) {
         this.src = require(`@/assets/img/confirmation.gif`);
         setTimeout(() => {
-          this.src = undefined;
-            this.$emit('next');
+          this.src = '';
+          this.$emit('next');
         }, 1500);
     }
 }
