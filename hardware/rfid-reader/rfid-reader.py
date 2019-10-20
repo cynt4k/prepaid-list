@@ -17,7 +17,6 @@ class RFIDReader():
                 print("Hold a tag near the reader")
                 id, text = self.reader.read()
                 print("ID: %s\nText: %s" % (id,text))
-                sleep(5)
                 return id, text
         except KeyboardInterrupt:
             GPIO.cleanup()
@@ -26,11 +25,14 @@ class RFIDReader():
 async def websocket_rfid(websocket, path):
     print('opened websocket')
     reader = RFIDReader()
-    cardInput = await reader.readCard()
-    print(cardInput)
-    result = await websocket.send(json.dumps({'cardId': cardInput}))
+    async for message in websocket: 
+        cardInput = await reader.readCard()
+        print('card id', cardInput)
+        message = json.dumps({'cardId': cardInput})
+        print('message: ', message)
+        result = await websocket.send(message)
 
 if __name__ == "__main__":
-    asyncio.get_event_loop().run_until_complete(websockets.serve(websocket_rfid, 'localhost', 8765))
+    asyncio.get_event_loop().run_until_complete(websockets.serve(websocket_rfid, '10.102.40.40', 8765))
     asyncio.get_event_loop().run_forever()
 
