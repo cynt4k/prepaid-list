@@ -23,4 +23,5 @@ build-frontend:
   script:
     - cd frontend/prepaid-list
     - npm install @vue/cli
+    - npm install
     - npm run-script build
