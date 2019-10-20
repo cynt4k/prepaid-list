@@ -3,7 +3,7 @@ import store from '@/store';
 import { IMessageState, MessagesQueue } from './message.state';
 
 @Module({ dynamic: true, store, name: 'message' })
-class Message extends VuexModule implements IMessageState {
+export class MessageState extends VuexModule implements IMessageState {
     public messages: MessagesQueue[] = [];
 
     @Mutation
@@ -36,4 +36,4 @@ class Message extends VuexModule implements IMessageState {
     }
 }
 
-export const MessageModule = getModule(Message);
+export const MessageModule = getModule(MessageState);

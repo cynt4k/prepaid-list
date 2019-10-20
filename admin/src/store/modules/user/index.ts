@@ -4,7 +4,7 @@ import { IUserState } from './user.state';
 import { UserService } from '@/services/user.service';
 
 @Module({ dynamic: true, store, name: 'user' })
-class User extends VuexModule implements IUserState {
+export class UserState extends VuexModule implements IUserState {
     public token = '';
     public refreshToken = '';
     public loggedIn = false;
@@ -49,4 +49,4 @@ class User extends VuexModule implements IUserState {
     }
 }
 
-export const UserModule = getModule(User);
+export const UserModule = getModule(UserState);
