@@ -5,6 +5,7 @@ import { UserService } from '@/services/user.service';
 import { AxiosError } from 'axios';
 import { IResponse } from '@/types/service';
 import { MessageModule } from '../message';
+import { LocalStorageService } from '@/services';
 
 @Module({ dynamic: true, store, name: 'user' })
 export class UserState extends VuexModule implements IUserState {
@@ -45,11 +46,15 @@ export class UserState extends VuexModule implements IUserState {
             this.SET_REFRESH_TOKEN(data.refreshToken);
             this.SET_NICKNAME(data.user);
             this.SET_LOGIN(true);
+            LocalStorageService.updateStorage({
+                username: data.user,
+                token: data.token,
+                rights: [],
+                refreshToken: data.refreshToken
+            });
         } catch (e) {
             const axiosError = e as AxiosError<IResponse<any>>;
-            if (axiosError.response) {
-                MessageModule.addApiMessage(axiosError.response.data);
-            }
+            MessageModule.addApiMessage(axiosError);
         }
     }
 

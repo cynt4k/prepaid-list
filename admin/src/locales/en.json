@@ -1,4 +1,5 @@
 {
+	"api.NETWORK_ERROR": "Error while connecting",
 	"api.UNKNOWN": "An error occurred",
 	"api.warning.W_USERS_NOT_FOUND": "User not found",
 	"api.warning.W_USER_PASSWORD_WRONG": "Password is wrong",

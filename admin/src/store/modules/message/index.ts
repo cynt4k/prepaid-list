@@ -3,6 +3,7 @@ import store from '@/store';
 import { IResponse } from '@/types/service';
 import { IMessageState, MessagesQueue, MessageQueueType } from './message.state';
 import i18n from '@/i18n';
+import { AxiosError } from 'axios';
 
 @Module({ dynamic: true, store, name: 'message' })
 export class MessageState extends VuexModule implements IMessageState {
@@ -38,32 +39,44 @@ export class MessageState extends VuexModule implements IMessageState {
     }
 
     @Action
-    public addApiMessage(api: IResponse<any>): void {
-        function getTypeOfApiMessage(errorCode: number): MessageQueueType {
-            if (api.message.startsWith('E_')) {
-                return 'error';
-            }
-            if (api.message.startsWith('W_')) {
-                return 'warning';
-            }
-            if (api.message.startsWith('I_')) {
-                return 'info';
-            }
-            if (errorCode >= 400) {
-                return 'error';
-            }
-            return 'info';
-        }
+    public addApiMessage(api: AxiosError<IResponse<any>>): void {
+        const response = api.response;
 
         const message: MessagesQueue = {
-            type: getTypeOfApiMessage(api.code),
+            type: 'error',
             shortText: i18n.t('api.UNKNOWN').toString()
         };
 
-        const localeString = `api.${message.type}.${api.message}`;
-        if (i18n.te(localeString)) {
-            message.shortText = i18n.t(`api.${message.type}.${api.message}`).toString();
+        if (!response) {
+            if (api.request) {
+                message.type = 'error';
+                message.shortText = i18n.t(`api.NETWORK_ERROR`).toString();
+            }
+        } else {
+            function getTypeOfApiMessage(errorCode: number, msg: string): MessageQueueType {
+                if (msg.startsWith('E_')) {
+                    return 'error';
+                }
+                if (msg.startsWith('W_')) {
+                    return 'warning';
+                }
+                if (msg.startsWith('I_')) {
+                    return 'info';
+                }
+                if (errorCode >= 400) {
+                    return 'error';
+                }
+                return 'info';
+            }
+
+            message.type = getTypeOfApiMessage(response.data.code, response.data.message);
+
+            const localeString = `api.${message.type}.${response.data.message}`;
+            if (i18n.te(localeString)) {
+                message.shortText = i18n.t(localeString).toString();
+            }
         }
+
         this.addMessage(message);
     }
 }
