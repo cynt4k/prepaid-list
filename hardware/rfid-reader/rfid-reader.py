@@ -4,6 +4,7 @@ from mfrc522 import SimpleMFRC522
 import websockets
 import asyncio
 import json
+import RPi.GPIO as GPIO
 
 
 class RFIDReader():
@@ -22,10 +23,15 @@ class RFIDReader():
             GPIO.cleanup()
             raise
 
+oldWebsocket = None
+
 async def websocket_rfid(websocket, path):
+    if oldWebsocket:
+        oldWebsocket.close()
     print('opened websocket')
+    # todo oldwebsocket close
     reader = RFIDReader()
-    async for message in websocket: 
+    while True:
         cardInput = await reader.readCard()
         print('card id', cardInput)
         message = json.dumps({'cardId': cardInput})
