@@ -5,6 +5,7 @@ import store from './store';
 import vuetify from './plugins/vuetify';
 import Vuelidate from 'vuelidate';
 import { Component } from 'vue-property-decorator';
+import i18n from './i18n';
 
 Component.registerHooks(['validations']);
 
@@ -16,5 +17,6 @@ new Vue({
   router,
   store,
   vuetify,
+  i18n,
   render: (h: CreateElement): VNode => h(App),
 }).$mount('#app');

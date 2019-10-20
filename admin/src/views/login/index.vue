@@ -8,7 +8,7 @@
                             <v-text-field
                                 v-model="username"
                                 color="green darken-2"
-                                label="Benutzername"
+                                :label="$t('frontend.view.login.username')"
                                 :error-messages="nameErrors()"
                                 required
                                 @input="$v.username.$touch()"
@@ -17,7 +17,7 @@
                             <v-text-field
                                 v-model="password"
                                 color="green darken-2"
-                                label="Passwort"
+                                :label="$t('frontend.view.login.password')"
                                 :type="showPassword ? 'text' : 'password'"
                                 :append-icon="showPassword ? showPassordIcon.show : showPassordIcon.hide"
                                 @click:append="showPassword = !showPassword"
@@ -30,7 +30,7 @@
                     </v-row>
                     <v-row no-gutters align="center" justify="center">
                         <v-col cols="auto">
-                            <v-btn @click="submit">Login</v-btn>
+                            <v-btn @click="submit">{{$t('frontend.view.login.submit')}}</v-btn>
                         </v-col>
                     </v-row>
                 </v-container>
