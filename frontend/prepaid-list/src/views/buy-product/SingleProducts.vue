@@ -7,7 +7,7 @@
             <big-button-flex
               :key="product.name"
               :title="product.name"
-              :additional="product | extras | currency(product.extras ? 'ab ' : '')"
+              :additional="product.price | currency(product.extras ? 'ab ' : '')"
               @click="product.extras ? showDialog(product) : addToCart(product)"
             ></big-button-flex>
           </template>
