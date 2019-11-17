@@ -8,10 +8,7 @@ services:
       dockerfile: ./docker/dev.Dockerfile
     volumes:
       - ../prepaid-list:/usr/src/app
-      - /usr/src/app/node_modules
     ports:
       - 8080:8080
     env_file:
        - .env.backend.local
-#volumes:
-  #node_modules:

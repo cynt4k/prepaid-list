@@ -1,7 +1,7 @@
 image: node:12-alpine
 
 stages:
-#  - build
+  - build
 
 cache:
   untracked: false
