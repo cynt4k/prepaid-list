@@ -18,4 +18,5 @@ export interface IUserModel extends Document, ITimestamp {
     updateToken: (newToken: string) => void;
     comparePassword: (checkingPassword: string, cb: (e: any, isMatch: any) => void) => void;
     updatePassword: (newPassword: string) => void;
+    updateBalance: (amount: number, cb: (e: any) => void) => void;
 }

@@ -5,6 +5,7 @@ import Register from '@/views/Register.vue';
 import UserSelect from '@/views/UserSelect.vue';
 import Dashboard from '@/views/Dashboard.vue';
 import BuyProduct from '@/views/buy-product/BuyProduct.vue';
+import Recharge from '@/views/Recharge.vue';
 import SingleProducts from '@/views/buy-product/SingleProducts.vue';
 import Confirmation from '@/views/buy-product/Confirmation.vue';
 
@@ -34,25 +35,25 @@ function titleFct(route: Route): Title {
     } else if (
         route.name === 'UserSingleProductInfos' ||
         route.name === 'SingleProductInfos' ||
-        route.name === 'ProductInfos'||
+        route.name === 'ProductInfos' ||
         route.name === 'UserProductInfos'
     ) {
         return { firstPart: 'Produkt', secondPart: 'Infos' };
+    } else if (route.name === 'Recharge') {
+        return { firstPart: 'Guthaben', secondPart: 'einzahlen' };
     } else {
         return { firstPart: 'Digitale', secondPart: 'Prepaid Liste' };
     }
 }
 
-export default new Router({
+const router = new Router({
     routes: [
         {
             path: '/',
             component: ToolbarLayout,
             props: (route: Route) => ({
                 title: titleFct(route),
-                titleFirst: 'Digitale',
-                titleSecond: 'Prepaidliste',
-                showBackBtn: route.name !== 'Home',
+                showBackBtn: route.name !== 'Home' && route.name !== 'Dashboard',
             }),
             children: [
                 { name: 'Home', component: Home, path: '/' },
@@ -86,6 +87,11 @@ export default new Router({
                     path: '/user/nav',
                     component: NavigationToolbarLayout,
                     children: [
+                        {
+                            path: 'recharge',
+                            name: 'Recharge',
+                            component: Recharge,
+                        },
                         {
                             path: 'buyProducts',
                             name: 'BuyProduct',
@@ -123,3 +129,18 @@ export default new Router({
         },
     ],
 });
+
+import { store } from './store';
+
+router.beforeEach((to, from, next) => {
+    if (to.path.includes('/user/')) {
+        /* Pretty hacky to include the store... */
+        const token = store.getters['UserModule/token'];
+        if (!token) {
+            next({name: 'Home'});
+        }
+    }
+    next();
+});
+
+export default router;

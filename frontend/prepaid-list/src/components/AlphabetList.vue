@@ -18,20 +18,22 @@
           <span>{{letterObj.letter}}</span>
         </v-subheader>
 
-        <template v-for="item in letterObj.users" ref="tempRef">
-          <v-list-tile :key="item.title" avatar @click="emitUser(item)" ripple>
-            <v-list-tile-avatar>
-              <img :src="item.avatar" v-if="item.avatar">
-              <v-icon x-large v-else>mdi-account-circle</v-icon>
-            </v-list-tile-avatar>
+        <div class="users" :key="`div.${letterObj.letter}`">
+          <template v-for="item in letterObj.users" ref="tempRef">
+            <v-list-tile class="listitem" :key="item.title" avatar @click="emitUser(item)" ripple>
+              <v-list-tile-avatar>
+                <img :src="item.avatar" v-if="item.avatar">
+                <v-icon x-large v-else>mdi-account-circle</v-icon>
+              </v-list-tile-avatar>
 
-            <v-list-tile-content>
-              <!-- <v-list-tile-title v-html="item.name"></v-list-tile-title> -->
-              <v-list-tile-sub-title v-html="item.nickname"></v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action></v-list-tile-action>
-          </v-list-tile>
-        </template>
+              <v-list-tile-content>
+                <!-- <v-list-tile-title v-html="item.name"></v-list-tile-title> -->
+                <v-list-tile-sub-title v-html="item.nickname"></v-list-tile-sub-title>
+              </v-list-tile-content>
+              <v-list-tile-action></v-list-tile-action>
+            </v-list-tile>
+          </template>
+        </div>
       </template>
     </v-list>
   </div>
@@ -52,28 +54,28 @@ export default class AlphabetList extends Vue {
     }
 
     private get alphabet() {
-        return [...'abcdefghijklmnopqrstuvwxyz'];
+      return [...'abcdefghijklmnopqrstuvwxyz'];
     }
 
-    private subscriptions() {}
+    private mounted() {
+        this.onChildChanged([], []);
+    }
 
     @Watch('items')
-    onChildChanged(val: User[], oldVal: User[]) {
+    private onChildChanged(val: User[], oldVal: User[]) {
         const result = this.items
-            .map(user => ({ letter: user.nickname[0], user }))
+            .map((user: User) => ({ letter: user.nickname[0], user }))
             .reduce((acc: any, curr) => {
                 const letter = curr.letter.toLowerCase();
                 (acc[letter] = acc[letter] || []).push(curr.user);
                 return acc;
             }, {});
-            
+        this.alphaUserList = [];
         this.alphabet.forEach((letter: string) => {
             const obj: AlphabetUser = { letter, users: result[letter] };
             this.alphaUserList.push(obj);
         });
     }
-
-    private mounted() {}
 
     private emitUser(item: any) {
         this.$emit('user-selected', item);
@@ -126,9 +128,22 @@ interface AlphabetUser {
 }
 .letter-separator {
     background-color: grey;
+    font-size: 10px;
+    height: 25px;
     > span {
         text-transform: uppercase;
         font-size: 150%;
+    }
+}
+
+.users {
+    display: flex;
+    flex-flow: row wrap;
+    .listitem {
+        width: 50%;
+    }
+    .listitem:nth-last-child(1):nth-child(odd) {
+        width: 100%;
     }
 }
 </style>

@@ -7,6 +7,6 @@ const router: Router = Router();
 
 router.get('/', CheckAuth.isAuth, ProfileController.getProfile);
 router.put('/', CheckAuth.isAuth, ProfileValidator.updateUser(), ProfileController.putUpdateUser);
-router.put('/balance', CheckAuth.isAuth, ProfileController.putAddBalance);
+router.put('/balance', CheckAuth.isAuth, ProfileValidator.addBalance(), ProfileController.putAddBalance);
 
 export const ProfileRouter: Router = router;

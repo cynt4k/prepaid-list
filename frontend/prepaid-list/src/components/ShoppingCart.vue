@@ -16,8 +16,8 @@
           <v-icon>mdi-plus-circle</v-icon>
         </v-btn>
       </td>
-      <td>{{ props.item.productExtra ? props.item.productExtra.price : props.item.product.price | currency}}</td>
-      <td>{{ (props.item.amount * (props.item.productExtra ? props.item.productExtra.price : props.item.product.price)) | currency }}</td>
+      <td>{{ props.item.product.price + (props.item.productExtra ? props.item.productExtra.price : 0) | currency}}</td>
+      <td>{{ (props.item.amount * (props.item.product.price + (props.item.productExtra ? props.item.productExtra.price : 0))) | currency }}</td>
       <td class="text-xs-right">
         <v-btn icon color="error" flat @click="removeItem(props.item)">
           <v-icon>mdi-delete</v-icon>
@@ -37,7 +37,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import NavigationToolbarLayout from '@/layout/NavigationToolbarLayout.vue';
 import NavigationFooter from '@/components/NavigationFooter.vue';
 
 import { Product } from '@/interfaces/Product';

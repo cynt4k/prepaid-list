@@ -1,6 +1,6 @@
 export interface ProductExtra {
     name: string;
     icon?: string;
-    id?: number;
+    id: string;
     price: number;
 }

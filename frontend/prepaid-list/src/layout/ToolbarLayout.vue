@@ -17,6 +17,9 @@
         </v-toolbar-title>
       </slot>
       <v-spacer></v-spacer>
+	  <span v-if="user">
+		  <auto-logoff/>
+	  </span>
       <span v-if="user">
         <v-chip slot="activator" color="green" text-color="white" class="credit-chip">
           <v-avatar class="green darken-4">
@@ -45,6 +48,8 @@
   </div>
 </template>
 <script lang="ts">
+import AutoLogoff from '@/components/AutoLogoff.vue';
+
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import { User } from '@/interfaces/User';
@@ -65,25 +70,22 @@ const userModule = namespace(StateNamespaces.USER_STATE);
             return formatter.format(s);
         },
     },
+    components: { AutoLogoff },
 })
 export default class ToolbarLayout extends Vue {
     @userModule.Action(UserActionTypes.RESET_STATE)
     private resetUserAction!: ResetUserAction;
 
-    @userModule.Getter
-    private user!: User;
+    @userModule.Getter private user!: User;
 
     @Prop({ default: false })
     private showBackBtn!: boolean;
 
-    @Prop()
-    private title!: Title;
+    @Prop() private title!: Title;
 
     private logout() {
-        setTimeout(() => {
-            this.$router.push({ name: 'Home' });
-            this.resetUserAction(undefined);
-        }, 100);
+        this.resetUserAction();
+        this.$router.push({ name: 'Home' });
     }
 }
 </script>

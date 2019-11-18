@@ -69,6 +69,7 @@ export const mutations: MutationTree<ShoppingCartState> = {
 export type AddProductAction = (payload: ShoppingCartItem) => void;
 export type RemoveProductAction = (payload: ShoppingCartItem) => void;
 export type DeleteProductAction = (payload: ShoppingCartItem) => void;
+export type ResetStateAction = () => void;
 
 export enum ShoppingCartActionTypes {
     ADD_PRODUCT = 'addProductAction',
@@ -116,15 +117,15 @@ export const getters: GetterTree<ShoppingCartState, any> = {
         let sum: number = 0;
         Object.keys(state.shoppingCart).forEach((key: string) => {
             const item: ShoppingCartItem = state.shoppingCart[key];
-            const price = item.productExtra
-                ? item.productExtra.price
-                : item.product.price;
+            const price =
+                item.product.price +
+                (item.productExtra ? item.productExtra.price : 0);
             sum += price * state.shoppingCart[key].amount;
         });
         return sum;
     },
-    shoppingCartIsEmpty: (state, getters): boolean => {
-        return getters.shoppingCartItems.length === 0;
+    shoppingCartIsEmpty: (state, getters1): boolean => {
+        return getters1.shoppingCartItems.length === 0;
     },
 };
 

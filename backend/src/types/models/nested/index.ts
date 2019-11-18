@@ -1,3 +1,4 @@
-export * from './product-order';
-export * from './product-extra';
-export * from './language-translation';
+export * from './language-translation.d';
+export * from './product-extra-order.d';
+export * from './product-extra.d';
+export * from './product-order.d';

@@ -29,8 +29,9 @@ import ShoppingCart from '@/components/ShoppingCart.vue';
     components: { ShoppingCart },
 })
 export default class Register extends Vue {
-	// name of binding should not be changed because of emitting on a v-model. This v-model automatically listen to a binding called "value".
-	// For further information see https://vuejs.org/v2/guide/components.html#Using-v-model-on-Components
+    // name of binding should not be changed because of
+    // emitting on a v-model. This v-model automatically listen to a binding called "value".
+    // For further information see https://vuejs.org/v2/guide/components.html#Using-v-model-on-Components
     @Prop()
     private value: boolean = false;
 }

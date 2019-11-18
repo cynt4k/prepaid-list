@@ -41,7 +41,7 @@ passport.use('login-token', new LocalStrategy({
     passwordField: 'token'
 }, async (req: Request, token: string, password: string, done: any) => {
     try {
-        const users = await User.find({ token: { $exists: true }}, '+token');
+        const users = await User.find({ tokenUid: { $exists: true }}, '+tokenUid');
         const res = users.find((user: IUserModel) => {
             if (bcrypt.compareSync(token, user.tokenUid)) {
                 return true;

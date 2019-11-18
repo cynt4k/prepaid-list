@@ -1,19 +1,7 @@
 <template>
   <v-footer>
-    <v-dialog v-model="showDialog" persistent width="fit-content">
-      <v-layout align-center>
-        <v-card>
-          <v-card-title class="headline">
-            <img :src="require(`@/assets/img/confirmation.gif`)">
-          </v-card-title>
-          <v-card-title>
-            <h2>Kauf abgeschlossen!</h2>
-          </v-card-title>
-        </v-card>
-      </v-layout>
-    </v-dialog>
     <v-btn
-      :disabled="shoppingCartIsEmpty || showDialog"
+      :disabled="shoppingCartIsEmpty"
       color="success"
       class="confirm-btn"
       @click="acceptOrder()"
@@ -40,15 +28,8 @@ export default class ConfirmationNavigationFooter extends Vue {
     @shoppingCartModule.Getter
     private shoppingCartIsEmpty!: boolean;
 
-    private showDialog: boolean = false;
-
     private acceptOrder(): void {
-        this.showDialog = true;
-        // setTimeout(() => (this.showDialog = false), 4000);
-
-        // ToDo to backend: send order
-        // Reset shopping cart state.
-        // update the credit of the current user
+        this.$emit('next');
     }
 }
 </script>
