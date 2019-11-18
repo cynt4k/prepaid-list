@@ -104,3 +104,8 @@ export default class App extends Vue {
     left: calc(50% - 35px);
 }
 </style>
+<style>
+html {
+    overflow-y: auto !important;
+}
+</style>
