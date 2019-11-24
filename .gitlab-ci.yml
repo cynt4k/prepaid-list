@@ -21,7 +21,7 @@ build-backend:
 build-frontend:
   stage: build
   script:
-    - cd frontend/prepaid-list
+    - cd frontend
     - npm install @vue/cli
     - npm install
     - npm run-script build
