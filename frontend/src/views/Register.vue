@@ -1,0 +1,198 @@
+<template>
+  <v-container class="register content-container" align-center justify-center text-xs-center fluid fill-height>
+    <v-card flat>
+      <v-container justify-center align-center v-if="registering">
+        <!-- <v-layout align-center justify-center text-xs-center wrap class="btn-list-layout"> -->
+        <v-progress-circular :size="200" color="primary" indeterminate></v-progress-circular>
+        <h4>Register</h4>
+        <v-btn class="back-to-home-btn" text color="red">Abbrechen</v-btn>
+      </v-container>
+      <v-form v-if="!registering" ref="form" @submit.prevent="submit">
+        <v-container grid-list-xl fluid>
+          <v-layout wrap>
+            <!-- Vorname -->
+            <v-flex xs12 sm6>
+              <v-text-field
+                v-model="firstName"
+                :rules="chkNotEmptyRule"
+                color="green darken-2"
+                label="Vorname"
+                required
+              ></v-text-field>
+            </v-flex>
+
+            <!-- Nachname -->
+            <v-flex xs12 sm6>
+              <v-text-field
+                v-model="lastName"
+                :rules="chkNotEmptyRule"
+                color="blue darken-2"
+                label="Nachname"
+                required
+              ></v-text-field>
+            </v-flex>
+
+            <!-- Nick -->
+            <v-flex xs12 sm6>
+              <v-text-field
+                v-model="nick"
+                :rules="chkNotEmptyRule"
+                color="blue darken-2"
+                label="Nick"
+                required
+              ></v-text-field>
+            </v-flex>
+
+            <!-- EMail -->
+            <v-flex xs12>
+              <v-text-field v-model="email" :rules="emailRules" required color="teal">
+                <div slot="label">E-Mail</div>
+              </v-text-field>
+            </v-flex>
+            <v-flex xs12>
+              <v-checkbox v-model="acceptTerms" color="green">
+                <div slot="label">
+                  Hiermit akzeptiere ich die
+                  <a @click.stop="terms = true">Nutzungsbedingungen</a>
+                  der digitalen Getränkeliste.
+                </div>
+              </v-checkbox>
+            </v-flex>
+          </v-layout>
+        </v-container>
+        <v-card-actions>
+          <v-btn text @click="resetForm" :to="{name: 'Home'}">Abbrechen</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn :disabled="!formIsValid" text color="primary" type="submit">Registrieren</v-btn>
+        </v-card-actions>
+      </v-form>
+
+      <!-- Nutzungsbedingungen -->
+      <v-dialog v-model="terms" width="70%">
+        <v-card>
+          <v-card-title class="title">Terms</v-card-title>
+          <v-card-text
+            v-for="n in 5"
+            :key="n"
+          >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc.</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text color="green" @click="terms = false">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-card>
+  </v-container>
+</template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import { IApiService, IUserService, IJwtService } from '@/types';
+import {
+  IUserRegister,
+  IResponseToken,
+  IApiResponse
+} from '../interfaces/services';
+import { tap, catchError } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+import { User } from '../interfaces/User';
+import {
+  EventBus,
+  EventBusMessage,
+  SnackbarOptions,
+  TypeColor
+} from '@/assets/EventBus';
+import { userStore } from '../store';
+
+@Component({ components: { } })
+export default class Register extends Vue {
+    private firstName: string = '';
+    private lastName: string = '';
+    private nick: string = '';
+    private email: string = '';
+    private acceptTerms: boolean = false;
+    private snackbar: boolean = false;
+    private terms: boolean = false;
+
+    private registering: boolean = false;
+    private chkNotEmptyRule = [
+      (val: any) => (val || '').length > 0 || 'Dieses Feld muss gefüllt sein'
+    ];
+
+    private emailRules = [this.emailValid];
+
+    private resetForm() {
+      // @ts-ignore
+      this.$refs.form.reset();
+    }
+
+    private regexMail(val: any) {
+      return (val || '').length > 0 && /.+@.+\...+/.test(val);
+    }
+
+    private emailValid(val: any) {
+      return this.regexMail(val) || 'E-Mailadresse ist ungültig';
+    }
+    private submit() {
+      const newUser: IUserRegister = {
+        username: this.nick,
+        email: this.email,
+        name: {
+          firstname: this.firstName,
+          lastname: this.lastName
+        }
+      };
+
+      try {
+        userStore.registerUser(newUser);
+        this.registering = false;
+        this.snackbar = true;
+
+        this.resetForm();
+        setTimeout(() => this.$router.push({ name: 'Dashboard' }), 1000);
+        this.registering = true;
+
+        const options: SnackbarOptions = {
+          message: 'Registrierung erfolgreich!',
+          snackbarType: TypeColor.INFO
+        };
+        EventBus.$emit(EventBusMessage.MESSAGE, options);
+      } catch (err) {
+        this.registering = false;
+
+        // TODO - TranslatorService mit einbinden für I18N-Konvertierung
+        // TODO - Pruefen auf Code und abhängig von ErrCode Message ausgeben
+        const options: SnackbarOptions = {
+          message: err.message,
+          snackbarType: TypeColor.ERROR
+        };
+        EventBus.$emit(EventBusMessage.MESSAGE, options);
+      }
+    }
+
+    get formIsValid() {
+      return (
+        this.firstName &&
+            this.lastName &&
+            this.nick &&
+            this.regexMail(this.email) &&
+            this.acceptTerms
+      );
+    }
+}
+</script>
+<style lang="scss">
+h4 {
+    text-align: center;
+    padding: 0;
+    margin: 15px 0 0 0;
+}
+.back-to-home-btn {
+    margin: 15px 0 -20px 0;
+}
+</style>
+<style lang="scss" scoped>
+.content-container {
+    overflow: auto;
+}
+</style>
