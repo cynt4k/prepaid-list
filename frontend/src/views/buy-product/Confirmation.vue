@@ -19,19 +19,15 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import ConfirmationNavigationFooter from '@/components/ConfirmationNavigationFooter.vue';
-
-import { User } from '@/interfaces/User';
-
 import ShoppingCart from '@/components/ShoppingCart.vue';
-import { IOrderService } from '@/types/services/order.service';
-import { IErrorHandlingService } from '@/types/services/errorHandling.service';
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
-import { INewOrder, INewProductOrder, IOrder, INewProductExtraOrder } from '../../interfaces/services';
-import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
-import { ErrorMessage } from '@/interfaces/ErrorMessage';
 import { EventBus, EventBusMessage, SnackbarOptions, TypeColor, TypeColorConverter } from '@/assets/EventBus';
 import { userStore, shoppingCartStore } from '@/store';
 import Factory from '../../services/factory';
+import { INewProductOrder, INewProductExtraOrder, INewOrder, IOrder } from '@/services/entities/api';
+import { ShoppingCartItem } from '@/services/entities/ShoppingCartItem';
+import { ErrorMessage } from '@/services/entities/ErrorMessage';
+import { User } from '@/services/entities/User';
 
 @Component({
   components: {
@@ -64,6 +60,7 @@ export default class Confirmation extends Vue {
     }
 
     private acceptOrder() {
+      // TODO: Put into store. No service call in vue compoenent.
       const products: INewProductOrder[] = [];
       this.shoppingCartItems.forEach((element: ShoppingCartItem) => {
         const extras: INewProductExtraOrder[] = ((): INewProductExtraOrder[] => {
@@ -88,7 +85,7 @@ export default class Confirmation extends Vue {
           shoppingCartStore.resetState();
           this.showDialog = true;
         },
-        (error) => {
+        (error: any) => {
           const errorCode: string = error.response.data.message;
           const message: ErrorMessage = Factory.getInstance().ErrorHandlingService.translateError(errorCode, '');
           const typeColor: TypeColor = TypeColorConverter.convertFromErrorMessage(message);

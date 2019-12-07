@@ -52,8 +52,7 @@ import AutoLogoff from '@/components/AutoLogoff.vue';
 
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import { User } from '@/interfaces/User';
-import { Title } from '@/router';
+import { Title } from '@/plugins/router';
 import { userStore } from '../store';
 
 @Component({

@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-import { User } from '@/interfaces/User';
+import { User } from '@/services/entities/User';
 
 @Component({})
 export default class AlphabetList extends Vue {

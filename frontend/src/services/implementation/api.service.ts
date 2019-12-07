@@ -1,10 +1,10 @@
-import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { Observable, from, observable } from 'rxjs';
-import { IApiService, IJwtService } from '@/types';
-import { IResponse, IResponseToken } from '@/interfaces/services';
 import { JwtService } from './jwt.service';
 import { EventBus } from '@/assets/EventBus';
-import Factory from './factory';
+import Factory from '../factory';
+import { IApiService } from '@/services/types/api';
+import { IResponse } from '../entities/api';
 
 export class ApiService implements IApiService {
     private api: string;
@@ -25,11 +25,11 @@ export class ApiService implements IApiService {
       return Observable.create((observer: any) => {
         axios
           .get(url, config)
-          .then((response) => {
+          .then((response: AxiosResponse) => {
             observer.next(response.data);
             observer.complete();
           })
-          .catch((e) => {
+          .catch((e: Error) => {
             observer.error(e);
           });
       });
@@ -47,11 +47,11 @@ export class ApiService implements IApiService {
       return Observable.create((observer: any) => {
         axios
           .post(url, data, config)
-          .then((response) => {
+          .then((response: AxiosResponse) => {
             observer.next(response.data);
             observer.complete();
           })
-          .catch((e) => {
+          .catch((e: Error) => {
             observer.error(e);
           });
       });
@@ -69,11 +69,11 @@ export class ApiService implements IApiService {
       return Observable.create((observer: any) => {
         axios
           .put(url, data, config)
-          .then((response) => {
+          .then((response: AxiosResponse) => {
             observer.next(response.data);
             observer.complete();
           })
-          .catch((e) => {
+          .catch((e: Error) => {
             observer.error(e);
           });
       });

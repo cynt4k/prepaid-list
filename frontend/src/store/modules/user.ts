@@ -1,9 +1,9 @@
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
-import { User } from '@/interfaces/User';
-import { IUserRegister, IResponseToken, IUserModel } from '@/interfaces/services/index';
 import Factory from '@/services/factory';
 import store from '../index';
 import { shoppingCartStore } from '../store-accessor';
+import { User } from '@/services/entities/User';
+import { IUserRegister, IResponseToken, IUserModel } from '@/services/entities/api';
 
 @Module({ name: 'user', namespaced: true, store })
 export default class UserModule extends VuexModule {

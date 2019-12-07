@@ -45,9 +45,8 @@
 import { Component, Vue } from 'vue-property-decorator';
 import NavigationFooter from '@/components/NavigationFooter.vue';
 
-import { Product } from '@/interfaces/Product';
-import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
 import { shoppingCartStore } from '../store';
+import { ShoppingCartItem } from '@/services/entities/ShoppingCartItem';
 
 @Component({
   filters: {

@@ -1,14 +1,13 @@
-import { IOrderService } from '@/types/services/order.service';
-import { IApiService } from '@/types';
-import { IOrder, INewOrder, IApiResponse } from '@/interfaces/services';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import Factory from './factory';
+import Factory from '@/services/factory';
+import { IOrderService } from '@/services/types/order.service';
+import { INewOrder, IOrder, IResponse } from '@/services/entities/api';
 
 export class OrderService implements IOrderService {
   public placeOrder(order: INewOrder): Observable<IOrder> {
     return Factory.getInstance().ApiService
       .post<IOrder>('order', order, true)
-      .pipe(map((res: IApiResponse<any>) => res.data));
+      .pipe(map((res: IResponse<any>) => res.data));
   }
 }

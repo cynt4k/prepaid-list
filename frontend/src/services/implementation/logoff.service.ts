@@ -1,7 +1,6 @@
-import { IJwtService, IApiService } from '@/types';
-import { ILogoffService } from '@/types/services/logoff.service';
-import { IResponseToken } from '@/interfaces/services';
-import Factory from './factory';
+import { ILogoffService } from '@/services/types/logoff.service';
+import Factory from '../factory';
+import { IResponseToken } from '@/services/entities/api';
 
 // tslint:disable: no-console
 

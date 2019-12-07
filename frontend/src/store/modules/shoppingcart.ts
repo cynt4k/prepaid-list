@@ -1,5 +1,5 @@
-import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
 import { Mutation, Action, getModule, VuexModule, Module } from 'vuex-module-decorators';
+import { ShoppingCartItem } from '@/services/entities/ShoppingCartItem';
 
 /// ////////////////////////////////////
 // State

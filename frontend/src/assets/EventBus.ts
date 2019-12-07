@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import { ErrorMessage, ErrorType } from '@/interfaces/ErrorMessage';
+import { ErrorMessage, ErrorType } from '@/services/entities/ErrorMessage';
+
 export const EventBus = new Vue();
 
 export const enum EventBusMessage {LOADING = 'loading', MESSAGE = 'message'}

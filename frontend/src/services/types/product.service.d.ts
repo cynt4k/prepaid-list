@@ -1,4 +1,4 @@
-import { IProductModel, ICategoryModel } from '@/interfaces/services';
+import { IProductModel, ICategoryModel } from '@/services/entities/api';
 import { Observable } from 'rxjs';
 
 export interface IProductService {

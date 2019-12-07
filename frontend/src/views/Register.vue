@@ -87,15 +87,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { IApiService, IUserService, IJwtService } from '@/types';
-import {
-  IUserRegister,
-  IResponseToken,
-  IApiResponse
-} from '../interfaces/services';
 import { tap, catchError } from 'rxjs/operators';
 import { Observable, from } from 'rxjs';
-import { User } from '../interfaces/User';
 import {
   EventBus,
   EventBusMessage,
@@ -103,6 +96,7 @@ import {
   TypeColor
 } from '@/assets/EventBus';
 import { userStore } from '../store';
+import { IUserRegister } from '../services/entities/api';
 
 @Component({ components: { } })
 export default class Register extends Vue {

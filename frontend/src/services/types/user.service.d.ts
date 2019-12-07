@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { IUser, IResponseToken, IUserModel, IUserRegister } from '@/interfaces/services';
+import { IUser, IResponseToken, IUserModel, IUserRegister } from '@/services/entities/api';
 
 export interface IUserService {
     getAllUser(): Observable<IUser[]>;

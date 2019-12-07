@@ -1,4 +1,4 @@
-import { IBalanceUpdateModel, IUser, IUserModel } from '@/interfaces/services';
+import { IBalanceUpdateModel, IUser, IUserModel } from '@/services/entities/api';
 import { Observable } from 'rxjs';
 
 export interface IProfileService {

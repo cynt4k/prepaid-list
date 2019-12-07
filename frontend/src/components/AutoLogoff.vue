@@ -11,14 +11,12 @@
 <script lang="ts">
 import { Component, Vue, Emit, Watch } from 'vue-property-decorator';
 import { TimeInterval } from 'rxjs';
-import { User } from '@/interfaces/User';
 import {
   EventBus,
   EventBusMessage,
   SnackbarOptions,
   TypeColor
 } from '@/assets/EventBus';
-import { IUserService, IJwtService } from '../types';
 import Factory from '../services/factory';
 import { userStore } from '../store';
 

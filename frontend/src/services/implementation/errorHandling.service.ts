@@ -1,5 +1,5 @@
-import { IErrorHandlingService } from '@/types/services/errorHandling.service';
-import { ErrorMessage, ErrorType } from '@/interfaces/ErrorMessage';
+import { IErrorHandlingService } from '@/services/types/errorHandling.service';
+import { ErrorMessage, ErrorType } from '@/services/entities/ErrorMessage';
 
 export class ErrorHandlingService implements IErrorHandlingService {
   public translateError(errorCode: string, locale: string): ErrorMessage {

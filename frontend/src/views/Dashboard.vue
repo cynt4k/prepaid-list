@@ -22,12 +22,10 @@ import BigButton from '@/components/BigButton.vue';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 
-import { User } from '@/interfaces/User';
-// import { ChangeUserAction } from '../store/user-state';
-import { IUserService, IJwtService } from '../types';
 import store, { userStore } from '../store';
 import { getModule } from 'vuex-module-decorators';
-import UserModule from '../store/modules/user';
+import UserModule from '@/store/modules/user';
+import { User } from '@/services/entities/User';
 
 @Component({ components: { BigButton, BigButtonFlex } })
 export default class Dashboard extends Vue {

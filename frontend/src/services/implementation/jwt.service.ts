@@ -1,5 +1,5 @@
-import { IJwtService, IApiService } from '@/types';
 import jwtDecode from 'jwt-decode';
+import { IJwtService } from '@/services/types/jwt.service';
 
 export class JwtService implements IJwtService {
   public getToken() {

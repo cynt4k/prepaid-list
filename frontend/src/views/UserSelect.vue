@@ -12,11 +12,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import AlphabetList from '@/components/AlphabetList.vue';
-import { User } from '@/interfaces/User';
 import { map } from 'rxjs/operators';
-import { ApiService } from '../services/api';
-import { IApiService, IUserService, IJwtService } from '@/types';
-import { IResponseToken, IUserModel, IUser } from '../interfaces/services';
 import {
   EventBus,
   EventBusMessage,
@@ -25,10 +21,12 @@ import {
 } from '@/assets/EventBus';
 import Factory from '../services/factory';
 import { userStore } from '../store';
+import { User } from '@/services/entities/User';
+import { IUser } from '@/services/entities/api';
 
 @Component({ components: { AlphabetList } })
 export default class UserSelect extends Vue {
-  private users: IUser[];
+  private users: User[];
 
   constructor() {
     super();
@@ -37,11 +35,12 @@ export default class UserSelect extends Vue {
 
   private mounted() {
     EventBus.$emit(EventBusMessage.LOADING, true);
+    // TODO: Put into store. No service call in vue compoenent.
     Factory.getInstance()
       .UserService.getAllUser()
       .subscribe(
         (data: IUser[]) => {
-          this.users = data;
+          this.users = data as any;
           EventBus.$emit(EventBusMessage.LOADING, false);
         },
         (err: any) => {

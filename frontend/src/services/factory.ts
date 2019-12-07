@@ -1,9 +1,17 @@
-import { IApiService, IUserService, IJwtService, IProfileService, IProductService } from '@/types';
-import { ApiService, UserService, JwtService, ProductService, OrderService } from '.';
-import { ProfileService } from './profile';
-import { IOrderService } from '@/types/services/order.service';
-import { IErrorHandlingService } from '@/types/services/errorHandling.service';
-import { ErrorHandlingService } from './errorHandling';
+import { ProfileService } from './implementation/profile.service';
+import { ErrorHandlingService } from './implementation/errorHandling.service';
+import { IApiService } from './types/api';
+import { IUserService } from './types/user.service';
+import { IJwtService } from './types/jwt.service';
+import { IProfileService } from './types/profile.service';
+import { IProductService } from './types/product.service';
+import { IOrderService } from './types/order.service';
+import { IErrorHandlingService } from './types/errorHandling.service';
+import { ApiService } from './implementation/api.service';
+import { UserService } from './implementation/user.service';
+import { JwtService } from './implementation/jwt.service';
+import { ProductService } from './implementation/product.service';
+import { OrderService } from './implementation/order.service';
 
 export default class Factory {
     private static instance: Factory | null = null;

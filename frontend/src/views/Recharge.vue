@@ -68,18 +68,13 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Category } from '@/interfaces/Category';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import BigButton from '@/components/BigButton.vue';
 import RechargeNavigationFooter from '@/components/RechargeNavigationFooter.vue';
 import ShoppingCartDialog from '@/components/ShoppingCartDialog.vue';
-import { IProductService, IProfileService } from '@/types';
-import { ILanguageTranslation } from '@/interfaces/services';
 
-import { IBalanceUpdateModel, IUserModel } from '../interfaces/services';
 
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
-import router from '../router';
 import {
   EventBus,
   EventBusMessage,
@@ -88,6 +83,7 @@ import {
 } from '@/assets/EventBus';
 import { userStore } from '../store';
 import Factory from '../services/factory';
+import { IBalanceUpdateModel, IUserModel } from '../services/entities/api';
 
 @Component({
   components: {
@@ -163,7 +159,7 @@ export default class Recharge extends Vue {
       );
   }
   private redirect() {
-    router.push({ name: 'Dashboard' });
+    this.$router.push({ name: 'Dashboard' });
   }
 }
 </script>

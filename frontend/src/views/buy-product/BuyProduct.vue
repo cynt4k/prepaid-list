@@ -27,19 +27,13 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Category } from '@/interfaces/Category';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import BuyProductNavigationFooter from '@/components/BuyProductNavigationFooter.vue';
 import ShoppingCartDialog from '@/components/ShoppingCartDialog.vue';
-import { IProductService } from '@/types';
-import {
-  ILanguageTranslation,
-  LanguageCode,
-  ICategoryModel,
-  ITranslationModel
-} from '@/interfaces/services';
 import { EventBusMessage, EventBus } from '@/assets/EventBus';
 import Factory from '../../services/factory';
+import { ICategoryModel, ILanguageTranslation, LanguageCode } from '@/services/entities/api';
+import { Category } from '@/services/entities/Category';
 
 @Component({
   components: {

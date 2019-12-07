@@ -59,25 +59,17 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
-import { Product } from '@/interfaces/Product';
-import { ProductExtra } from '@/interfaces/ProductExtra';
 import BuyProductNavigationFooter from '@/components/BuyProductNavigationFooter.vue';
 
 import ShoppingCartDialog from '@/components/ShoppingCartDialog.vue';
 
-import { ShoppingCartItem } from '@/interfaces/ShoppingCartItem';
-import { IProductService } from '../../types';
-import {
-  ILanguageTranslation,
-  IProductExtra,
-  ITranslationModel,
-  LanguageCode,
-  IProductModel
-} from '@/interfaces/services';
-
 import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 import Factory from '../../services/factory';
 import { shoppingCartStore } from '../../store';
+import { Product } from '@/services/entities/Product';
+import { ProductExtra } from '@/services/entities/ProductExtra';
+import { ShoppingCartItem } from '@/services/entities/ShoppingCartItem';
+import { ILanguageTranslation, ITranslationModel, LanguageCode, IProductModel, IProductExtra } from '@/services/entities/api';
 
 @Component({
   components: {
