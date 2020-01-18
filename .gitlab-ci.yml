@@ -8,7 +8,7 @@ cache:
   policy: pull-push
   paths:
     - backend/node_modules/
-    - frontend/prepaid-list/node_modules/
+    - frontend/node_modules/
 
 build-backend:
   stage: build
@@ -21,7 +21,7 @@ build-backend:
 build-frontend:
   stage: build
   script:
-    - cd frontend/prepaid-list
+    - cd frontend
     - npm install @vue/cli
     - npm install
     - npm run-script build
