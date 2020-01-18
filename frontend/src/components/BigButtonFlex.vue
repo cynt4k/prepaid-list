@@ -5,7 +5,7 @@
       :disabled="disabled"
       :icon="icon"
       :title="title"
-      @click="emitClick()"
+      @click="$emit('click')"
       :to="to"
       :additional="additional"
       :append="append"
@@ -32,10 +32,6 @@ export default class BigButtonFlex extends Vue {
     private additional!: string;
     @Prop()
     private append!: boolean;
-
-    private emitClick() {
-      this.$emit('click');
-    }
 }
 </script>
 <style lang="scss" scoped>

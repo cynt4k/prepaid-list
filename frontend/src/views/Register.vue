@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Ref } from 'vue-property-decorator';
 import { tap, catchError } from 'rxjs/operators';
 import { Observable, from } from 'rxjs';
 import {
@@ -96,7 +96,7 @@ import {
   TypeColor
 } from '@/assets/EventBus';
 import { userStore } from '../store';
-import { IUserRegister } from '../services/entities/api';
+import { IUserRegister } from '@/services/entities/api';
 
 @Component({ components: { } })
 export default class Register extends Vue {
@@ -115,9 +115,11 @@ export default class Register extends Vue {
 
     private emailRules = [this.emailValid];
 
+    @Ref('form')
+    private readonly form!: HTMLFormElement;
+
     private resetForm() {
-      // @ts-ignore
-      this.$refs.form.reset();
+      this.form.reset();
     }
 
     private regexMail(val: any) {

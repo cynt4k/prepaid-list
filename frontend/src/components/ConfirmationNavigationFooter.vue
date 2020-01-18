@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
 
 import Confirmation from '@/views/buy-product/Confirmation.vue';
 import { shoppingCartStore } from '../store';
@@ -27,9 +27,8 @@ export default class ConfirmationNavigationFooter extends Vue {
     return shoppingCartStore.shoppingCartIsEmpty;
   };
 
-  // Todo: Emit mit @Emit?
+  @Emit('next')
   private acceptOrder(): void {
-    this.$emit('next');
   }
 }
 </script>

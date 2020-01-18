@@ -71,8 +71,6 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import BigButton from '@/components/BigButton.vue';
 import RechargeNavigationFooter from '@/components/RechargeNavigationFooter.vue';
-import ShoppingCartDialog from '@/components/ShoppingCartDialog.vue';
-
 
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue';
 import {

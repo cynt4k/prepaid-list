@@ -1,6 +1,6 @@
 import { map } from 'rxjs/operators';
 import {
-  IApiService,
+  IApiService
 } from '@/services/types/api';
 import {
   IUser,

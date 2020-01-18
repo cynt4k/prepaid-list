@@ -8,7 +8,7 @@ cache:
   policy: pull-push
   paths:
     - backend/node_modules/
-    - frontend/prepaid-list/node_modules/
+    - frontend/node_modules/
 
 build-backend:
   stage: build

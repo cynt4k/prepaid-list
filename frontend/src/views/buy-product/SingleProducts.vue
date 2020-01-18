@@ -48,7 +48,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <shopping-cart-dialog v-if="showFooter" v-model="isShoppingCartDialogShown"/>
+    <shopping-cart-dialog v-if="showFooter" :show.sync="isShoppingCartDialogShown"/>
     <buy-product-navigation-footer
       ref="footer"
       v-if="showFooter"
@@ -57,7 +57,7 @@
   </v-container>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Ref } from 'vue-property-decorator';
 import BigButtonFlex from '@/components/BigButtonFlex.vue';
 import BuyProductNavigationFooter from '@/components/BuyProductNavigationFooter.vue';
 
@@ -108,6 +108,8 @@ export default class SingleProducts extends Vue {
     private category!: string;
     @Prop({ default: true })
     private showFooter!: boolean;
+    @Ref('footer')
+    private readonly footer!: BuyProductNavigationFooter;
 
     private getTranslation(
       translation: ITranslationModel,
@@ -179,9 +181,7 @@ export default class SingleProducts extends Vue {
       if (this.showFooter) {
         const item: ShoppingCartItem = { product: p, amount: 1 };
         shoppingCartStore.addProduct(item);
-        // @ts-ignore
-        // tslint:disable
-        this.$refs['footer'].update();
+        this.footer.update();
         this.dialogExtraProduct = false;
       }
     }
@@ -194,8 +194,7 @@ export default class SingleProducts extends Vue {
           productExtra: extra
         };
         shoppingCartStore.addProduct(item);
-        // @ts-ignore
-        this.$refs['footer'].update();
+        this.footer.update();
         this.dialogExtraProduct = false;
       }
     }

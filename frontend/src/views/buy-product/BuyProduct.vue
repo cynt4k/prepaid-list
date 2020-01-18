@@ -17,7 +17,7 @@
         ></big-button-flex>
       </template>
     </v-layout>
-    <shopping-cart-dialog v-if="showFooter" v-model="isShoppingCartDialogShown"/>
+    <shopping-cart-dialog v-if="showFooter" :show.sync="isShoppingCartDialogShown"/>
     <buy-product-navigation-footer
       v-if="showFooter"
       @show-shopping-cart-dialog="isShoppingCartDialogShown = true"
