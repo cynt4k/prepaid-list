@@ -23,22 +23,28 @@ class RFIDReader():
             GPIO.cleanup()
             raise
 
-oldWebsocket = None
+class WebSocketHandler: 
+    def __init__(self):
+        self.oldWebsocket = None
 
-async def websocket_rfid(websocket, path):
-    if oldWebsocket:
-        oldWebsocket.close()
-    print('opened websocket')
-    # todo oldwebsocket close
-    reader = RFIDReader()
-    while True:
-        cardInput = await reader.readCard()
-        print('card id', cardInput)
-        message = json.dumps({'cardId': cardInput})
-        print('message: ', message)
-        result = await websocket.send(message)
+    async def websocket_rfid(self, websocket, path):
+        if self.oldWebsocket:
+            self.oldWebsocket.close()
+        self.oldWebsocket = websocket
+        print('opened websocket')
+        # todo oldwebsocket close
+        reader = RFIDReader()
+        while True:
+            cardInput = await reader.readCard()
+            print('card id', cardInput)
+            message = json.dumps({'cardId': cardInput})
+            print('message: ', message)
+            result = await websocket.send(message)
+            await asyncio.sleep(3)
 
 if __name__ == "__main__":
-    asyncio.get_event_loop().run_until_complete(websockets.serve(websocket_rfid, '10.102.40.40', 8765))
+    print('Websocket gets served')
+    handler = WebSocketHandler()
+    asyncio.get_event_loop().run_until_complete(websockets.serve(handler.websocket_rfid, 'localhost', 8765))
     asyncio.get_event_loop().run_forever()
 
