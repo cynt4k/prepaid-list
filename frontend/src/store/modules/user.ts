@@ -4,12 +4,10 @@ import store from '../index';
 import { shoppingCartStore } from '../store-accessor';
 import { User } from '@/services/entities/User';
 import { IUserRegister, IResponseToken, IUserModel } from '@/services/entities/api';
-import { EventBus, EventBusMessage } from '@/assets/EventBus';
+import { EventBus, EventBusMessage, SnackbarOptions, TypeColor } from '@/assets/EventBus';
 
 @Module({ name: 'user', namespaced: true, store })
 export default class UserModule extends VuexModule {
-  private userName: string = '';
-  private userNick: string = '';
   private userObj: User | undefined = undefined;
   private tokenObj: string | undefined = undefined;
 
@@ -77,16 +75,31 @@ export default class UserModule extends VuexModule {
     const data: IResponseToken = await Factory.getInstance().UserService
       .loginUserByUsername(user.nickname)
       .toPromise();
-    await this.saveToken(data);
-    // context.dispatch(UserActionTypes.SAVE_TOKEN, data);
+    this.updateUserInformation(data);
+  }
+
+  @Action
+  private async updateUserInformation(token: IResponseToken) {
+    this.saveToken(token);
     const infos: IUserModel = await Factory.getInstance().UserService.getUserInfos().toPromise();
-    const newUser: User = {
-      name: infos.username,
+    const user: User = {
+      name: infos.name.firstname + infos.name.lastname,
       credit: infos.balance,
       nickname: infos.username
     };
-    this.setUser(newUser);
-    // return newUser;
+    this.setUser(user);
+    EventBus.$emit(EventBusMessage.ROUTING, { name: 'Dashboard' });
+  }
+
+  @Action
+  private async loginUserByCardId(cardId: string) {
+    try {
+      const data: IResponseToken = await Factory.getInstance().UserService.loginUserByToken(String(cardId)).toPromise();
+      this.updateUserInformation(data);
+    } catch (error) {
+      const message : SnackbarOptions = { message: 'User not defined', snackbarType: TypeColor.ERROR };
+      EventBus.$emit(EventBusMessage.MESSAGE, message);
+    }
   }
 
   @Action({ commit: 'updateBalanceMutation' })
@@ -103,6 +116,7 @@ export default class UserModule extends VuexModule {
     this.invalidateToken();
 
     shoppingCartStore.resetState();
+    EventBus.$emit(EventBusMessage.ROUTING, { name: 'Home' });
   }
   @Action
   async refreshToken() {
@@ -127,23 +141,19 @@ export default class UserModule extends VuexModule {
   }
 
   @Action
+  private async receiveRFIDCard(event: MessageEvent) {
+    const cardId = JSON.parse(event.data)['cardId'][0];
+    // console.log('cardId', cardId);
+    // No User is logged in
+    if (this.user) {
+      this.resetState();
+    }
+    this.loginUserByCardId(cardId);
+  }
+
+  @Action
   public async initRFIDReader() {
-    const callback = async(event: MessageEvent): Promise<void> => {
-      const userService = Factory.getInstance().UserService;
-      const cardId = JSON.parse(event.data)['cardId'][0];
-      console.log('cardId', cardId);
-      const data: IResponseToken = await userService.loginUserByToken(String(cardId)).toPromise();
-      this.saveToken(data);
-      const infos: IUserModel = await userService.getUserInfos().toPromise();
-      const user: User = {
-        name: infos.name.firstname + infos.name.lastname,
-        credit: infos.balance,
-        nickname: infos.username
-      };
-      await this.loginUser(user);
-      EventBus.$emit(EventBusMessage.ROUTING, { name: 'Dashboard' });
-    };
     const websocketLocation: string = 'ws://localhost:8765';
-    Factory.getInstance().WebsocketService.initNewSocket(websocketLocation, callback);
+    Factory.getInstance().WebsocketService.initNewSocket(websocketLocation, this.receiveRFIDCard);
   }
 }
