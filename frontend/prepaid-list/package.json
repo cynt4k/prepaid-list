@@ -31,9 +31,9 @@
     },
     "devDependencies": {
         "@mdi/font": "^2.8.94",
-        "@vue/cli-plugin-babel": "^3.9.2",
+        "@vue/cli-plugin-babel": "^5.0.8",
         "@vue/cli-plugin-typescript": "^3.9.0",
-        "@vue/cli-service": "^3.9.2",
+        "@vue/cli-service": "^5.0.8",
         "babel-eslint": "^10.0.3",
         "eslint": "^6.5.1",
         "eslint-config-prettier": "^6.4.0",
